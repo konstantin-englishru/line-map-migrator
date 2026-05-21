@@ -1142,8 +1142,8 @@
             const svg = document.getElementById('interactive-metro-map');
             const MAP_SIZE = 1800;
             const CENTER = MAP_SIZE / 2;
-            const RING_RADIUS = 195;          // меньшее центральное кольцо
-            const MAX_RADIUS = 870;           // ещё более длинные линии
+            const RING_RADIUS = 190;          // меньшее центральное кольцо
+            const MAX_RADIUS = 760;           // длинные линии, но с местом под подписи
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1314,7 +1314,7 @@
                 const px = perpX * pSign;
                 const py = perpY * pSign;
 
-                const connectorLen = 110;
+                const connectorLen = 90;
                 const iconR = 42;
                 // Маркер на самой линии (конец)
                 // Точка крепления подписи — перпендикулярно от конца линии
