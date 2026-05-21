@@ -261,6 +261,12 @@
                 </div>
             </div>
 
+            <!-- Кликабельный телефон -->
+            <a href="tel:+79991234567" class="hidden sm:flex items-center gap-2 bg-white/70 hover:bg-white px-4 py-2 rounded-2xl shadow-sm font-heading font-bold text-base lg:text-lg text-textMain hover:scale-105 transition-transform whitespace-nowrap z-10 mr-2 lg:mr-4">
+                <svg class="w-5 h-5 text-pastelPink fill-current" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+                +7 (999) 123-45-67
+            </a>
+
             <!-- Развернутая навигация для десктопов (lg/xl) -->
             <nav class="hidden md:flex gap-x-2 gap-y-3 xl:gap-x-4 xl:gap-y-4 items-center justify-end flex-wrap flex-1 ml-6 lg:ml-12 z-50 overflow-visible">
                 
@@ -748,6 +754,196 @@
         </section>
         
         <!-- ================= КОНЕЦ НОВОЙ СЕКЦИИ ================= -->
+
+        <!-- ================= ЛЕНДИНГ-БЛОКИ ================= -->
+        <style>
+            .lp-section { width:100%; padding: 3.5rem 1.5rem; position:relative; z-index:10; }
+            @media(min-width:768px){ .lp-section { padding: 4rem 3rem; } }
+            .lp-wrap { max-width: 1100px; margin: 0 auto; }
+            .lp-title { font-family:'Fredoka',sans-serif; font-weight:800; font-size:2rem; line-height:1.15; color:#4A4A4A; margin-bottom:1rem; text-align:center; }
+            @media(min-width:768px){ .lp-title{ font-size:2.75rem; } }
+            .lp-sub { text-align:center; font-size:1.1rem; opacity:.8; max-width:720px; margin:0 auto 2.5rem; }
+            .lp-card { background:#fff; border-radius:28px; padding:1.75rem; box-shadow:0 10px 25px -5px rgba(0,0,0,.05); border:3px solid #fff; transition: transform .3s ease, box-shadow .3s ease; }
+            .lp-card:hover{ transform: translateY(-4px); box-shadow:0 18px 35px -10px rgba(0,0,0,.1); }
+            .lp-grid { display:grid; gap:1.25rem; grid-template-columns:1fr; }
+            @media(min-width:640px){ .lp-grid-2{ grid-template-columns:1fr 1fr; } }
+            @media(min-width:768px){ .lp-grid-3{ grid-template-columns:repeat(3,1fr); } .lp-grid-4{ grid-template-columns:repeat(4,1fr); } }
+            .lp-emoji { font-size:2.5rem; display:block; margin-bottom:.75rem; }
+            .lp-cta-float { display:flex; justify-content:center; margin: -1.25rem auto 0; position:relative; z-index:30; }
+            .lp-cta-btn { display:inline-flex; align-items:center; gap:.6rem; background:linear-gradient(135deg,#FFFACD,#FFE6F2); color:#4A4A4A; font-family:'Fredoka',sans-serif; font-weight:700; font-size:1rem; padding:.9rem 1.6rem; border-radius:999px; border:3px solid #fff; box-shadow:0 8px 20px rgba(0,0,0,.12); text-decoration:none; animation: float 5s ease-in-out infinite; transition: transform .25s ease; }
+            .lp-cta-btn:hover{ transform:scale(1.08); }
+            .lp-cta-btn .dot { width:.6rem; height:.6rem; border-radius:50%; background:#EF4444; box-shadow:0 0 0 0 rgba(239,68,68,.6); animation: pulseSoft 1.8s infinite; }
+            details.faq-item { background:#fff; border-radius:20px; padding:1rem 1.25rem; border:2px solid #E6F2FF; margin-bottom:.75rem; }
+            details.faq-item summary { cursor:pointer; font-family:'Fredoka',sans-serif; font-weight:700; font-size:1.05rem; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+            details.faq-item summary::-webkit-details-marker{display:none;}
+            details.faq-item[open] summary{ color:#0d9488; }
+            details.faq-item p{ margin-top:.7rem; opacity:.8; }
+        </style>
+
+        <!-- 2. HERO (УТП/УЦП) -->
+        <section class="lp-section" style="background:linear-gradient(180deg,#FFF8F0 0%,#FFE6F2 100%);">
+            <div class="lp-wrap grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                    <span class="inline-block bg-pastelYellow px-4 py-1.5 rounded-full font-heading font-bold text-sm mb-4 border-2 border-white shadow-sm">🎓 Развитие с 3 до 16 лет</span>
+                    <h1 class="font-heading font-black text-4xl md:text-5xl leading-tight mb-5 text-textMain">Превратим обучение в любимое путешествие вашего ребёнка</h1>
+                    <p class="text-lg opacity-80 mb-7">Авторская методика «метро знаний»: каждое занятие — новая станция. Дети учатся с горящими глазами, родители видят результат уже через месяц.</p>
+                    <a href="/p/Записаться%20на%20пробное%20занятие" class="door-btn bg-gradient-to-r from-pastelMint to-pastelYellow text-textMain font-heading font-black text-xl py-4 px-8 rounded-full shadow-lg border-4 border-white inline-flex items-center gap-3 hover:scale-105 transition-transform">
+                        🚂 Записаться на бесплатное пробное
+                    </a>
+                    <div class="mt-4 text-sm opacity-70">⭐ 4.9 / 5 · более 1200 семей с нами</div>
+                </div>
+                <div class="relative">
+                    <div class="bg-white rounded-[40px] p-6 border-4 border-white shadow-soft">
+                        <div class="aspect-square bg-gradient-to-br from-pastelMint via-skyBg to-pastelLavender rounded-[28px] flex items-center justify-center text-8xl md:text-9xl">🚄</div>
+                        <div class="absolute -top-4 -right-2 bg-pastelYellow rounded-2xl px-4 py-2 font-heading font-bold shadow-md border-2 border-white animate-float">+27% к успеваемости</div>
+                        <div class="absolute -bottom-4 -left-2 bg-pastelPink rounded-2xl px-4 py-2 font-heading font-bold shadow-md border-2 border-white animate-float-delayed">Первое занятие — бесплатно</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Записаться%20на%20занятие" class="lp-cta-btn"><span class="dot"></span>📝 Записаться сейчас</a></div>
+
+        <!-- 3. ПРОБЛЕМЫ И БОЛИ -->
+        <section class="lp-section" style="background:#E6F2FF;">
+            <div class="lp-wrap">
+                <h2 class="lp-title">Узнаёте свою ситуацию?</h2>
+                <p class="lp-sub">Каждый родитель сталкивается с этим. Хорошая новость: всё решается, когда ребёнку интересно.</p>
+                <div class="lp-grid lp-grid-3">
+                    <div class="lp-card"><span class="lp-emoji">😩</span><h3 class="font-heading font-bold text-xl mb-2">«Не хочу делать уроки»</h3><p class="opacity-80">Ребёнок саботирует домашку, родители превращаются в надзирателей.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">📱</span><h3 class="font-heading font-bold text-xl mb-2">Гаджеты вместо книг</h3><p class="opacity-80">Внимание рассеивается, мотивация учиться падает.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">😟</span><h3 class="font-heading font-bold text-xl mb-2">Стеснение и страх ошибки</h3><p class="opacity-80">В школе боится отвечать, замыкается, теряет уверенность.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">📉</span><h3 class="font-heading font-bold text-xl mb-2">Оценки идут вниз</h3><p class="opacity-80">Пробелы накапливаются как снежный ком — догнать всё сложнее.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">⏰</span><h3 class="font-heading font-bold text-xl mb-2">Нет свободного времени</h3><p class="opacity-80">Кружки, школа, репетиторы — ребёнок выгорает, а толку мало.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">🤷</span><h3 class="font-heading font-bold text-xl mb-2">«Не знаю, кем хочу стать»</h3><p class="opacity-80">Подросток не видит цели, обучение кажется бессмысленным.</p></div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Бесплатная%20консультация" class="lp-cta-btn"><span class="dot"></span>🎁 Получить консультацию</a></div>
+
+        <!-- 4. РЕШЕНИЯ -->
+        <section class="lp-section" style="background:#FFF8F0;">
+            <div class="lp-wrap">
+                <h2 class="lp-title">Как мы это решаем</h2>
+                <p class="lp-sub">Четыре опоры нашей методики — каждая работает на главное: ребёнок хочет учиться сам.</p>
+                <div class="lp-grid lp-grid-2">
+                    <div class="lp-card flex gap-4"><div class="text-4xl shrink-0">🎮</div><div><h3 class="font-heading font-bold text-xl mb-1">Игровые форматы</h3><p class="opacity-80">Квесты, станции, командные миссии — знания усваиваются через действие, а не зубрёжку.</p></div></div>
+                    <div class="lp-card flex gap-4"><div class="text-4xl shrink-0">🧩</div><div><h3 class="font-heading font-bold text-xl mb-1">Индивидуальный маршрут</h3><p class="opacity-80">Программа подстраивается под уровень и интересы ребёнка, а не наоборот.</p></div></div>
+                    <div class="lp-card flex gap-4"><div class="text-4xl shrink-0">👥</div><div><h3 class="font-heading font-bold text-xl mb-1">Мини-группы до 6 человек</h3><p class="opacity-80">Педагог видит каждого, дети учатся общаться и работать в команде.</p></div></div>
+                    <div class="lp-card flex gap-4"><div class="text-4xl shrink-0">📊</div><div><h3 class="font-heading font-bold text-xl mb-1">Прозрачный прогресс</h3><p class="opacity-80">Родитель каждую неделю получает отчёт с результатами и рекомендациями.</p></div></div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Записаться%20на%20занятие" class="lp-cta-btn"><span class="dot"></span>📝 Записаться сейчас</a></div>
+
+        <!-- 5. КАК ПРОХОДЯТ ЗАНЯТИЯ -->
+        <section class="lp-section" style="background:#E0F7FA;">
+            <div class="lp-wrap">
+                <h2 class="lp-title">Как проходит одно занятие</h2>
+                <p class="lp-sub">60 минут, 5 «станций» — каждая со своей задачей. Никакой скуки, только драйв.</p>
+                <div class="lp-grid lp-grid-3">
+                    <div class="lp-card"><div class="font-heading font-black text-3xl text-pink-500 mb-1">10′</div><h3 class="font-heading font-bold text-lg mb-1">Разогрев</h3><p class="opacity-80 text-sm">Игра-приветствие, настрой на работу, мини-разминка для мозга.</p></div>
+                    <div class="lp-card"><div class="font-heading font-black text-3xl text-teal-500 mb-1">15′</div><h3 class="font-heading font-bold text-lg mb-1">Новая тема</h3><p class="opacity-80 text-sm">Открытие материала через эксперимент, историю или квест.</p></div>
+                    <div class="lp-card"><div class="font-heading font-black text-3xl text-yellow-500 mb-1">20′</div><h3 class="font-heading font-bold text-lg mb-1">Практика</h3><p class="opacity-80 text-sm">Командные задания, кейсы, разбор реальных примеров.</p></div>
+                    <div class="lp-card"><div class="font-heading font-black text-3xl text-purple-500 mb-1">10′</div><h3 class="font-heading font-bold text-lg mb-1">Закрепление</h3><p class="opacity-80 text-sm">Викторина, мини-проект или творческое задание.</p></div>
+                    <div class="lp-card"><div class="font-heading font-black text-3xl text-orange-500 mb-1">5′</div><h3 class="font-heading font-bold text-lg mb-1">Рефлексия</h3><p class="opacity-80 text-sm">Что понравилось, что узнал, что заберу с собой.</p></div>
+                    <div class="lp-card bg-pastelYellow"><div class="text-3xl mb-1">🎁</div><h3 class="font-heading font-bold text-lg mb-1">Бонус</h3><p class="opacity-80 text-sm">Звёзды-наклейки за активность и приз в конце месяца.</p></div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Записаться%20на%20пробное%20занятие" class="lp-cta-btn"><span class="dot"></span>🚂 Прийти на пробное</a></div>
+
+        <!-- 6. КТО ВЕДЁТ -->
+        <section class="lp-section" style="background:#F5E8FF;">
+            <div class="lp-wrap">
+                <h2 class="lp-title">Кто ведёт занятия</h2>
+                <p class="lp-sub">Только педагоги с высшим образованием, опытом от 5 лет и регулярной аттестацией.</p>
+                <div class="lp-grid lp-grid-3">
+                    <div class="lp-card text-center"><div class="w-24 h-24 mx-auto mb-3 rounded-full bg-gradient-to-br from-pastelMint to-pastelYellow flex items-center justify-center text-5xl border-4 border-white shadow-sm">👩‍🏫</div><h3 class="font-heading font-bold text-xl">Анна Михайловна</h3><p class="text-pink-500 font-medium text-sm mb-2">Логопед-дефектолог</p><p class="opacity-80 text-sm">12 лет опыта · МГПУ · подготовка к школе, постановка речи</p></div>
+                    <div class="lp-card text-center"><div class="w-24 h-24 mx-auto mb-3 rounded-full bg-gradient-to-br from-pastelPink to-pastelLavender flex items-center justify-center text-5xl border-4 border-white shadow-sm">🧑‍🔬</div><h3 class="font-heading font-bold text-xl">Дмитрий Сергеевич</h3><p class="text-teal-500 font-medium text-sm mb-2">Математика и логика</p><p class="opacity-80 text-sm">8 лет опыта · МГУ мехмат · олимпиадная подготовка</p></div>
+                    <div class="lp-card text-center"><div class="w-24 h-24 mx-auto mb-3 rounded-full bg-gradient-to-br from-pastelYellow to-pastelPink flex items-center justify-center text-5xl border-4 border-white shadow-sm">🧑‍🎨</div><h3 class="font-heading font-bold text-xl">Елена Викторовна</h3><p class="text-purple-500 font-medium text-sm mb-2">Детский психолог</p><p class="opacity-80 text-sm">15 лет опыта · РГГУ · сопровождение, профориентация</p></div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Познакомиться%20с%20педагогом" class="lp-cta-btn"><span class="dot"></span>👋 Познакомиться с педагогом</a></div>
+
+        <!-- 7. ИЗМЕРИМЫЕ РЕЗУЛЬТАТЫ -->
+        <section class="lp-section" style="background:#FFF8F0;">
+            <div class="lp-wrap">
+                <h2 class="lp-title">Что вы увидите через 3 месяца</h2>
+                <p class="lp-sub">Цифры — это итоги ежегодного независимого замера прогресса наших учеников.</p>
+                <div class="lp-grid lp-grid-4">
+                    <div class="lp-card text-center"><div class="font-heading font-black text-5xl text-pink-500 mb-2">+27%</div><p class="font-medium">Рост успеваемости в школе</p></div>
+                    <div class="lp-card text-center"><div class="font-heading font-black text-5xl text-teal-500 mb-2">94%</div><p class="font-medium">Сами садятся за уроки</p></div>
+                    <div class="lp-card text-center"><div class="font-heading font-black text-5xl text-yellow-500 mb-2">×3</div><p class="font-medium">Скорость чтения</p></div>
+                    <div class="lp-card text-center"><div class="font-heading font-black text-5xl text-purple-500 mb-2">98%</div><p class="font-medium">Родителей продлевают абонемент</p></div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Узнать%20о%20результатах" class="lp-cta-btn"><span class="dot"></span>📈 Хочу таких же результатов</a></div>
+
+        <!-- 8. ВЫГОДА ДЛЯ РОДИТЕЛЯ -->
+        <section class="lp-section" style="background:#E6F2FF;">
+            <div class="lp-wrap">
+                <h2 class="lp-title">Что получаете вы</h2>
+                <p class="lp-sub">Мы заботимся не только о детях. Родителям — спокойствие, время и уверенность.</p>
+                <div class="lp-grid lp-grid-3">
+                    <div class="lp-card"><span class="lp-emoji">🕰️</span><h3 class="font-heading font-bold text-lg mb-1">+10 часов в неделю</h3><p class="opacity-80 text-sm">Не нужно сидеть с уроками — ребёнок справляется сам.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">📲</span><h3 class="font-heading font-bold text-lg mb-1">Отчёт в личном кабинете</h3><p class="opacity-80 text-sm">Видите прогресс, темы и рекомендации педагога.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">😌</span><h3 class="font-heading font-bold text-lg mb-1">Меньше стресса</h3><p class="opacity-80 text-sm">Никаких скандалов из-за двоек и невыученной домашки.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">💸</span><h3 class="font-heading font-bold text-lg mb-1">Налоговый вычет</h3><p class="opacity-80 text-sm">Помогаем оформить возврат 13% — это до 19 500 ₽ в год.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">🤝</span><h3 class="font-heading font-bold text-lg mb-1">Клуб родителей</h3><p class="opacity-80 text-sm">Лекции, чаты, поддержка психолога — вы не одни.</p></div>
+                    <div class="lp-card"><span class="lp-emoji">🎯</span><h3 class="font-heading font-bold text-lg mb-1">Гарантия результата</h3><p class="opacity-80 text-sm">Если нет прогресса за 2 месяца — вернём 100% оплаты.</p></div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Записаться%20на%20занятие" class="lp-cta-btn"><span class="dot"></span>📝 Хочу записаться</a></div>
+
+        <!-- 9. ОТЗЫВЫ -->
+        <section class="lp-section" style="background:#FFE6F2;">
+            <div class="lp-wrap">
+                <h2 class="lp-title">Отзывы родителей</h2>
+                <p class="lp-sub">Истории семей, которые проходят с нами свой маршрут.</p>
+                <div class="lp-grid lp-grid-3">
+                    <div class="lp-card"><div class="flex items-center gap-3 mb-3"><div class="w-12 h-12 rounded-full bg-pastelYellow flex items-center justify-center font-bold text-xl border-2 border-white">М</div><div><div class="font-heading font-bold">Мария</div><div class="text-sm opacity-70">мама Кирилла, 7 лет</div></div></div><div class="text-yellow-500 mb-2">★★★★★</div><p class="opacity-80">«Сын впервые сам попросил пойти на занятие. За 2 месяца научился читать и считать — школа просто пролетает.»</p></div>
+                    <div class="lp-card"><div class="flex items-center gap-3 mb-3"><div class="w-12 h-12 rounded-full bg-pastelMint flex items-center justify-center font-bold text-xl border-2 border-white">А</div><div><div class="font-heading font-bold">Анастасия</div><div class="text-sm opacity-70">мама Софии, 10 лет</div></div></div><div class="text-yellow-500 mb-2">★★★★★</div><p class="opacity-80">«Дочка была зажатой. Теперь уверенно отвечает у доски, появились друзья. Спасибо Елене Викторовне!»</p></div>
+                    <div class="lp-card"><div class="flex items-center gap-3 mb-3"><div class="w-12 h-12 rounded-full bg-pastelLavender flex items-center justify-center font-bold text-xl border-2 border-white">И</div><div><div class="font-heading font-bold">Игорь</div><div class="text-sm opacity-70">папа Артёма, 14 лет</div></div></div><div class="text-yellow-500 mb-2">★★★★★</div><p class="opacity-80">«Подросток сам выбрал направление — IT. Подтянули математику, готовимся к ОГЭ. Видим горящие глаза!»</p></div>
+                </div>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Все%20отзывы" class="lp-cta-btn"><span class="dot"></span>💬 Читать все отзывы</a></div>
+
+        <!-- 10. FAQ -->
+        <section class="lp-section" style="background:#FFF8F0;">
+            <div class="lp-wrap" style="max-width:820px;">
+                <h2 class="lp-title">Частые вопросы</h2>
+                <details class="faq-item"><summary>С какого возраста принимаете? <span>＋</span></summary><p>Принимаем с 3 лет в малышковую группу и до 16 лет — школьники и старшеклассники.</p></details>
+                <details class="faq-item"><summary>Как проходит пробное занятие? <span>＋</span></summary><p>Бесплатно, 60 минут. Знакомство с педагогом, диагностика уровня, мини-урок. После — обратная связь.</p></details>
+                <details class="faq-item"><summary>Можно ли заниматься онлайн? <span>＋</span></summary><p>Да, у нас есть онлайн-формат с интерактивной доской и теми же педагогами.</p></details>
+                <details class="faq-item"><summary>Сколько стоит абонемент? <span>＋</span></summary><p>От 4 800 ₽ в месяц за 8 занятий. Точная цена зависит от программы — расскажем на консультации.</p></details>
+                <details class="faq-item"><summary>Что если ребёнок пропустит? <span>＋</span></summary><p>Переносим пропущенные занятия в течение месяца, либо отрабатываем индивидуально.</p></details>
+                <details class="faq-item"><summary>Есть ли скидки? <span>＋</span></summary><p>Да: для второго ребёнка из семьи — 15%, при оплате за полугодие — 10%, есть рассрочка 0%.</p></details>
+            </div>
+        </section>
+        <div class="lp-cta-float"><a href="/p/Задать%20вопрос" class="lp-cta-btn"><span class="dot"></span>❓ Задать свой вопрос</a></div>
+
+        <!-- 11. ПРИЗЫВ К ДЕЙСТВИЮ -->
+        <section class="lp-section" style="background:linear-gradient(135deg,#FFFACD 0%,#FFE6F2 50%,#F5E8FF 100%);">
+            <div class="lp-wrap text-center">
+                <div class="text-6xl mb-4">🚂</div>
+                <h2 class="lp-title" style="font-size:2.5rem;">Запишитесь на бесплатное пробное</h2>
+                <p class="lp-sub">60 минут, никаких обязательств. Покажем, как ребёнок начинает учиться с удовольствием.</p>
+                <form onsubmit="event.preventDefault(); window.location.href='/p/Заявка%20отправлена';" class="max-w-xl mx-auto bg-white p-6 md:p-8 rounded-[32px] shadow-soft border-4 border-white grid gap-3">
+                    <input required type="text" placeholder="Имя родителя" class="w-full p-4 rounded-2xl border-2 border-doorFrame focus:outline-none focus:border-pastelMint font-body">
+                    <input required type="tel" placeholder="+7 (___) ___-__-__" class="w-full p-4 rounded-2xl border-2 border-doorFrame focus:outline-none focus:border-pastelMint font-body">
+                    <input type="text" placeholder="Возраст ребёнка" class="w-full p-4 rounded-2xl border-2 border-doorFrame focus:outline-none focus:border-pastelMint font-body">
+                    <button type="submit" class="door-btn bg-gradient-to-r from-pastelMint to-pastelYellow text-textMain font-heading font-black text-lg md:text-xl py-4 px-8 rounded-full shadow-lg border-4 border-white">
+                        🎁 Записаться бесплатно
+                    </button>
+                    <p class="text-xs opacity-60">Нажимая кнопку, вы соглашаетесь с <a href="/p/Политика%20конфиденциальности" class="underline">политикой конфиденциальности</a></p>
+                </form>
+            </div>
+        </section>
+        <!-- ================= КОНЕЦ ЛЕНДИНГ-БЛОКОВ ================= -->
 
         <!-- Нижний бампер/пол -->
         <div class="h-6 w-full bg-gray-300 mt-auto border-t-2 border-gray-400 relative z-20"></div>
@@ -1555,14 +1751,18 @@
             return '/p/' + encodeURIComponent(title.trim());
         }
         function setupExternalNavigation() {
-            // Все ссылки с href="#", у которых нет onclick (т.е. не игры/меню-аккордеоны)
+            // Все ссылки с href="#", у которых нет onclick — навешиваем переход на отдельную страницу
             document.querySelectorAll('a[href="#"]').forEach((a) => {
                 if (a.getAttribute('onclick')) return; // не трогаем игровые/служебные
                 const label = (a.textContent || '').trim();
                 if (!label) return;
                 a.setAttribute('href', pageUrl(label));
-                a.setAttribute('target', '_blank');
-                a.setAttribute('rel', 'noopener');
+                // Ссылки в header/footer открываем в том же окне (user-friendly),
+                // остальные (если вдруг останутся) — в новой вкладке.
+                if (!a.closest('header') && !a.closest('footer')) {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener');
+                }
             });
         }
 
