@@ -1547,7 +1547,32 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderMetroMap();
             setupMapInteractions(); // Запускаем слушатели событий для карты
+            setupExternalNavigation();
         });
+
+        // Превращает пункты меню/футера и клики по станциям в открытие новых вкладок
+        function pageUrl(title) {
+            return '/p/' + encodeURIComponent(title.trim());
+        }
+        function setupExternalNavigation() {
+            // Все ссылки с href="#", у которых нет onclick (т.е. не игры/меню-аккордеоны)
+            document.querySelectorAll('a[href="#"]').forEach((a) => {
+                if (a.getAttribute('onclick')) return; // не трогаем игровые/служебные
+                const label = (a.textContent || '').trim();
+                if (!label) return;
+                a.setAttribute('href', pageUrl(label));
+                a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noopener');
+            });
+        }
+
+        // Переопределяем открытие карточки станции — теперь это новая страница
+        function openStationModal(lineIdx, stationIdx) {
+            const line = METRO_LINES[lineIdx];
+            const station = line.stations[stationIdx];
+            const title = line.name + ' — ' + station.name;
+            window.open(pageUrl(title), '_blank', 'noopener');
+        }
     </script>
 </body>
 </html>
