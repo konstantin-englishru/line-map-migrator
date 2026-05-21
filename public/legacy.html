@@ -1751,14 +1751,18 @@
             return '/p/' + encodeURIComponent(title.trim());
         }
         function setupExternalNavigation() {
-            // Все ссылки с href="#", у которых нет onclick (т.е. не игры/меню-аккордеоны)
+            // Все ссылки с href="#", у которых нет onclick — навешиваем переход на отдельную страницу
             document.querySelectorAll('a[href="#"]').forEach((a) => {
                 if (a.getAttribute('onclick')) return; // не трогаем игровые/служебные
                 const label = (a.textContent || '').trim();
                 if (!label) return;
                 a.setAttribute('href', pageUrl(label));
-                a.setAttribute('target', '_blank');
-                a.setAttribute('rel', 'noopener');
+                // Ссылки в header/footer открываем в том же окне (user-friendly),
+                // остальные (если вдруг останутся) — в новой вкладке.
+                if (!a.closest('header') && !a.closest('footer')) {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener');
+                }
             });
         }
 
