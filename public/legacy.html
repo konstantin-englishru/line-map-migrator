@@ -1140,10 +1140,10 @@
         
         function renderMetroMap() {
             const svg = document.getElementById('interactive-metro-map');
-            const MAP_SIZE = 1800;
+            const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
-            const RING_RADIUS = 230;          // компактное центральное кольцо
-            const MAX_RADIUS = 820;           // длинные линии наружу
+            const RING_RADIUS = 210;          // компактное центральное кольцо
+            const MAX_RADIUS = 880;           // длинные линии — конец = центр иконки
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1165,11 +1165,10 @@
 
             let content = `
                 <defs>
-                    <radialGradient id="bg-grad" cx="50%" cy="50%" r="55%">
-                        <stop offset="0%" stop-color="#BFE0FB" stop-opacity="1"/>
-                        <stop offset="55%" stop-color="#BFE0FB" stop-opacity="0.85"/>
-                        <stop offset="80%" stop-color="#BFE0FB" stop-opacity="0.35"/>
-                        <stop offset="100%" stop-color="#BFE0FB" stop-opacity="0"/>
+                    <radialGradient id="bg-grad" cx="50%" cy="50%" r="60%">
+                        <stop offset="0%"   stop-color="#EAF4FF" stop-opacity="1"/>
+                        <stop offset="60%"  stop-color="#F4F9FF" stop-opacity="1"/>
+                        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"/>
                     </radialGradient>
                     <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
                         <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#3B82F6" flood-opacity="0.15"/>
@@ -1180,13 +1179,13 @@
                 </defs>
                 <rect x="0" y="0" width="${MAP_SIZE}" height="${MAP_SIZE}" fill="url(#bg-grad)"/>
                 <!-- декоративные звёздочки -->
-                <g fill="#CBE2F7" opacity="0.7">
-                    <circle cx="180" cy="220" r="4"/>
-                    <circle cx="1620" cy="180" r="5"/>
-                    <circle cx="240" cy="1600" r="4"/>
-                    <circle cx="1640" cy="1640" r="5"/>
-                    <circle cx="900" cy="120" r="3"/>
-                    <circle cx="120" cy="900" r="3"/>
+                <g fill="#D4E6F8" opacity="0.55">
+                    <circle cx="200" cy="240" r="4"/>
+                    <circle cx="1800" cy="200" r="5"/>
+                    <circle cx="260" cy="1780" r="4"/>
+                    <circle cx="1820" cy="1820" r="5"/>
+                    <circle cx="1000" cy="140" r="3"/>
+                    <circle cx="140" cy="1000" r="3"/>
                 </g>
             `;
 
