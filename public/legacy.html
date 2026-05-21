@@ -1142,8 +1142,8 @@
             const svg = document.getElementById('interactive-metro-map');
             const MAP_SIZE = 1800;
             const CENTER = MAP_SIZE / 2;
-            const RING_RADIUS = 320;          // большое центральное кольцо
-            const MAX_RADIUS = 700;           // длина линий наружу
+            const RING_RADIUS = 230;          // компактное центральное кольцо
+            const MAX_RADIUS = 820;           // длинные линии наружу
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1203,7 +1203,7 @@
                 // Изгибаем линию: «выезд» из кольца идёт почти по касательной, потом плавно
                 // выходит на радиус. Это даёт стиль референса (мягкая дуга от кольца наружу).
                 const tangentDir = rad + Math.PI / 2; // касательная к кольцу
-                const tangentLen = 180;
+                const tangentLen = 150;
                 const cpStartX = startX + tangentLen * Math.cos(tangentDir);
                 const cpStartY = startY + tangentLen * Math.sin(tangentDir);
                 // Контрольная точка у конца — по направлению радиуса (плавный выход)
@@ -1253,8 +1253,8 @@
                 };
 
                 // Отступы: первая станция чуть отступает от кольца, последняя — от конца (для лейбла)
-                const padStart = 80;
-                const padEnd   = 130;
+                const padStart = 70;
+                const padEnd   = 150;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
 
@@ -1272,7 +1272,7 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    const labelDist = 26;
+                    const labelDist = 32;
                     const lx = cx + nx * labelDist;
                     const ly = cy + ny * labelDist;
                     const anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
@@ -1285,7 +1285,7 @@
                                     stroke="${line.color}" stroke-width="5"
                                     filter="url(#station-shadow)"/>
                             <text x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
-                                  font-family="${FONT}" font-size="22" font-weight="600"
+                                  font-family="${FONT}" font-size="26" font-weight="700"
                                   fill="${TEXT_DARK}" pointer-events="none">${station.name}</text>
                         </g>
                     `;
@@ -1328,12 +1328,12 @@
             content += `
                 <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS}"
                         fill="none" stroke="${RING_COLOR}" stroke-width="16"/>
-                <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 110}"
+                <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 40}"
                         fill="#FFFFFF" filter="url(#soft-shadow)"
                         stroke="#E5EFFA" stroke-width="2"/>
 
                 <!-- Логотип "Город Знаний" -->
-                <g transform="translate(${CENTER}, ${CENTER})" pointer-events="none">
+                <g transform="translate(${CENTER}, ${CENTER}) scale(0.75)" pointer-events="none">
                     <!-- стилизованный домик -->
                     <g transform="translate(0,-70)">
                         <rect x="-60" y="-10" width="120" height="60" rx="6" fill="#3FB8E5"/>
