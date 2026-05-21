@@ -1253,9 +1253,10 @@
                     return { x: last.x, y: last.y, tx: 1, ty: 0 };
                 };
 
-                // Отступы: первая станция чуть отступает от кольца, последняя — от конца (для лейбла)
-                const padStart = 70;
-                const padEnd   = 150;
+                // Отступы: первая станция чуть отступает от кольца,
+                // последняя — от конечной (иконки), чтобы не наезжать
+                const padStart = 80;
+                const padEnd   = 110;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
 
@@ -1273,7 +1274,7 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    const labelDist = 32;
+                    const labelDist = 30;
                     const lx = cx + nx * labelDist;
                     const ly = cy + ny * labelDist;
                     const anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
@@ -1286,8 +1287,10 @@
                                     stroke="${line.color}" stroke-width="5"
                                     filter="url(#station-shadow)"/>
                             <text x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
-                                  font-family="${FONT}" font-size="26" font-weight="700"
-                                  fill="${TEXT_DARK}" pointer-events="none">${station.name}</text>
+                                  font-family="${FONT}" font-size="24" font-weight="700"
+                                  fill="${TEXT_DARK}" pointer-events="none"
+                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
+                                  stroke-linejoin="round">${station.name}</text>
                         </g>
                     `;
                 });
@@ -1298,29 +1301,40 @@
                     yellow:    '🎓', blue:   '🏛', lightblue: '🏙',
                     green:     '☀',  red:    '🎭'
                 };
-                // Позиция лейбла — немного дальше конца линии, вдоль радиуса
-                const labelOffset = 90;
-                const tlx = endX + labelOffset * Math.cos(rad);
-                const tly = endY + labelOffset * Math.sin(rad);
-                const iconR = 40;
-                const iconY = tly - 75;
+                // Иконка конечной станции совпадает с концом линии (линия входит в круг),
+                // а текст уходит дальше наружу.
+                const iconR = 46;
+                const tlx = endX;       // центр иконки = конец линии
+                const ticy = endY;
+                const labelOffset = iconR + 36;
+                const lblX = endX + labelOffset * Math.cos(rad);
+                const lblY = endY + labelOffset * Math.sin(rad);
+                // Если конечная уходит вверх — текст над иконкой; иначе под ней
+                const above = Math.sin(rad) < -0.2;
+                const tly = above ? (ticy - iconR - 30) : (ticy + iconR + 36);
 
                 content += `
                     <g pointer-events="none">
-                        <circle cx="${tlx}" cy="${iconY}" r="${iconR}" fill="#FFFFFF"
-                                stroke="${line.color}" stroke-width="5"
+                        <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
+                                stroke="${line.color}" stroke-width="6"
                                 filter="url(#soft-shadow)"/>
-                        <text x="${tlx}" y="${iconY + 18}" text-anchor="middle"
-                              font-size="44">${termIconMap[line.id] || '⭐'}</text>
+                        <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
+                              font-size="46">${termIconMap[line.id] || '⭐'}</text>
                         <text x="${tlx}" y="${tly}" text-anchor="middle"
                               font-family="${FONT}" font-size="22" font-weight="800"
-                              fill="${TEXT_DARK}">Конечная станция</text>
-                        <text x="${tlx}" y="${tly + 30}" text-anchor="middle"
-                              font-family="${FONT}" font-size="24" font-weight="800"
-                              fill="${line.color}">«${line.name}»</text>
-                        <text x="${tlx}" y="${tly + 58}" text-anchor="middle"
+                              fill="${TEXT_DARK}"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                              stroke-linejoin="round">Конечная станция</text>
+                        <text x="${tlx}" y="${tly + 28}" text-anchor="middle"
+                              font-family="${FONT}" font-size="24" font-weight="900"
+                              fill="${line.color}"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                              stroke-linejoin="round">«${line.name}»</text>
+                        <text x="${tlx}" y="${tly + 54}" text-anchor="middle"
                               font-family="${FONT}" font-size="18" font-weight="600"
-                              fill="${TEXT_SOFT}">(${line.age})</text>
+                              fill="${TEXT_SOFT}"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
+                              stroke-linejoin="round">(${line.age})</text>
                     </g>
                 `;
             });
