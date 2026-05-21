@@ -1328,12 +1328,12 @@
             content += `
                 <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS}"
                         fill="none" stroke="${RING_COLOR}" stroke-width="16"/>
-                <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 110}"
+                <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 40}"
                         fill="#FFFFFF" filter="url(#soft-shadow)"
                         stroke="#E5EFFA" stroke-width="2"/>
 
                 <!-- Логотип "Город Знаний" -->
-                <g transform="translate(${CENTER}, ${CENTER})" pointer-events="none">
+                <g transform="translate(${CENTER}, ${CENTER}) scale(0.75)" pointer-events="none">
                     <!-- стилизованный домик -->
                     <g transform="translate(0,-70)">
                         <rect x="-60" y="-10" width="120" height="60" rx="6" fill="#3FB8E5"/>
