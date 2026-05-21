@@ -694,7 +694,7 @@
         <!-- ================= НОВАЯ СЕКЦИЯ: ИНТЕРАКТИВНАЯ КАРТА И ИГРОТЕКА ================= -->
         
         <!-- Секция: Интерактивная карта "Город Знаний" -->
-        <section class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: radial-gradient(ellipse 60% 55% at 50% 60%, #BFE0FB 0%, rgba(191,224,251,0.75) 35%, rgba(191,224,251,0.35) 65%, rgba(191,224,251,0) 100%), #FFFFFF;">
+        <section class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: radial-gradient(ellipse 70% 60% at 50% 55%, #F2F9FF 0%, #F8FCFF 55%, #FFFFFF 100%);">
             <div class="max-w-6xl mx-auto text-center mb-8">
                 <h3 style="font-family:'Montserrat',sans-serif;letter-spacing:0.02em;" class="text-2xl md:text-4xl font-extrabold uppercase text-[#1F2937] leading-tight">
                     Схема метро образовательного центра<br/>
@@ -1140,10 +1140,10 @@
         
         function renderMetroMap() {
             const svg = document.getElementById('interactive-metro-map');
-            const MAP_SIZE = 1800;
+            const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
-            const RING_RADIUS = 230;          // компактное центральное кольцо
-            const MAX_RADIUS = 820;           // длинные линии наружу
+            const RING_RADIUS = 210;          // компактное центральное кольцо
+            const MAX_RADIUS = 880;           // длинные линии — конец = центр иконки
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1165,11 +1165,10 @@
 
             let content = `
                 <defs>
-                    <radialGradient id="bg-grad" cx="50%" cy="50%" r="55%">
-                        <stop offset="0%" stop-color="#BFE0FB" stop-opacity="1"/>
-                        <stop offset="55%" stop-color="#BFE0FB" stop-opacity="0.85"/>
-                        <stop offset="80%" stop-color="#BFE0FB" stop-opacity="0.35"/>
-                        <stop offset="100%" stop-color="#BFE0FB" stop-opacity="0"/>
+                    <radialGradient id="bg-grad" cx="50%" cy="50%" r="60%">
+                        <stop offset="0%"   stop-color="#EAF4FF" stop-opacity="1"/>
+                        <stop offset="60%"  stop-color="#F4F9FF" stop-opacity="1"/>
+                        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"/>
                     </radialGradient>
                     <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
                         <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#3B82F6" flood-opacity="0.15"/>
@@ -1180,13 +1179,13 @@
                 </defs>
                 <rect x="0" y="0" width="${MAP_SIZE}" height="${MAP_SIZE}" fill="url(#bg-grad)"/>
                 <!-- декоративные звёздочки -->
-                <g fill="#CBE2F7" opacity="0.7">
-                    <circle cx="180" cy="220" r="4"/>
-                    <circle cx="1620" cy="180" r="5"/>
-                    <circle cx="240" cy="1600" r="4"/>
-                    <circle cx="1640" cy="1640" r="5"/>
-                    <circle cx="900" cy="120" r="3"/>
-                    <circle cx="120" cy="900" r="3"/>
+                <g fill="#D4E6F8" opacity="0.55">
+                    <circle cx="200" cy="240" r="4"/>
+                    <circle cx="1800" cy="200" r="5"/>
+                    <circle cx="260" cy="1780" r="4"/>
+                    <circle cx="1820" cy="1820" r="5"/>
+                    <circle cx="1000" cy="140" r="3"/>
+                    <circle cx="140" cy="1000" r="3"/>
                 </g>
             `;
 
@@ -1254,9 +1253,10 @@
                     return { x: last.x, y: last.y, tx: 1, ty: 0 };
                 };
 
-                // Отступы: первая станция чуть отступает от кольца, последняя — от конца (для лейбла)
-                const padStart = 70;
-                const padEnd   = 150;
+                // Отступы: первая станция чуть отступает от кольца,
+                // последняя — от конечной (иконки), чтобы не наезжать
+                const padStart = 80;
+                const padEnd   = 110;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
 
@@ -1274,7 +1274,7 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    const labelDist = 32;
+                    const labelDist = 30;
                     const lx = cx + nx * labelDist;
                     const ly = cy + ny * labelDist;
                     const anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
@@ -1287,8 +1287,10 @@
                                     stroke="${line.color}" stroke-width="5"
                                     filter="url(#station-shadow)"/>
                             <text x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
-                                  font-family="${FONT}" font-size="26" font-weight="700"
-                                  fill="${TEXT_DARK}" pointer-events="none">${station.name}</text>
+                                  font-family="${FONT}" font-size="24" font-weight="700"
+                                  fill="${TEXT_DARK}" pointer-events="none"
+                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
+                                  stroke-linejoin="round">${station.name}</text>
                         </g>
                     `;
                 });
@@ -1299,29 +1301,40 @@
                     yellow:    '🎓', blue:   '🏛', lightblue: '🏙',
                     green:     '☀',  red:    '🎭'
                 };
-                // Позиция лейбла — немного дальше конца линии, вдоль радиуса
-                const labelOffset = 90;
-                const tlx = endX + labelOffset * Math.cos(rad);
-                const tly = endY + labelOffset * Math.sin(rad);
-                const iconR = 40;
-                const iconY = tly - 75;
+                // Иконка конечной станции совпадает с концом линии (линия входит в круг),
+                // а текст уходит дальше наружу.
+                const iconR = 46;
+                const tlx = endX;       // центр иконки = конец линии
+                const ticy = endY;
+                const labelOffset = iconR + 36;
+                const lblX = endX + labelOffset * Math.cos(rad);
+                const lblY = endY + labelOffset * Math.sin(rad);
+                // Если конечная уходит вверх — текст над иконкой; иначе под ней
+                const above = Math.sin(rad) < -0.2;
+                const tly = above ? (ticy - iconR - 30) : (ticy + iconR + 36);
 
                 content += `
                     <g pointer-events="none">
-                        <circle cx="${tlx}" cy="${iconY}" r="${iconR}" fill="#FFFFFF"
-                                stroke="${line.color}" stroke-width="5"
+                        <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
+                                stroke="${line.color}" stroke-width="6"
                                 filter="url(#soft-shadow)"/>
-                        <text x="${tlx}" y="${iconY + 18}" text-anchor="middle"
-                              font-size="44">${termIconMap[line.id] || '⭐'}</text>
+                        <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
+                              font-size="46">${termIconMap[line.id] || '⭐'}</text>
                         <text x="${tlx}" y="${tly}" text-anchor="middle"
                               font-family="${FONT}" font-size="22" font-weight="800"
-                              fill="${TEXT_DARK}">Конечная станция</text>
-                        <text x="${tlx}" y="${tly + 30}" text-anchor="middle"
-                              font-family="${FONT}" font-size="24" font-weight="800"
-                              fill="${line.color}">«${line.name}»</text>
-                        <text x="${tlx}" y="${tly + 58}" text-anchor="middle"
+                              fill="${TEXT_DARK}"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                              stroke-linejoin="round">Конечная станция</text>
+                        <text x="${tlx}" y="${tly + 28}" text-anchor="middle"
+                              font-family="${FONT}" font-size="24" font-weight="900"
+                              fill="${line.color}"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                              stroke-linejoin="round">«${line.name}»</text>
+                        <text x="${tlx}" y="${tly + 54}" text-anchor="middle"
                               font-family="${FONT}" font-size="18" font-weight="600"
-                              fill="${TEXT_SOFT}">(${line.age})</text>
+                              fill="${TEXT_SOFT}"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
+                              stroke-linejoin="round">(${line.age})</text>
                     </g>
                 `;
             });
