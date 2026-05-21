@@ -231,7 +231,7 @@
     <div class="w-full max-w-[1400px] bg-carBg rounded-[40px] md:rounded-[60px] shadow-soft relative flex flex-col border-8 border-white overflow-hidden">
         
         <!-- Стилизованная крыша вагона (Шапка) -->
-        <header class="bg-pastelMint w-full min-h-[8rem] md:min-h-[11rem] py-4 md:py-6 rounded-t-[32px] md:rounded-t-[52px] relative flex items-center justify-between px-6 md:px-12 border-b-4 border-white z-50">
+        <header class="w-full min-h-[8rem] md:min-h-[11rem] py-4 md:py-6 rounded-t-[32px] md:rounded-t-[52px] relative flex items-center justify-between px-6 md:px-12 border-b-4 border-white z-50" style="background: linear-gradient(135deg,#FDBA74 0%,#FB923C 35%,#F97316 70%,#EA580C 100%); box-shadow: 0 8px 24px -8px rgba(234,88,12,0.45);">
             <!-- Блик на крыше -->
             <div class="absolute top-2 left-10 right-10 h-4 bg-white opacity-40 rounded-full blur-sm"></div>
 
@@ -694,7 +694,7 @@
         <!-- ================= НОВАЯ СЕКЦИЯ: ИНТЕРАКТИВНАЯ КАРТА И ИГРОТЕКА ================= -->
         
         <!-- Секция: Интерактивная карта "Город Знаний" -->
-        <section class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: linear-gradient(180deg,#F4FAFF 0%,#EAF4FF 100%);">
+        <section class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: linear-gradient(180deg,#DCEEFF 0%,#C7E2FB 60%,#B8D8F7 100%);">
             <div class="max-w-6xl mx-auto text-center mb-8">
                 <h3 style="font-family:'Montserrat',sans-serif;letter-spacing:0.02em;" class="text-2xl md:text-4xl font-extrabold uppercase text-[#1F2937] leading-tight">
                     Схема метро образовательного центра<br/>
@@ -703,7 +703,7 @@
                 <p style="font-family:'Montserrat',sans-serif;letter-spacing:0.05em;" class="mt-3 text-sm md:text-base font-semibold uppercase tracking-wider text-[#6B7280]">Станции по возрасту учеников</p>
             </div>
 
-            <div class="w-full max-w-6xl mx-auto overflow-hidden relative bg-white p-2 md:p-6 rounded-[32px] shadow-[0_20px_60px_-20px_rgba(59,130,246,0.25)] border border-[#E5EFFA]" style="aspect-ratio: 1/1;">
+            <div class="w-full max-w-6xl mx-auto overflow-hidden relative p-2 md:p-6 rounded-[32px] shadow-[0_20px_60px_-20px_rgba(59,130,246,0.25)] border border-[#B8D8F7]" style="aspect-ratio: 1/1; background: linear-gradient(180deg,#DCEEFF 0%,#C7E2FB 100%);">
                 
                 <!-- Элементы управления зумом -->
                 <div class="absolute top-6 right-6 md:top-10 md:right-10 z-20 flex flex-col gap-2">
@@ -712,7 +712,7 @@
                     <button onclick="resetMapZoom()" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-xl font-bold text-textMain hover:bg-pastelMint hover:scale-110 active:scale-90 transition-all focus:outline-none" title="Вернуть к исходному виду">⟲</button>
                 </div>
                 
-                <div id="map-container-inner" class="w-full h-full overflow-hidden relative rounded-[28px] cursor-grab active:cursor-grabbing bg-white">
+                <div id="map-container-inner" class="w-full h-full overflow-hidden relative rounded-[28px] cursor-grab active:cursor-grabbing" style="background: linear-gradient(180deg,#DCEEFF 0%,#C7E2FB 100%);">
                     <svg id="interactive-metro-map" viewBox="0 0 1800 1800" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
@@ -956,7 +956,7 @@
         <!-- Нижний бампер/пол -->
         <div class="h-6 w-full bg-gray-300 mt-auto border-t-2 border-gray-400 relative z-20"></div>
 
-        <footer class="bg-[#F3F4F6] w-full pt-8 pb-6 px-6 md:px-12 relative z-20 flex flex-col items-center">
+        <footer class="w-full pt-8 pb-6 px-6 md:px-12 relative z-20 flex flex-col items-center" style="background: linear-gradient(160deg,#FDBA74 0%,#FB923C 40%,#F97316 75%,#EA580C 100%); color: #1F2937;">
             
             <!-- Сиденья (подушки) -->
             <div class="absolute -top-6 left-0 right-0 flex justify-center gap-2 md:gap-6 px-4">
