@@ -1384,7 +1384,7 @@
                 legendEl.querySelectorAll('.legend-item').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const id = btn.getAttribute('data-line');
-                        highlightMetroLine(id);
+                        goToLinePage(id);
                     });
                 });
             }
@@ -1552,6 +1552,78 @@
             if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
             setTrainPath('#train-ring-path', { mode: 'ring', speed: 1.8 });
             tickTrain();
+        }
+
+        // === Клик по легенде: подсветить линию, поезд → конечная → страница со всеми дисциплинами ===
+        function goToLinePage(lineId) {
+            const line = METRO_LINES.find(l => l.id === lineId);
+            if (!line) return;
+            // подсветка как раньше
+            const svg = document.getElementById('interactive-metro-map');
+            if (svg) {
+                highlightedLine = lineId;
+                svg.querySelectorAll('.metro-line').forEach(el => {
+                    const same = el.getAttribute('data-line') === lineId;
+                    el.style.opacity = same ? '1' : '0.18';
+                    el.setAttribute('stroke-width', same ? '20' : '14');
+                });
+                svg.querySelectorAll('.metro-line-group').forEach(el => {
+                    const same = el.getAttribute('data-line') === lineId;
+                    el.style.opacity = same ? '1' : '0.2';
+                });
+                document.querySelectorAll('.legend-item').forEach(btn => {
+                    const active = btn.getAttribute('data-line') === lineId;
+                    btn.style.boxShadow = active ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none';
+                    btn.style.background = active ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
+                });
+            }
+            const win = window.open('', '_blank');
+            try {
+                sendTrainAlongLine(lineId, true, undefined, () => {
+                    openLineDisciplinesPage(line, win);
+                    setTimeout(returnTrainToRing, 400);
+                });
+            } catch (e) {
+                openLineDisciplinesPage(line, win);
+            }
+        }
+
+        function openLineDisciplinesPage(line, win) {
+            const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            const stationsHtml = line.stations.map((st, i) => `
+                <section style="background:#fff;border-radius:24px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);border-left:8px solid ${line.color};">
+                  <h2 style="margin:0 0 10px;font-size:1.35rem;font-weight:800;color:#1F2937;">${i+1}. ${esc(st.name)}</h2>
+                  <ul style="margin:0;padding-left:1.2rem;color:#374151;line-height:1.55;">
+                    ${st.programs.map(p => `<li>${esc(p)}</li>`).join('')}
+                  </ul>
+                </section>
+            `).join('');
+            const html = `<!doctype html><html lang="ru"><head><meta charset="utf-8"/>
+                <title>${esc(line.name)} — Город Знаний</title>
+                <meta name="viewport" content="width=device-width,initial-scale=1"/>
+                <style>
+                  body{margin:0;font-family:'Montserrat','Inter',system-ui,sans-serif;background:linear-gradient(180deg,#EAF4FF,#FFF5F7);min-height:100vh;color:#1F2937;}
+                  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 64px;}
+                  .back{display:inline-flex;align-items:center;gap:8px;background:${line.color};color:#fff;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:1rem;}
+                  .back:hover{filter:brightness(.95);}
+                  h1{font-size:2.2rem;margin:18px 0 6px;font-weight:900;}
+                  .age{color:#6B7280;font-weight:600;margin-bottom:24px;}
+                </style></head><body>
+                <div class="wrap">
+                  <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад</button>
+                  <h1 style="color:${line.color}">«${esc(line.name)}»</h1>
+                  <div class="age">Конечная станция • ${esc(line.age)}</div>
+                  ${stationsHtml}
+                  <div style="text-align:center;margin-top:28px;">
+                    <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад к карте</button>
+                  </div>
+                </div>
+              </body></html>`;
+            const target = win || window.open('', '_blank');
+            if (!target) return;
+            target.document.open();
+            target.document.write(html);
+            target.document.close();
         }
 
 
