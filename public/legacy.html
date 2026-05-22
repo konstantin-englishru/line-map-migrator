@@ -1368,6 +1368,9 @@
                 </g>
             `;
 
+            // --- Запуск анимации поезда ---
+            startMetroTrain();
+
             // Легенда в HTML (под SVG) — не загораживает карту
             const legendEl = document.getElementById('metro-legend');
             if (legendEl) {
@@ -1416,7 +1419,142 @@
                 btn.style.boxShadow = active ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none';
                 btn.style.background = active ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
             });
+            // Поезд едет по выбранной линии (до конечной) или возвращается на кольцо
+            if (highlightedLine) {
+                sendTrainAlongLine(highlightedLine, /*toEnd*/ true);
+            } else {
+                returnTrainToRing();
+            }
         }
+
+        // ============ АНИМАЦИЯ ПОЕЗДА ============
+        const TRAIN_STATE = {
+            mode: 'ring',          // 'ring' | 'line'
+            pathEl: null,
+            total: 0,
+            t: 0,                  // текущая позиция головы по пути (в длинах)
+            speed: 1.8,            // px за кадр (кольцо)
+            carSpacing: 52,        // расстояние между вагонами (px вдоль пути)
+            rafId: null,
+            oneShot: false,
+            onArrive: null,
+        };
+
+        function setTrainPath(pathSelector, opts = {}) {
+            const p = document.querySelector(pathSelector);
+            if (!p) return false;
+            TRAIN_STATE.pathEl = p;
+            TRAIN_STATE.total = p.getTotalLength();
+            TRAIN_STATE.t = opts.startAt != null ? opts.startAt : 0;
+            TRAIN_STATE.speed = opts.speed ?? 1.8;
+            TRAIN_STATE.oneShot = !!opts.oneShot;
+            TRAIN_STATE.onArrive = opts.onArrive || null;
+            TRAIN_STATE.mode = opts.mode || 'ring';
+            return true;
+        }
+
+        function startMetroTrain() {
+            if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
+            setTrainPath('#train-ring-path', { mode: 'ring', speed: 1.8 });
+            tickTrain();
+        }
+
+        function tickTrain() {
+            const train = document.getElementById('metro-train');
+            const path = TRAIN_STATE.pathEl;
+            if (!train || !path) {
+                TRAIN_STATE.rafId = requestAnimationFrame(tickTrain);
+                return;
+            }
+            const total = TRAIN_STATE.total || path.getTotalLength();
+            TRAIN_STATE.t += TRAIN_STATE.speed;
+
+            let reachedEnd = false;
+            if (TRAIN_STATE.oneShot) {
+                if (TRAIN_STATE.t >= total) {
+                    TRAIN_STATE.t = total;
+                    reachedEnd = true;
+                }
+            } else {
+                if (TRAIN_STATE.t >= total) TRAIN_STATE.t -= total;
+            }
+
+            const cars = train.querySelectorAll('.train-car');
+            cars.forEach((car, i) => {
+                let L = TRAIN_STATE.t - i * TRAIN_STATE.carSpacing;
+                if (TRAIN_STATE.mode === 'ring') {
+                    while (L < 0) L += total;
+                } else {
+                    if (L < 0) L = 0;
+                }
+                const p1 = path.getPointAtLength(L);
+                const p2 = path.getPointAtLength(Math.min(L + 1, total));
+                const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+                car.setAttribute('transform', `translate(${p1.x},${p1.y}) rotate(${angle})`);
+            });
+
+            if (reachedEnd) {
+                const cb = TRAIN_STATE.onArrive;
+                TRAIN_STATE.onArrive = null;
+                TRAIN_STATE.oneShot = false;
+                if (cb) cb();
+                return; // остановим до следующей команды
+            }
+
+            TRAIN_STATE.rafId = requestAnimationFrame(tickTrain);
+        }
+
+        // Едет по линии до станции (stationIdx) или до конечной (если undefined)
+        function sendTrainAlongLine(lineId, toEnd, stationIdx, onArriveCb) {
+            const linePath = document.getElementById(`line-path-${lineId}`);
+            if (!linePath) return;
+            // Создаём временный путь: от текущей позиции по кольцу к началу линии + сама линия
+            const total = linePath.getTotalLength();
+            let targetLen = total;
+            if (typeof stationIdx === 'number') {
+                // Позиция станции по пути аппроксимирована теми же отступами, что и при отрисовке
+                const padStart = 80, padEnd = 110;
+                const usable = Math.max(0, total - padStart - padEnd);
+                const line = METRO_LINES.find(l => l.id === lineId);
+                const count = line ? line.stations.length : 1;
+                const step = count > 1 ? usable / (count - 1) : 0;
+                targetLen = Math.min(total, padStart + step * stationIdx);
+            }
+            // Сократим путь: создадим динамический <path> с d, ограниченным до targetLen,
+            // используя оригинальный path как источник
+            const svgNS = 'http://www.w3.org/2000/svg';
+            let dyn = document.getElementById('train-dyn-path');
+            if (!dyn) {
+                dyn = document.createElementNS(svgNS, 'path');
+                dyn.setAttribute('id', 'train-dyn-path');
+                dyn.setAttribute('fill', 'none');
+                dyn.setAttribute('stroke', 'none');
+                linePath.parentNode.appendChild(dyn);
+            }
+            // Аппроксимация: путь = серия отрезков от t=0 до targetLen
+            const steps = 60;
+            let d = '';
+            for (let i = 0; i <= steps; i++) {
+                const L = (targetLen * i) / steps;
+                const pt = linePath.getPointAtLength(L);
+                d += (i === 0 ? `M ${pt.x} ${pt.y}` : ` L ${pt.x} ${pt.y}`);
+            }
+            dyn.setAttribute('d', d);
+
+            if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
+            setTrainPath('#train-dyn-path', {
+                mode: 'line', speed: 6, oneShot: true,
+                onArrive: onArriveCb || (() => {})
+            });
+            tickTrain();
+        }
+
+        function returnTrainToRing() {
+            if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
+            setTrainPath('#train-ring-path', { mode: 'ring', speed: 1.8 });
+            tickTrain();
+        }
+
 
         // --- ЛОГИКА ЗУМА И ПАНОРАМИРОВАНИЯ ---
         let mapScale = 1;
