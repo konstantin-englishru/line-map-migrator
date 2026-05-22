@@ -1951,7 +1951,15 @@
             const line = METRO_LINES[lineIdx];
             const station = line.stations[stationIdx];
             const title = line.name + ' — ' + station.name;
-            window.open(pageUrl(title), '_blank', 'noopener');
+            // Сначала отправляем поезд к выбранной станции, по прибытии открываем страницу
+            try {
+                sendTrainAlongLine(line.id, false, stationIdx, () => {
+                    window.open(pageUrl(title), '_blank', 'noopener');
+                    setTimeout(returnTrainToRing, 400);
+                });
+            } catch (e) {
+                window.open(pageUrl(title), '_blank', 'noopener');
+            }
         }
     </script>
 </body>
