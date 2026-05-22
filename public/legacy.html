@@ -1323,11 +1323,9 @@
                 const iconR = 46;
                 const tlx = endX;       // центр иконки = конец линии
                 const ticy = endY;
-                const labelOffset = iconR + 36;
-                const lblX = endX + labelOffset * Math.cos(rad);
-                const lblY = endY + labelOffset * Math.sin(rad);
-                // Подпись конечной всегда выше иконки, чтобы не сливалась с ней
-                const tly = ticy - iconR - 28;
+                // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
+                const nameY = ticy - iconR - 36;
+                const ageY  = nameY + 24;
 
                 content += `
                     <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
@@ -1336,12 +1334,12 @@
                                 filter="url(#soft-shadow)"/>
                         <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
                               font-size="46">${termIconMap[line.id] || '⭐'}</text>
-                        <text x="${tlx}" y="${tly}" text-anchor="middle"
-                              font-family="${FONT}" font-size="24" font-weight="900"
+                        <text x="${tlx}" y="${nameY}" text-anchor="middle"
+                              font-family="${FONT}" font-size="26" font-weight="900"
                               fill="${line.color}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
-                              stroke-linejoin="round">«${line.name}»</text>
-                        <text x="${tlx}" y="${tly - 26}" text-anchor="middle"
+                              stroke-linejoin="round">${line.name}</text>
+                        <text x="${tlx}" y="${ageY}" text-anchor="middle"
                               font-family="${FONT}" font-size="18" font-weight="600"
                               fill="${TEXT_SOFT}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
