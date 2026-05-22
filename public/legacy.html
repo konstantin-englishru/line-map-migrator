@@ -1278,7 +1278,7 @@
                     const dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
 
                     content += `
-                        <g class="cursor-pointer" onclick="openStationModal(${lineIdx}, ${stationIdx})">
+                        <g class="cursor-pointer metro-line-group" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
                             <circle cx="${cx}" cy="${cy}" r="28" fill="transparent"/>
                             <circle cx="${cx}" cy="${cy}" r="11" fill="#FFFFFF"
                                     stroke="${line.color}" stroke-width="5"
@@ -1340,30 +1340,10 @@
                         stroke="#E5EFFA" stroke-width="2"/>
 
                 <!-- Логотип "Город Знаний" -->
-                <g transform="translate(${CENTER}, ${CENTER}) scale(0.75)" pointer-events="none">
-                    <!-- стилизованный домик -->
-                    <g transform="translate(0,-70)">
-                        <rect x="-60" y="-10" width="120" height="60" rx="6" fill="#3FB8E5"/>
-                        <rect x="-45" y="5"  width="22" height="30" fill="#FFFFFF"/>
-                        <rect x="-13" y="5"  width="22" height="30" fill="#FFFFFF"/>
-                        <rect x="23"  y="5"  width="22" height="30" fill="#FFFFFF"/>
-                        <polygon points="-66,-10 0,-58 66,-10" fill="#1F6FA8"/>
-                        <text x="-40" y="-22" font-size="22" fill="#FACC15">★</text>
-                        <text x="-10" y="-30" font-size="26" fill="#FACC15">★</text>
-                        <text x="20"  y="-22" font-size="22" fill="#FACC15">★</text>
-                    </g>
-                    <!-- лента-таблетка с текстом -->
-                    <g transform="translate(0,80)">
-                        <rect x="-130" y="-44" width="260" height="88" rx="44"
-                              fill="#3FB8E5"/>
-                        <text text-anchor="middle" y="-4"
-                              font-family="${FONT}" font-size="34" font-weight="900"
-                              fill="#FFFFFF" letter-spacing="2">ГОРОД</text>
-                        <text text-anchor="middle" y="30"
-                              font-family="${FONT}" font-size="34" font-weight="900"
-                              fill="#FFFFFF" letter-spacing="2">ЗНАНИЙ</text>
-                    </g>
-                </g>
+                <image href="/GorodZnaniyLOGO.png"
+                       x="${CENTER - (RING_RADIUS - 50)}" y="${CENTER - (RING_RADIUS - 50)}"
+                       width="${2 * (RING_RADIUS - 50)}" height="${2 * (RING_RADIUS - 50)}"
+                       preserveAspectRatio="xMidYMid meet" pointer-events="none"/>
             `;
 
             svg.innerHTML = `
@@ -1378,12 +1358,50 @@
             const legendEl = document.getElementById('metro-legend');
             if (legendEl) {
                 legendEl.innerHTML = METRO_LINES.map(l => `
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-3 h-3 rounded-full" style="background:${l.color}"></span>
+                    <button type="button" data-line="${l.id}"
+                            class="legend-item flex items-center gap-2 px-3 py-1.5 rounded-full border-2 border-transparent hover:border-[${l.color}] transition-colors cursor-pointer"
+                            style="background:rgba(255,255,255,0.6);">
+                        <span class="inline-block w-4 h-4 rounded-full" style="background:${l.color}"></span>
                         <span class="text-sm md:text-base font-semibold text-[#1F2937]">${l.name}</span>
-                    </div>
+                    </button>
                 `).join('');
+                legendEl.querySelectorAll('.legend-item').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-line');
+                        highlightMetroLine(id);
+                    });
+                });
             }
+        }
+
+        let highlightedLine = null;
+        function highlightMetroLine(id) {
+            const svg = document.getElementById('interactive-metro-map');
+            if (!svg) return;
+            const toggle = (highlightedLine === id);
+            highlightedLine = toggle ? null : id;
+            // Линии
+            svg.querySelectorAll('.metro-line').forEach(el => {
+                const same = el.getAttribute('data-line') === highlightedLine;
+                if (!highlightedLine) {
+                    el.style.opacity = '1';
+                    el.setAttribute('stroke-width', '14');
+                } else {
+                    el.style.opacity = same ? '1' : '0.18';
+                    el.setAttribute('stroke-width', same ? '20' : '14');
+                }
+            });
+            // Группы (станции и конечные)
+            svg.querySelectorAll('.metro-line-group').forEach(el => {
+                const same = el.getAttribute('data-line') === highlightedLine;
+                el.style.opacity = !highlightedLine ? '1' : (same ? '1' : '0.2');
+            });
+            // Подсветка кнопок легенды
+            document.querySelectorAll('.legend-item').forEach(btn => {
+                const active = btn.getAttribute('data-line') === highlightedLine;
+                btn.style.boxShadow = active ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none';
+                btn.style.background = active ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
+            });
         }
 
         // --- ЛОГИКА ЗУМА И ПАНОРАМИРОВАНИЯ ---
