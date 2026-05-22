@@ -235,25 +235,10 @@
             <!-- Блик на крыше -->
             <div class="absolute top-2 left-10 right-10 h-4 bg-white opacity-40 rounded-full blur-sm"></div>
 
-            <!-- Логотип: Улыбающийся поезд -->
+            <!-- Логотип: Город Знаний -->
             <div class="flex items-center gap-4 z-10 cursor-pointer group shrink-0">
-                <div class="w-16 h-16 md:w-20 md:h-20 bg-pastelYellow rounded-2xl md:rounded-3xl flex flex-col items-center justify-center border-4 border-white shadow-sm transform group-hover:scale-105 transition-transform">
-                    <svg viewBox="0 0 64 64" class="w-12 h-12 md:w-14 md:h-14 fill-current text-textMain">
-                        <!-- Корпус -->
-                        <rect x="12" y="10" width="40" height="44" rx="8" fill="#FFFACD" stroke="#4A4A4A" stroke-width="3"/>
-                        <!-- Окно кабины -->
-                        <rect x="20" y="18" width="24" height="14" rx="4" fill="#E6F2FF" stroke="#4A4A4A" stroke-width="3"/>
-                        <!-- Фары (глаза) -->
-                        <circle cx="22" cy="42" r="4" fill="#4A4A4A"/>
-                        <circle cx="42" cy="42" r="4" fill="#4A4A4A"/>
-                        <!-- Блики в глазах -->
-                        <circle cx="21" cy="41" r="1.5" fill="#FFF"/>
-                        <circle cx="41" cy="41" r="1.5" fill="#FFF"/>
-                        <!-- Улыбка (решетка) -->
-                        <path d="M26 50 Q32 54 38 50" fill="none" stroke="#4A4A4A" stroke-width="3" stroke-linecap="round"/>
-                        <!-- Труба -->
-                        <path d="M38 10 L38 4 L44 4 L44 10 Z" fill="#FFE6F2" stroke="#4A4A4A" stroke-width="2"/>
-                    </svg>
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-full flex items-center justify-center border-4 border-white shadow-sm transform group-hover:scale-105 transition-transform overflow-hidden">
+                    <img src="/GZ_logo_circle.jpg" alt="Город Знаний" class="w-full h-full object-cover" />
                 </div>
                 <div>
                     <h1 class="font-heading text-2xl md:text-3xl font-bold text-textMain tracking-wide">Город Знаний</h1>
@@ -262,7 +247,7 @@
             </div>
 
             <!-- Кликабельный телефон -->
-            <a href="tel:+79991234567" class="hidden sm:flex items-center gap-2 bg-white/70 hover:bg-white px-4 py-2 rounded-2xl shadow-sm font-heading font-bold text-base lg:text-lg text-textMain hover:scale-105 transition-transform whitespace-nowrap z-10 mr-2 lg:mr-4">
+            <a href="tel:+79991234567" class="hidden sm:flex items-center gap-2 bg-white/70 hover:bg-white px-4 py-2 rounded-2xl shadow-sm font-heading font-bold text-base lg:text-lg text-textMain hover:scale-105 transition-transform whitespace-nowrap z-10 ml-4 lg:ml-8 mr-2 lg:mr-4">
                 <svg class="w-5 h-5 text-pastelPink fill-current" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
                 +7 (999) 123-45-67
             </a>
@@ -1339,11 +1324,40 @@
                         fill="#FFFFFF" filter="url(#soft-shadow)"
                         stroke="#E5EFFA" stroke-width="2"/>
 
-                <!-- Логотип "Город Знаний" -->
-                <image href="/GorodZnaniyLOGO.png"
-                       x="${CENTER - (RING_RADIUS - 50)}" y="${CENTER - (RING_RADIUS - 50)}"
-                       width="${2 * (RING_RADIUS - 50)}" height="${2 * (RING_RADIUS - 50)}"
-                       preserveAspectRatio="xMidYMid meet" pointer-events="none"/>
+                <!-- Логотип "Город Знаний" — обрезан по бокам и вписан в круг -->
+                <defs>
+                    <clipPath id="logo-clip">
+                        <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 44}"/>
+                    </clipPath>
+                </defs>
+                <image href="/GZ_logo_circle.jpg"
+                       x="${CENTER - (RING_RADIUS - 44)}" y="${CENTER - (RING_RADIUS - 44)}"
+                       width="${2 * (RING_RADIUS - 44)}" height="${2 * (RING_RADIUS - 44)}"
+                       preserveAspectRatio="xMidYMid slice"
+                       clip-path="url(#logo-clip)" pointer-events="none"/>
+
+                <!-- Скрытый круговой путь, по которому едет поезд -->
+                <path id="train-ring-path"
+                      d="M ${CENTER + (RING_RADIUS + 28)},${CENTER}
+                         A ${RING_RADIUS + 28},${RING_RADIUS + 28} 0 1,1 ${CENTER - (RING_RADIUS + 28)},${CENTER}
+                         A ${RING_RADIUS + 28},${RING_RADIUS + 28} 0 1,1 ${CENTER + (RING_RADIUS + 28)},${CENTER} Z"
+                      fill="none" stroke="none"/>
+
+                <!-- Поезд: локомотив + 3 вагончика -->
+                <g id="metro-train" pointer-events="none">
+                    ${[0,1,2,3].map(i => `
+                        <g class="train-car" data-idx="${i}">
+                            <rect x="-22" y="-12" width="44" height="24" rx="6"
+                                  fill="${i===0 ? '#FFE066' : (i===1 ? '#F4B5D6' : (i===2 ? '#B9A6E6' : '#B4E59A'))}"
+                                  stroke="#1F2937" stroke-width="2.5"/>
+                            <rect x="-16" y="-7" width="12" height="9" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="1.5"/>
+                            <rect x="4" y="-7" width="12" height="9" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="1.5"/>
+                            <circle cx="-12" cy="13" r="3.5" fill="#1F2937"/>
+                            <circle cx="12" cy="13" r="3.5" fill="#1F2937"/>
+                            ${i===0 ? '<rect x="8" y="-20" width="6" height="8" fill="#F4B5D6" stroke="#1F2937" stroke-width="1.5"/>' : ''}
+                        </g>
+                    `).join('')}
+                </g>
             `;
 
             svg.innerHTML = `
@@ -1353,6 +1367,9 @@
                     ${content}
                 </g>
             `;
+
+            // --- Запуск анимации поезда ---
+            startMetroTrain();
 
             // Легенда в HTML (под SVG) — не загораживает карту
             const legendEl = document.getElementById('metro-legend');
@@ -1402,7 +1419,142 @@
                 btn.style.boxShadow = active ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none';
                 btn.style.background = active ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
             });
+            // Поезд едет по выбранной линии (до конечной) или возвращается на кольцо
+            if (highlightedLine) {
+                sendTrainAlongLine(highlightedLine, /*toEnd*/ true);
+            } else {
+                returnTrainToRing();
+            }
         }
+
+        // ============ АНИМАЦИЯ ПОЕЗДА ============
+        const TRAIN_STATE = {
+            mode: 'ring',          // 'ring' | 'line'
+            pathEl: null,
+            total: 0,
+            t: 0,                  // текущая позиция головы по пути (в длинах)
+            speed: 1.8,            // px за кадр (кольцо)
+            carSpacing: 52,        // расстояние между вагонами (px вдоль пути)
+            rafId: null,
+            oneShot: false,
+            onArrive: null,
+        };
+
+        function setTrainPath(pathSelector, opts = {}) {
+            const p = document.querySelector(pathSelector);
+            if (!p) return false;
+            TRAIN_STATE.pathEl = p;
+            TRAIN_STATE.total = p.getTotalLength();
+            TRAIN_STATE.t = opts.startAt != null ? opts.startAt : 0;
+            TRAIN_STATE.speed = opts.speed ?? 1.8;
+            TRAIN_STATE.oneShot = !!opts.oneShot;
+            TRAIN_STATE.onArrive = opts.onArrive || null;
+            TRAIN_STATE.mode = opts.mode || 'ring';
+            return true;
+        }
+
+        function startMetroTrain() {
+            if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
+            setTrainPath('#train-ring-path', { mode: 'ring', speed: 1.8 });
+            tickTrain();
+        }
+
+        function tickTrain() {
+            const train = document.getElementById('metro-train');
+            const path = TRAIN_STATE.pathEl;
+            if (!train || !path) {
+                TRAIN_STATE.rafId = requestAnimationFrame(tickTrain);
+                return;
+            }
+            const total = TRAIN_STATE.total || path.getTotalLength();
+            TRAIN_STATE.t += TRAIN_STATE.speed;
+
+            let reachedEnd = false;
+            if (TRAIN_STATE.oneShot) {
+                if (TRAIN_STATE.t >= total) {
+                    TRAIN_STATE.t = total;
+                    reachedEnd = true;
+                }
+            } else {
+                if (TRAIN_STATE.t >= total) TRAIN_STATE.t -= total;
+            }
+
+            const cars = train.querySelectorAll('.train-car');
+            cars.forEach((car, i) => {
+                let L = TRAIN_STATE.t - i * TRAIN_STATE.carSpacing;
+                if (TRAIN_STATE.mode === 'ring') {
+                    while (L < 0) L += total;
+                } else {
+                    if (L < 0) L = 0;
+                }
+                const p1 = path.getPointAtLength(L);
+                const p2 = path.getPointAtLength(Math.min(L + 1, total));
+                const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+                car.setAttribute('transform', `translate(${p1.x},${p1.y}) rotate(${angle})`);
+            });
+
+            if (reachedEnd) {
+                const cb = TRAIN_STATE.onArrive;
+                TRAIN_STATE.onArrive = null;
+                TRAIN_STATE.oneShot = false;
+                if (cb) cb();
+                return; // остановим до следующей команды
+            }
+
+            TRAIN_STATE.rafId = requestAnimationFrame(tickTrain);
+        }
+
+        // Едет по линии до станции (stationIdx) или до конечной (если undefined)
+        function sendTrainAlongLine(lineId, toEnd, stationIdx, onArriveCb) {
+            const linePath = document.getElementById(`line-path-${lineId}`);
+            if (!linePath) return;
+            // Создаём временный путь: от текущей позиции по кольцу к началу линии + сама линия
+            const total = linePath.getTotalLength();
+            let targetLen = total;
+            if (typeof stationIdx === 'number') {
+                // Позиция станции по пути аппроксимирована теми же отступами, что и при отрисовке
+                const padStart = 80, padEnd = 110;
+                const usable = Math.max(0, total - padStart - padEnd);
+                const line = METRO_LINES.find(l => l.id === lineId);
+                const count = line ? line.stations.length : 1;
+                const step = count > 1 ? usable / (count - 1) : 0;
+                targetLen = Math.min(total, padStart + step * stationIdx);
+            }
+            // Сократим путь: создадим динамический <path> с d, ограниченным до targetLen,
+            // используя оригинальный path как источник
+            const svgNS = 'http://www.w3.org/2000/svg';
+            let dyn = document.getElementById('train-dyn-path');
+            if (!dyn) {
+                dyn = document.createElementNS(svgNS, 'path');
+                dyn.setAttribute('id', 'train-dyn-path');
+                dyn.setAttribute('fill', 'none');
+                dyn.setAttribute('stroke', 'none');
+                linePath.parentNode.appendChild(dyn);
+            }
+            // Аппроксимация: путь = серия отрезков от t=0 до targetLen
+            const steps = 60;
+            let d = '';
+            for (let i = 0; i <= steps; i++) {
+                const L = (targetLen * i) / steps;
+                const pt = linePath.getPointAtLength(L);
+                d += (i === 0 ? `M ${pt.x} ${pt.y}` : ` L ${pt.x} ${pt.y}`);
+            }
+            dyn.setAttribute('d', d);
+
+            if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
+            setTrainPath('#train-dyn-path', {
+                mode: 'line', speed: 6, oneShot: true,
+                onArrive: onArriveCb || (() => {})
+            });
+            tickTrain();
+        }
+
+        function returnTrainToRing() {
+            if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
+            setTrainPath('#train-ring-path', { mode: 'ring', speed: 1.8 });
+            tickTrain();
+        }
+
 
         // --- ЛОГИКА ЗУМА И ПАНОРАМИРОВАНИЯ ---
         let mapScale = 1;
@@ -1799,7 +1951,15 @@
             const line = METRO_LINES[lineIdx];
             const station = line.stations[stationIdx];
             const title = line.name + ' — ' + station.name;
-            window.open(pageUrl(title), '_blank', 'noopener');
+            // Сначала отправляем поезд к выбранной станции, по прибытии открываем страницу
+            try {
+                sendTrainAlongLine(line.id, false, stationIdx, () => {
+                    window.open(pageUrl(title), '_blank', 'noopener');
+                    setTimeout(returnTrainToRing, 400);
+                });
+            } catch (e) {
+                window.open(pageUrl(title), '_blank', 'noopener');
+            }
         }
     </script>
 </body>
