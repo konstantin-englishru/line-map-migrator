@@ -1216,15 +1216,26 @@
                 // Длина пути для равномерного распределения станций
                 // (используем приближение через куски — но проще: используем SVG getPointAtLength).
                 // Чтобы не зависеть от рантайма SVG, аппроксимируем кривую сэмплами.
+                // Сэмплируем полилинию из двух сегментов
                 const samples = 200;
                 const pts = [];
+                const seg1Len = Math.hypot(kinkX - startX, kinkY - startY);
+                const seg2Len = Math.hypot(endX - kinkX, endY - kinkY);
+                const fullLen = seg1Len + seg2Len;
                 let prevX = startX, prevY = startY, total = 0;
                 for (let i = 0; i <= samples; i++) {
                     const t = i / samples;
-                    // Кубическая Безье
-                    const mt = 1 - t;
-                    const x = mt*mt*mt*startX + 3*mt*mt*t*cpStartX + 3*mt*t*t*cpEndX + t*t*t*endX;
-                    const y = mt*mt*mt*startY + 3*mt*mt*t*cpStartY + 3*mt*t*t*cpEndY + t*t*t*endY;
+                    const cur = t * fullLen;
+                    let x, y;
+                    if (cur <= seg1Len) {
+                        const k = cur / Math.max(seg1Len, 0.0001);
+                        x = startX + (kinkX - startX) * k;
+                        y = startY + (kinkY - startY) * k;
+                    } else {
+                        const k = (cur - seg1Len) / Math.max(seg2Len, 0.0001);
+                        x = kinkX + (endX - kinkX) * k;
+                        y = kinkY + (endY - kinkY) * k;
+                    }
                     if (i > 0) total += Math.hypot(x - prevX, y - prevY);
                     pts.push({ x, y, len: total });
                     prevX = x; prevY = y;
