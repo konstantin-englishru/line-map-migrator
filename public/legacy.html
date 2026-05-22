@@ -1193,13 +1193,17 @@
                 const endX   = CENTER + MAX_RADIUS  * Math.cos(rad);
                 const endY   = CENTER + MAX_RADIUS  * Math.sin(rad);
 
-                // Прямые лучи: линия исходит ровно из центрального круга по радиусу
-                const cpStartX = startX + (endX - startX) / 3;
-                const cpStartY = startY + (endY - startY) / 3;
-                const cpEndX = startX + 2 * (endX - startX) / 3;
-                const cpEndY = startY + 2 * (endY - startY) / 3;
+                // Точка излома примерно на середине, смещённая перпендикулярно радиусу.
+                // Линия выходит из центра прямо, затем делает мягкий поворот и снова идёт прямо.
+                const bendDir = BENDS[line.id] ?? 1;
+                const perpX = -Math.sin(rad) * bendDir;
+                const perpY =  Math.cos(rad) * bendDir;
+                const midBaseX = (startX + endX) / 2;
+                const midBaseY = (startY + endY) / 2;
+                const kinkX = midBaseX + perpX * BEND_OFFSET;
+                const kinkY = midBaseY + perpY * BEND_OFFSET;
 
-                const pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+                const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
