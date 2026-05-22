@@ -1129,7 +1129,9 @@
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
-            const MAX_RADIUS = 880;           // длинные линии — конец = центр иконки
+            const KINK_R     = 540;           // радиус, где линия делает поворот
+            const SEG2_LEN   = 460;           // длина второго (наклонного) сегмента
+            const BEND_DEG   = 28;            // угол мягкого поворота на середине
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
