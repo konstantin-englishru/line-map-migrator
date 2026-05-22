@@ -1277,11 +1277,25 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    const labelDist = 30;
-                    const lx = cx + nx * labelDist;
-                    const ly = cy + ny * labelDist;
-                    const anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
-                    const dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
+                    let labelDist = 30;
+                    let lx = cx + nx * labelDist;
+                    let ly = cy + ny * labelDist;
+                    let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
+                    let dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
+
+                    // На красной линии «Спектакли» — слева от станции для читаемости
+                    if (line.id === 'red' && station.name === 'Спектакли') {
+                        anchor = 'end';
+                        lx = cx - labelDist;
+                        ly = cy + 6;
+                        dyText = 0;
+                    }
+
+                    // «Мегаполис. Лето» рендерим в две строки
+                    const isMegapolis = station.name === 'Мегаполис. Лето';
+                    const nameMarkup = isMegapolis
+                        ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="22">Лето</tspan>`
+                        : station.name;
 
                     content += `
                         <g class="cursor-pointer metro-line-group" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
@@ -1293,7 +1307,7 @@
                                   font-family="${FONT}" font-size="24" font-weight="700"
                                   fill="${TEXT_DARK}" pointer-events="none"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
-                                  stroke-linejoin="round">${station.name}</text>
+                                  stroke-linejoin="round">${nameMarkup}</text>
                         </g>
                     `;
                 });
