@@ -1202,22 +1202,18 @@
                 const endX   = CENTER + MAX_RADIUS  * Math.cos(rad);
                 const endY   = CENTER + MAX_RADIUS  * Math.sin(rad);
 
-                // Изгибаем линию: «выезд» из кольца идёт почти по касательной, потом плавно
-                // выходит на радиус. Это даёт стиль референса (мягкая дуга от кольца наружу).
-                const tangentDir = rad + Math.PI / 2; // касательная к кольцу
-                const tangentLen = 150;
-                const cpStartX = startX + tangentLen * Math.cos(tangentDir);
-                const cpStartY = startY + tangentLen * Math.sin(tangentDir);
-                // Контрольная точка у конца — по направлению радиуса (плавный выход)
-                const cpEndX = endX - 220 * Math.cos(rad);
-                const cpEndY = endY - 220 * Math.sin(rad);
+                // Прямые лучи: линия исходит ровно из центрального круга по радиусу
+                const cpStartX = startX + (endX - startX) / 3;
+                const cpStartY = startY + (endY - startY) / 3;
+                const cpEndX = startX + 2 * (endX - startX) / 3;
+                const cpEndY = startY + 2 * (endY - startY) / 3;
 
-                const pathD = `M ${startX} ${startY} C ${cpStartX} ${cpStartY}, ${cpEndX} ${cpEndY}, ${endX} ${endY}`;
+                const pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
                 content += `
-                    <path id="${pathId}" d="${pathD}" fill="none"
+                    <path id="${pathId}" class="metro-line" data-line="${line.id}" d="${pathD}" fill="none"
                           stroke="${line.color}" stroke-width="14"
                           stroke-linecap="round" stroke-linejoin="round"/>
                 `;
@@ -1315,23 +1311,18 @@
                 const tly = above ? (ticy - iconR - 30) : (ticy + iconR + 36);
 
                 content += `
-                    <g pointer-events="none">
+                    <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
                         <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
                                 stroke="${line.color}" stroke-width="6"
                                 filter="url(#soft-shadow)"/>
                         <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
                               font-size="46">${termIconMap[line.id] || '⭐'}</text>
-                        <text x="${tlx}" y="${tly}" text-anchor="middle"
-                              font-family="${FONT}" font-size="22" font-weight="800"
-                              fill="${TEXT_DARK}"
-                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
-                              stroke-linejoin="round">Конечная станция</text>
-                        <text x="${tlx}" y="${tly + 28}" text-anchor="middle"
+                        <text x="${tlx}" y="${tly + 8}" text-anchor="middle"
                               font-family="${FONT}" font-size="24" font-weight="900"
                               fill="${line.color}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                               stroke-linejoin="round">«${line.name}»</text>
-                        <text x="${tlx}" y="${tly + 54}" text-anchor="middle"
+                        <text x="${tlx}" y="${tly + 34}" text-anchor="middle"
                               font-family="${FONT}" font-size="18" font-weight="600"
                               fill="${TEXT_SOFT}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
