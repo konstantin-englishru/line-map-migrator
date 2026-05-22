@@ -1195,21 +1195,18 @@
                 const rad = degreesToRadians(angleDeg);
                 const stationsCount = line.stations.length;
 
-                // Начало линии — на кольце по касательной
+                // Линия = два прямых сегмента с мягким поворотом ровно на середине.
+                // 1) от центрального кольца до точки излома — строго по радиусу;
+                // 2) от излома до конечной — под небольшим углом BEND_DEG к радиусу.
                 const startX = CENTER + RING_RADIUS * Math.cos(rad);
                 const startY = CENTER + RING_RADIUS * Math.sin(rad);
-                const endX   = CENTER + MAX_RADIUS  * Math.cos(rad);
-                const endY   = CENTER + MAX_RADIUS  * Math.sin(rad);
+                const kinkX  = CENTER + KINK_R      * Math.cos(rad);
+                const kinkY  = CENTER + KINK_R      * Math.sin(rad);
 
-                // Точка излома примерно на середине, смещённая перпендикулярно радиусу.
-                // Линия выходит из центра прямо, затем делает мягкий поворот и снова идёт прямо.
                 const bendDir = BENDS[line.id] ?? 1;
-                const perpX = -Math.sin(rad) * bendDir;
-                const perpY =  Math.cos(rad) * bendDir;
-                const midBaseX = (startX + endX) / 2;
-                const midBaseY = (startY + endY) / 2;
-                const kinkX = midBaseX + perpX * BEND_OFFSET;
-                const kinkY = midBaseY + perpY * BEND_OFFSET;
+                const radEnd  = rad + degreesToRadians(BEND_DEG) * bendDir;
+                const endX    = kinkX + SEG2_LEN * Math.cos(radEnd);
+                const endY    = kinkY + SEG2_LEN * Math.sin(radEnd);
 
                 const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
 
