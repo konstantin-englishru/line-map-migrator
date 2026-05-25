@@ -698,7 +698,7 @@
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
-                    <svg id="interactive-metro-map" viewBox="-120 -120 2240 2240" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+                    <svg id="interactive-metro-map" viewBox="-180 -180 2360 2360" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
                 </div>
@@ -1129,10 +1129,10 @@
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
-            const KINK_R     = 420;           // радиус, где линия делает поворот (компактнее)
-            const SEG2_LEN   = 320;           // длина второго (наклонного) сегмента
-            const BEND_DEG   = 24;            // угол мягкого поворота на середине
-            const RING_COLOR = '#B7A7E6';     // лавандовое кольцо (Sugar Floss)
+            const KINK_R     = 540;           // радиус, где линия делает поворот
+            const SEG2_LEN   = 460;           // длина второго (наклонного) сегмента
+            const BEND_DEG   = 28;            // угол мягкого поворота на середине
+            const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
             const FONT = "'Montserrat','Inter',sans-serif";
@@ -1169,12 +1169,12 @@
             let content = `
                 <defs>
                     <radialGradient id="bg-grad" cx="50%" cy="50%" r="60%">
-                        <stop offset="0%"   stop-color="#F3EEFF" stop-opacity="1"/>
-                        <stop offset="55%"  stop-color="#F1F8E2" stop-opacity="1"/>
-                        <stop offset="100%" stop-color="#FFF3FA" stop-opacity="1"/>
+                        <stop offset="0%"   stop-color="#EAF4FF" stop-opacity="1"/>
+                        <stop offset="60%"  stop-color="#F4F9FF" stop-opacity="1"/>
+                        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"/>
                     </radialGradient>
                     <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#B7A7E6" flood-opacity="0.22"/>
+                        <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#3B82F6" flood-opacity="0.15"/>
                     </filter>
                     <filter id="station-shadow" x="-50%" y="-50%" width="200%" height="200%">
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1F2937" flood-opacity="0.15"/>
@@ -1182,7 +1182,7 @@
                 </defs>
                 <rect x="-200" y="-200" width="${MAP_SIZE + 400}" height="${MAP_SIZE + 400}" fill="url(#bg-grad)"/>
                 <!-- декоративные звёздочки -->
-                <g fill="#D7A7C8" opacity="0.45">
+                <g fill="#D4E6F8" opacity="0.55">
                     <circle cx="200" cy="240" r="4"/>
                     <circle cx="1800" cy="200" r="5"/>
                     <circle cx="260" cy="1780" r="4"/>
@@ -1211,16 +1211,7 @@
                 const endX    = kinkX + SEG2_LEN * Math.cos(radEnd);
                 const endY    = kinkY + SEG2_LEN * Math.sin(radEnd);
 
-                // Мягкое скругление в точке поворота: отступаем по обоим
-                // сегментам на cornerR и заменяем угол квадратичной кривой.
-                const cornerR = 70;
-                const d1x = Math.cos(rad),    d1y = Math.sin(rad);
-                const d2x = Math.cos(radEnd), d2y = Math.sin(radEnd);
-                const b1x = kinkX - d1x * cornerR;
-                const b1y = kinkY - d1y * cornerR;
-                const b2x = kinkX + d2x * cornerR;
-                const b2y = kinkY + d2y * cornerR;
-                const pathD = `M ${startX} ${startY} L ${b1x} ${b1y} Q ${kinkX} ${kinkY} ${b2x} ${b2y} L ${endX} ${endY}`;
+                const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
@@ -1234,32 +1225,28 @@
                 // (используем приближение через куски — но проще: используем SVG getPointAtLength).
                 // Чтобы не зависеть от рантайма SVG, аппроксимируем кривую сэмплами.
                 // Сэмплируем полилинию из двух сегментов
-                // Сэмплируем путь (прямая → квадратичная дуга → прямая)
+                const samples = 200;
                 const pts = [];
+                const seg1Len = Math.hypot(kinkX - startX, kinkY - startY);
+                const seg2Len = Math.hypot(endX - kinkX, endY - kinkY);
+                const fullLen = seg1Len + seg2Len;
                 let prevX = startX, prevY = startY, total = 0;
-                const pushPt = (x, y, tx, ty) => {
-                    if (pts.length > 0) total += Math.hypot(x - prevX, y - prevY);
-                    pts.push({ x, y, len: total, tx, ty });
+                for (let i = 0; i <= samples; i++) {
+                    const t = i / samples;
+                    const cur = t * fullLen;
+                    let x, y;
+                    if (cur <= seg1Len) {
+                        const k = cur / Math.max(seg1Len, 0.0001);
+                        x = startX + (kinkX - startX) * k;
+                        y = startY + (kinkY - startY) * k;
+                    } else {
+                        const k = (cur - seg1Len) / Math.max(seg2Len, 0.0001);
+                        x = kinkX + (endX - kinkX) * k;
+                        y = kinkY + (endY - kinkY) * k;
+                    }
+                    if (i > 0) total += Math.hypot(x - prevX, y - prevY);
+                    pts.push({ x, y, len: total });
                     prevX = x; prevY = y;
-                };
-                const n1 = 60, n2 = 40, n3 = 60;
-                for (let i = 0; i <= n1; i++) {
-                    const k = i / n1;
-                    pushPt(startX + (b1x - startX) * k, startY + (b1y - startY) * k,
-                           b1x - startX, b1y - startY);
-                }
-                for (let i = 1; i <= n2; i++) {
-                    const k = i / n2, omk = 1 - k;
-                    const x = omk*omk*b1x + 2*omk*k*kinkX + k*k*b2x;
-                    const y = omk*omk*b1y + 2*omk*k*kinkY + k*k*b2y;
-                    const tx = 2*omk*(kinkX-b1x) + 2*k*(b2x-kinkX);
-                    const ty = 2*omk*(kinkY-b1y) + 2*k*(b2y-kinkY);
-                    pushPt(x, y, tx, ty);
-                }
-                for (let i = 1; i <= n3; i++) {
-                    const k = i / n3;
-                    pushPt(b2x + (endX - b2x) * k, b2y + (endY - b2y) * k,
-                           endX - b2x, endY - b2y);
                 }
                 const pointAtLen = (L) => {
                     for (let i = 1; i < pts.length; i++) {
@@ -1279,8 +1266,8 @@
 
                 // Отступы: первая станция чуть отступает от кольца,
                 // последняя — от конечной (иконки), чтобы не наезжать
-                const padStart = 110;
-                const padEnd   = 100;
+                const padStart = 140;
+                const padEnd   = 130;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
 
@@ -1304,12 +1291,11 @@
                     let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
                     let dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
 
-                    // На красной линии «Спектакли» — заметно левее станции, чтобы
-                    // подпись не пересекала линию и иконку.
+                    // На красной линии «Спектакли» — слева-снизу от станции для читаемости
                     if (line.id === 'red' && station.name === 'Спектакли') {
                         anchor = 'end';
-                        lx = cx - 90;
-                        ly = cy + 8;
+                        lx = cx - 28;
+                        ly = cy + 22;
                         dyText = 0;
                     }
 
@@ -1345,12 +1331,9 @@
                 const iconR = 46;
                 const tlx = endX;       // центр иконки = конец линии
                 const ticy = endY;
-                // У нижних линий (Парк культуры, Летняя, Деловой центр, Студенческая)
-                // подпись располагается под иконкой — название сверху, возраст ниже.
-                // У верхних линий — над иконкой по тем же правилам.
-                const isBottomTerminus = angleDeg > 0 && angleDeg < 180;
-                const nameY = isBottomTerminus ? (ticy + iconR + 38) : (ticy - iconR - 36);
-                const ageY  = nameY + 26;
+                // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
+                const nameY = ticy - iconR - 36;
+                const ageY  = nameY + 24;
 
                 content += `
                     <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
@@ -1660,7 +1643,7 @@
                 <title>${esc(line.name)} — Город Знаний</title>
                 <meta name="viewport" content="width=device-width,initial-scale=1"/>
                 <style>
-                  body{margin:0;font-family:'Montserrat','Inter',system-ui,sans-serif;background:linear-gradient(180deg,#F3EEFF 0%,#F1F8E2 50%,#FFF3FA 100%);min-height:100vh;color:#1F2937;}
+                  body{margin:0;font-family:'Montserrat','Inter',system-ui,sans-serif;background:linear-gradient(180deg,#EAF4FF,#FFF5F7);min-height:100vh;color:#1F2937;}
                   .wrap{max-width:760px;margin:0 auto;padding:32px 20px 64px;}
                   .back{display:inline-flex;align-items:center;gap:8px;background:${line.color};color:#fff;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:1rem;}
                   .back:hover{filter:brightness(.95);}
@@ -1668,7 +1651,7 @@
                   .age{color:#6B7280;font-weight:600;margin-bottom:24px;}
                 </style></head><body>
                 <div class="wrap">
-                  <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад к схеме</button>
+                  <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад</button>
                   <h1 style="color:${line.color}">«${esc(line.name)}»</h1>
                   <div class="age">Конечная станция • ${esc(line.age)}</div>
                   ${stationsHtml}
