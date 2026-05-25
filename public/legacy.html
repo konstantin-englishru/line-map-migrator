@@ -98,6 +98,28 @@
         }
         #line-panel-overlay.is-open .panel { transform: translateY(0) scale(1); }
         #line-panel-overlay .station-card {
+
+        /* === Header: анимация поезда === */
+        @keyframes hdrTrainRide {
+            0%   { transform: translateX(-20%); }
+            100% { transform: translateX(120%); }
+        }
+        .hdr-train {
+            position: absolute;
+            bottom: 14px;
+            left: 0;
+            width: 100px;
+            height: 38px;
+            pointer-events: none;
+            animation: hdrTrainRide 7s linear infinite;
+            animation-delay: 1s;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,.08));
+        }
+        .hdr-train .wheel {
+            transform-origin: center;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
             background: #FAFBFF;
             border-radius: 22px;
             padding: 18px 22px;
