@@ -107,8 +107,9 @@
         }
         /* === Header: анимация поезда === */
         @keyframes hdrTrainRide {
-            0%   { transform: translateX(-20%); }
-            100% { transform: translateX(120%); }
+            0%   { transform: translateX(-20vw); }
+            58%  { transform: translateX(110vw); }
+            100% { transform: translateX(110vw); }
         }
         .hdr-train {
             position: absolute;
@@ -117,7 +118,7 @@
             width: 110px;
             height: 40px;
             pointer-events: none;
-            animation: hdrTrainRide 8s linear infinite;
+            animation: hdrTrainRide 12s linear infinite;
             animation-delay: 1s;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,.08));
             will-change: transform;
