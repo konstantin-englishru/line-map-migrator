@@ -1304,11 +1304,12 @@
                     let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
                     let dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
 
-                    // На красной линии «Спектакли» — слева-снизу от станции для читаемости
+                    // На красной линии «Спектакли» — заметно левее станции, чтобы
+                    // подпись не пересекала линию и иконку.
                     if (line.id === 'red' && station.name === 'Спектакли') {
                         anchor = 'end';
-                        lx = cx - 28;
-                        ly = cy + 22;
+                        lx = cx - 90;
+                        ly = cy + 8;
                         dyText = 0;
                     }
 
@@ -1344,9 +1345,12 @@
                 const iconR = 46;
                 const tlx = endX;       // центр иконки = конец линии
                 const ticy = endY;
-                // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
-                const nameY = ticy - iconR - 36;
-                const ageY  = nameY + 24;
+                // У нижних линий (Парк культуры, Летняя, Деловой центр, Студенческая)
+                // подпись располагается под иконкой — название сверху, возраст ниже.
+                // У верхних линий — над иконкой по тем же правилам.
+                const isBottomTerminus = angleDeg > 0 && angleDeg < 180;
+                const nameY = isBottomTerminus ? (ticy + iconR + 38) : (ticy - iconR - 36);
+                const ageY  = nameY + 26;
 
                 content += `
                     <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
