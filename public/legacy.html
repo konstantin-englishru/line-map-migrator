@@ -698,7 +698,7 @@
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
-                    <svg id="interactive-metro-map" viewBox="-180 -180 2360 2360" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+                    <svg id="interactive-metro-map" viewBox="0 0 1800 1800" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
                 </div>
@@ -1129,9 +1129,7 @@
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
-            const KINK_R     = 540;           // радиус, где линия делает поворот
-            const SEG2_LEN   = 460;           // длина второго (наклонного) сегмента
-            const BEND_DEG   = 28;            // угол мягкого поворота на середине
+            const MAX_RADIUS = 880;           // длинные линии — конец = центр иконки
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1141,29 +1139,14 @@
             // 0° = вправо, 90° = вниз. Подобраны так, чтобы лейблы конечных уходили наружу.
             // Равномерно по кругу (с шагом 45°), порядок по часовой
             const ANGLES = {
-                'pink':      225,  // верх-лево  (Малышино)
-                'purple':    255,  // верх       (Детский Мир)
-                'orange':    285,  // верх       (Школьная)
-                'yellow':    315,  // верх-право (Академическая)
-                'red':        45,  // низ-право  (Парк культуры)
-                'green':      75,  // низ        (Летняя)
-                'lightblue': 105,  // низ        (Деловой центр)
-                'blue':      135   // низ-лево   (Студенческая)
-            };
-            // Направление мягкого поворота на середине линии (CW = +1, CCW = -1).
-            // Подбираем так, чтобы все 8 концов разошлись по периметру и не сталкивались.
-            // Каждая линия «отворачивается» от центра в свою сторону, чтобы концы
-            // расходились по периметру и не пересекали соседние линии.
-            // Концы линий разносим по периметру — у каждого свой угол.
-            const BENDS = {
-                pink:      -1, // 225° → левый край мида (вверх)
-                purple:    +1, // 255° → верх (левее центра)
-                orange:    +1, // 285° → верх-правый угол
-                yellow:    +1, // 315° → правый край мида (вверх)
-                red:       -1, // 45°  → правый край мида (вниз)
-                green:     +1, // 75°  → низ (правее центра)
-                lightblue: +1, // 105° → низ-левый угол
-                blue:      +1  // 135° → левый край мида (вниз)
+                'pink':      202,  // верх-лево
+                'purple':    247,  // лево-верх
+                'red':       157,  // лево-низ
+                'green':     112,  // низ-лево
+                'lightblue':  67,  // низ-право
+                'blue':       22,  // право-низ
+                'yellow':    337,  // право-верх
+                'orange':    292   // верх-право
             };
 
             let content = `
@@ -1180,7 +1163,7 @@
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1F2937" flood-opacity="0.15"/>
                     </filter>
                 </defs>
-                <rect x="-200" y="-200" width="${MAP_SIZE + 400}" height="${MAP_SIZE + 400}" fill="url(#bg-grad)"/>
+                <rect x="0" y="0" width="${MAP_SIZE}" height="${MAP_SIZE}" fill="url(#bg-grad)"/>
                 <!-- декоративные звёздочки -->
                 <g fill="#D4E6F8" opacity="0.55">
                     <circle cx="200" cy="240" r="4"/>
@@ -1198,20 +1181,19 @@
                 const rad = degreesToRadians(angleDeg);
                 const stationsCount = line.stations.length;
 
-                // Линия = два прямых сегмента с мягким поворотом ровно на середине.
-                // 1) от центрального кольца до точки излома — строго по радиусу;
-                // 2) от излома до конечной — под небольшим углом BEND_DEG к радиусу.
+                // Начало линии — на кольце по касательной
                 const startX = CENTER + RING_RADIUS * Math.cos(rad);
                 const startY = CENTER + RING_RADIUS * Math.sin(rad);
-                const kinkX  = CENTER + KINK_R      * Math.cos(rad);
-                const kinkY  = CENTER + KINK_R      * Math.sin(rad);
+                const endX   = CENTER + MAX_RADIUS  * Math.cos(rad);
+                const endY   = CENTER + MAX_RADIUS  * Math.sin(rad);
 
-                const bendDir = BENDS[line.id] ?? 1;
-                const radEnd  = rad + degreesToRadians(BEND_DEG) * bendDir;
-                const endX    = kinkX + SEG2_LEN * Math.cos(radEnd);
-                const endY    = kinkY + SEG2_LEN * Math.sin(radEnd);
+                // Прямые лучи: линия исходит ровно из центрального круга по радиусу
+                const cpStartX = startX + (endX - startX) / 3;
+                const cpStartY = startY + (endY - startY) / 3;
+                const cpEndX = startX + 2 * (endX - startX) / 3;
+                const cpEndY = startY + 2 * (endY - startY) / 3;
 
-                const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
+                const pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
@@ -1224,26 +1206,15 @@
                 // Длина пути для равномерного распределения станций
                 // (используем приближение через куски — но проще: используем SVG getPointAtLength).
                 // Чтобы не зависеть от рантайма SVG, аппроксимируем кривую сэмплами.
-                // Сэмплируем полилинию из двух сегментов
                 const samples = 200;
                 const pts = [];
-                const seg1Len = Math.hypot(kinkX - startX, kinkY - startY);
-                const seg2Len = Math.hypot(endX - kinkX, endY - kinkY);
-                const fullLen = seg1Len + seg2Len;
                 let prevX = startX, prevY = startY, total = 0;
                 for (let i = 0; i <= samples; i++) {
                     const t = i / samples;
-                    const cur = t * fullLen;
-                    let x, y;
-                    if (cur <= seg1Len) {
-                        const k = cur / Math.max(seg1Len, 0.0001);
-                        x = startX + (kinkX - startX) * k;
-                        y = startY + (kinkY - startY) * k;
-                    } else {
-                        const k = (cur - seg1Len) / Math.max(seg2Len, 0.0001);
-                        x = kinkX + (endX - kinkX) * k;
-                        y = kinkY + (endY - kinkY) * k;
-                    }
+                    // Кубическая Безье
+                    const mt = 1 - t;
+                    const x = mt*mt*mt*startX + 3*mt*mt*t*cpStartX + 3*mt*t*t*cpEndX + t*t*t*endX;
+                    const y = mt*mt*mt*startY + 3*mt*mt*t*cpStartY + 3*mt*t*t*cpEndY + t*t*t*endY;
                     if (i > 0) total += Math.hypot(x - prevX, y - prevY);
                     pts.push({ x, y, len: total });
                     prevX = x; prevY = y;
@@ -1266,8 +1237,8 @@
 
                 // Отступы: первая станция чуть отступает от кольца,
                 // последняя — от конечной (иконки), чтобы не наезжать
-                const padStart = 140;
-                const padEnd   = 130;
+                const padStart = 80;
+                const padEnd   = 110;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
 
@@ -1285,25 +1256,11 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    let labelDist = 30;
-                    let lx = cx + nx * labelDist;
-                    let ly = cy + ny * labelDist;
-                    let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
-                    let dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
-
-                    // На красной линии «Спектакли» — слева-снизу от станции для читаемости
-                    if (line.id === 'red' && station.name === 'Спектакли') {
-                        anchor = 'end';
-                        lx = cx - 28;
-                        ly = cy + 22;
-                        dyText = 0;
-                    }
-
-                    // «Мегаполис. Лето» рендерим в две строки
-                    const isMegapolis = station.name === 'Мегаполис. Лето';
-                    const nameMarkup = isMegapolis
-                        ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="22">Лето</tspan>`
-                        : station.name;
+                    const labelDist = 30;
+                    const lx = cx + nx * labelDist;
+                    const ly = cy + ny * labelDist;
+                    const anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
+                    const dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
 
                     content += `
                         <g class="cursor-pointer metro-line-group" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
@@ -1315,7 +1272,7 @@
                                   font-family="${FONT}" font-size="24" font-weight="700"
                                   fill="${TEXT_DARK}" pointer-events="none"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
-                                  stroke-linejoin="round">${nameMarkup}</text>
+                                  stroke-linejoin="round">${station.name}</text>
                         </g>
                     `;
                 });
@@ -1331,9 +1288,11 @@
                 const iconR = 46;
                 const tlx = endX;       // центр иконки = конец линии
                 const ticy = endY;
-                // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
-                const nameY = ticy - iconR - 36;
-                const ageY  = nameY + 24;
+                const labelOffset = iconR + 36;
+                const lblX = endX + labelOffset * Math.cos(rad);
+                const lblY = endY + labelOffset * Math.sin(rad);
+                // Подпись конечной всегда выше иконки, чтобы не сливалась с ней
+                const tly = ticy - iconR - 28;
 
                 content += `
                     <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
@@ -1342,12 +1301,12 @@
                                 filter="url(#soft-shadow)"/>
                         <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
                               font-size="46">${termIconMap[line.id] || '⭐'}</text>
-                        <text x="${tlx}" y="${nameY}" text-anchor="middle"
-                              font-family="${FONT}" font-size="26" font-weight="900"
+                        <text x="${tlx}" y="${tly}" text-anchor="middle"
+                              font-family="${FONT}" font-size="24" font-weight="900"
                               fill="${line.color}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
-                              stroke-linejoin="round">${line.name}</text>
-                        <text x="${tlx}" y="${ageY}" text-anchor="middle"
+                              stroke-linejoin="round">«${line.name}»</text>
+                        <text x="${tlx}" y="${tly - 26}" text-anchor="middle"
                               font-family="${FONT}" font-size="18" font-weight="600"
                               fill="${TEXT_SOFT}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
