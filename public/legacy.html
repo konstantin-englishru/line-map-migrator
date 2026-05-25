@@ -1129,10 +1129,10 @@
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
-            const KINK_R     = 540;           // радиус, где линия делает поворот
-            const SEG2_LEN   = 460;           // длина второго (наклонного) сегмента
-            const BEND_DEG   = 28;            // угол мягкого поворота на середине
-            const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
+            const KINK_R     = 420;           // радиус, где линия делает поворот (компактнее)
+            const SEG2_LEN   = 320;           // длина второго (наклонного) сегмента
+            const BEND_DEG   = 24;            // угол мягкого поворота на середине
+            const RING_COLOR = '#B7A7E6';     // лавандовое кольцо (Sugar Floss)
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
             const FONT = "'Montserrat','Inter',sans-serif";
@@ -1169,12 +1169,12 @@
             let content = `
                 <defs>
                     <radialGradient id="bg-grad" cx="50%" cy="50%" r="60%">
-                        <stop offset="0%"   stop-color="#EAF4FF" stop-opacity="1"/>
-                        <stop offset="60%"  stop-color="#F4F9FF" stop-opacity="1"/>
-                        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"/>
+                        <stop offset="0%"   stop-color="#F3EEFF" stop-opacity="1"/>
+                        <stop offset="55%"  stop-color="#F1F8E2" stop-opacity="1"/>
+                        <stop offset="100%" stop-color="#FFF3FA" stop-opacity="1"/>
                     </radialGradient>
                     <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#3B82F6" flood-opacity="0.15"/>
+                        <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#B7A7E6" flood-opacity="0.22"/>
                     </filter>
                     <filter id="station-shadow" x="-50%" y="-50%" width="200%" height="200%">
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1F2937" flood-opacity="0.15"/>
@@ -1182,7 +1182,7 @@
                 </defs>
                 <rect x="-200" y="-200" width="${MAP_SIZE + 400}" height="${MAP_SIZE + 400}" fill="url(#bg-grad)"/>
                 <!-- декоративные звёздочки -->
-                <g fill="#D4E6F8" opacity="0.55">
+                <g fill="#D7A7C8" opacity="0.45">
                     <circle cx="200" cy="240" r="4"/>
                     <circle cx="1800" cy="200" r="5"/>
                     <circle cx="260" cy="1780" r="4"/>
