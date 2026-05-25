@@ -1211,7 +1211,16 @@
                 const endX    = kinkX + SEG2_LEN * Math.cos(radEnd);
                 const endY    = kinkY + SEG2_LEN * Math.sin(radEnd);
 
-                const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
+                // Мягкое скругление в точке поворота: отступаем по обоим
+                // сегментам на cornerR и заменяем угол квадратичной кривой.
+                const cornerR = 70;
+                const d1x = Math.cos(rad),    d1y = Math.sin(rad);
+                const d2x = Math.cos(radEnd), d2y = Math.sin(radEnd);
+                const b1x = kinkX - d1x * cornerR;
+                const b1y = kinkY - d1y * cornerR;
+                const b2x = kinkX + d2x * cornerR;
+                const b2y = kinkY + d2y * cornerR;
+                const pathD = `M ${startX} ${startY} L ${b1x} ${b1y} Q ${kinkX} ${kinkY} ${b2x} ${b2y} L ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
@@ -1225,28 +1234,32 @@
                 // (используем приближение через куски — но проще: используем SVG getPointAtLength).
                 // Чтобы не зависеть от рантайма SVG, аппроксимируем кривую сэмплами.
                 // Сэмплируем полилинию из двух сегментов
-                const samples = 200;
+                // Сэмплируем путь (прямая → квадратичная дуга → прямая)
                 const pts = [];
-                const seg1Len = Math.hypot(kinkX - startX, kinkY - startY);
-                const seg2Len = Math.hypot(endX - kinkX, endY - kinkY);
-                const fullLen = seg1Len + seg2Len;
                 let prevX = startX, prevY = startY, total = 0;
-                for (let i = 0; i <= samples; i++) {
-                    const t = i / samples;
-                    const cur = t * fullLen;
-                    let x, y;
-                    if (cur <= seg1Len) {
-                        const k = cur / Math.max(seg1Len, 0.0001);
-                        x = startX + (kinkX - startX) * k;
-                        y = startY + (kinkY - startY) * k;
-                    } else {
-                        const k = (cur - seg1Len) / Math.max(seg2Len, 0.0001);
-                        x = kinkX + (endX - kinkX) * k;
-                        y = kinkY + (endY - kinkY) * k;
-                    }
-                    if (i > 0) total += Math.hypot(x - prevX, y - prevY);
-                    pts.push({ x, y, len: total });
+                const pushPt = (x, y, tx, ty) => {
+                    if (pts.length > 0) total += Math.hypot(x - prevX, y - prevY);
+                    pts.push({ x, y, len: total, tx, ty });
                     prevX = x; prevY = y;
+                };
+                const n1 = 60, n2 = 40, n3 = 60;
+                for (let i = 0; i <= n1; i++) {
+                    const k = i / n1;
+                    pushPt(startX + (b1x - startX) * k, startY + (b1y - startY) * k,
+                           b1x - startX, b1y - startY);
+                }
+                for (let i = 1; i <= n2; i++) {
+                    const k = i / n2, omk = 1 - k;
+                    const x = omk*omk*b1x + 2*omk*k*kinkX + k*k*b2x;
+                    const y = omk*omk*b1y + 2*omk*k*kinkY + k*k*b2y;
+                    const tx = 2*omk*(kinkX-b1x) + 2*k*(b2x-kinkX);
+                    const ty = 2*omk*(kinkY-b1y) + 2*k*(b2y-kinkY);
+                    pushPt(x, y, tx, ty);
+                }
+                for (let i = 1; i <= n3; i++) {
+                    const k = i / n3;
+                    pushPt(b2x + (endX - b2x) * k, b2y + (endY - b2y) * k,
+                           endX - b2x, endY - b2y);
                 }
                 const pointAtLen = (L) => {
                     for (let i = 1; i < pts.length; i++) {
