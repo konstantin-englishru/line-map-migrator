@@ -1481,6 +1481,21 @@
                     let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
                     let dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
 
+                    // Розовая линия: «Робототехническая» — длинное имя,
+                    // отодвигаем дальше наружу, чтобы не наезжало на «Языковую».
+                    if (line.id === 'pink' && station.name === 'Робототехническая') {
+                        labelDist = 64;
+                        lx = cx + nx * labelDist;
+                        ly = cy + ny * labelDist;
+                        dyText += 8;
+                    }
+                    if (line.id === 'pink' && station.name === 'Языковая') {
+                        labelDist = 22;
+                        lx = cx + nx * labelDist;
+                        ly = cy + ny * labelDist;
+                        dyText -= 4;
+                    }
+
                     // На красной линии «Спектакли» — слева-снизу от станции для читаемости
                     if (line.id === 'red' && station.name === 'Спектакли') {
                         anchor = 'end';
