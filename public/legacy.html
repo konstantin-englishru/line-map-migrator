@@ -56,7 +56,64 @@
             color: #4A4A4A;
             overflow-x: hidden;
         }
-        
+
+        /* === Глобальный шрифт сайта: Accuratist (с фолбэком) === */
+        @font-face {
+            font-family: 'Accuratist';
+            src: local('Accuratist'),
+                 url('https://fonts.cdnfonts.com/s/95819/Accuratist.woff') format('woff');
+            font-weight: 400 900;
+            font-style: normal;
+            font-display: swap;
+        }
+        html, body, h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, li, div, label, nav {
+            font-family: 'Accuratist', 'Montserrat', 'Quicksand', 'Fredoka', system-ui, sans-serif !important;
+        }
+
+        /* === Оверлей страницы линии метро === */
+        #line-panel-overlay {
+            position: fixed; inset: 0;
+            background: rgba(31, 41, 55, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            z-index: 9999;
+            padding: 32px 16px;
+            opacity: 0;
+            transition: opacity .28s ease;
+        }
+        #line-panel-overlay.is-open { display: flex; opacity: 1; }
+        #line-panel-overlay .panel {
+            background: #fff;
+            width: 100%;
+            max-width: 760px;
+            border-radius: 32px;
+            padding: 28px 24px 36px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.18);
+            transform: translateY(16px) scale(.98);
+            transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
+        }
+        #line-panel-overlay.is-open .panel { transform: translateY(0) scale(1); }
+        #line-panel-overlay .station-card {
+            background: #FAFBFF;
+            border-radius: 22px;
+            padding: 18px 22px;
+            margin-bottom: 14px;
+            border-left: 8px solid;
+            box-shadow: 0 6px 18px rgba(0,0,0,.04);
+        }
+        #line-panel-overlay .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: #fff; font-weight: 700;
+            border: none; cursor: pointer;
+            padding: 12px 22px; border-radius: 999px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.12);
+            font-size: 1rem;
+        }
+
         /* Стилизация дверей-кнопок - НОВЫЙ ВАРИАНТ (текст разъезжается) */
         .door-btn {
             position: relative;
