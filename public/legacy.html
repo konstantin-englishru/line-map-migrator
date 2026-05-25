@@ -1016,83 +1016,82 @@
     <script>
         const METRO_LINES = [
             {
-                id: 'pink', color: '#B9A6E6', name: 'Малышино', age: '3-7 лет', angle: 0,
+                id: 'pink', color: '#EC4899', name: 'Малышино', age: '3-7 лет', angle: 0,
                 stations: [
-                    { name: 'Языковая', programs: ['Английская', 'Немецкая', 'Китайская'] },
-                    { name: 'Робототехническая', programs: ['Робототехника для малышей'] },
-                    { name: 'Творческая', programs: ['Арт-лаборатория'] },
-                    { name: 'Логическая', programs: ['Шахматы', 'ТРИЗ'] },
-                    { name: 'Прогрессивная', programs: ['Подготовка к школе', 'Научная школа', 'Студия развития интеллекта', 'Нейрофитнес'] },
+                    { name: 'Языковая', programs: ['Английский для малышей', 'Немецкий в игре', 'Китайские сказки'] },
+                    { name: 'Робототехническая', programs: ['Лего-конструирование', 'Первые роботы'] },
+                    { name: 'Творческая', programs: ['Арт-лаборатория', 'Лепка', 'Рисование'] },
+                    { name: 'Логическая', programs: ['Шахматы для крох', 'ТРИЗ'] },
+                    { name: 'Прогрессивная', programs: ['Подготовка к школе', 'Научная школа', 'Нейрофитнес'] },
                     { name: 'Индивидуальная', programs: ['Нейропсихолог', 'Логопед'] }
                 ]
             },
             {
-                id: 'purple', color: '#B4E59A', name: 'Детский Мир', age: '7-11 лет', angle: 45,
+                id: 'purple', color: '#9333EA', name: 'Детский Мир', age: '7-11 лет', angle: 45,
                 stations: [
                     { name: 'Языковая', programs: ['Английская', 'Немецкая', 'Китайская', 'Британская школа'] },
-                    { name: 'Научная', programs: ['Математика олимпиадная', 'Научная школа', 'Грамматическая лаборатория', 'Шахматы'] },
-                    { name: 'Техническая', programs: ['Программирование', 'Робототехника'] },
+                    { name: 'Научная', programs: ['Математика олимпиадная', 'Научная школа', 'Шахматы'] },
+                    { name: 'Техническая', programs: ['Программирование Scratch', 'Робототехника EV3'] },
                     { name: 'Творческая', programs: ['Арт-лаборатория'] },
                     { name: 'Гуманитарная', programs: ['Русский язык', 'Об искусстве просто', 'Читательский клуб'] },
-                    { name: 'Прогрессивная', programs: ['Нейрофитнес', 'Эмоциональный интеллект', 'Логопед', 'Нейропсихолог'] }
+                    { name: 'Прогрессивная', programs: ['Нейрофитнес', 'Эмоциональный интеллект', 'Логопед'] }
                 ]
             },
             {
-                id: 'orange', color: '#C5D634', name: 'Школьная', age: '12-16 лет', angle: 90,
+                id: 'orange', color: '#F97316', name: 'Школьная', age: '12-16 лет', angle: 90,
                 stations: [
-                    { name: 'Лингвистическая', programs: ['Английский', 'Немецкий', 'Китайский', 'Разговорный клуб', 'Вокабустер'] },
-                    { name: 'Технонаучная', programs: ['Математика углублённая', 'Математика олимпиадная', 'Программирование'] },
+                    { name: 'Лингвистическая', programs: ['Английский', 'Немецкий', 'Китайский', 'Разговорный клуб'] },
+                    { name: 'Технонаучная', programs: ['Математика углубленная', 'Программирование Python'] },
                     { name: 'Гуманитарная', programs: ['Русский язык', 'Читательский клуб'] },
-                    { name: 'Логическая', programs: ['Шахматы'] },
+                    { name: 'Логическая', programs: ['Шахматы продвинутые'] },
                     { name: 'Индивидуальная', programs: ['Психолог', 'Нейропсихолог'] },
-                    { name: 'Творческая', programs: ['Арт-лаборатория'] }
+                    { name: 'Творческая', programs: ['Арт-лаборатория PRO'] }
                 ]
             },
             {
-                id: 'yellow', color: '#F4B5D6', name: 'Академическая', age: '17-18 лет', angle: 135,
+                id: 'yellow', color: '#EAB308', name: 'Академическая', age: '17-18 лет', angle: 135,
                 stations: [
-                    { name: 'Языковая', programs: ['Английская', 'Немецкая', 'Китайская'] },
-                    { name: 'Экзаменационная', programs: ['ЕГЭ', 'ОГЭ', 'Международные языковые экзамены'] },
+                    { name: 'Английская', programs: ['Advanced English', 'Подготовка к IELTS'] },
+                    { name: 'Немецкая / Китайская', programs: ['Немецкий B2', 'Китайский HSK'] },
+                    { name: 'Экзаменационная', programs: ['Подготовка к ЕГЭ', 'Подготовка к ОГЭ', 'Языковые экзамены'] },
                     { name: 'Математическая', programs: ['ЕГЭ Профиль', 'Высшая математика'] },
                     { name: 'Русская', programs: ['ЕГЭ Русский язык', 'Сочинение'] }
                 ]
             },
             {
-                id: 'blue', color: '#B9A6E6', name: 'Студенческая', age: 'Студенты', angle: 180,
+                id: 'blue', color: '#3B82F6', name: 'Студенческая', age: 'Студенты', angle: 180,
                 stations: [
-                    { name: 'Английская', programs: ['Английский язык'] },
-                    { name: 'Немецкая', programs: ['Немецкий язык'] },
-                    { name: 'Китайская', programs: ['Китайский язык'] },
-                    { name: 'Французская', programs: ['Французский язык'] },
-                    { name: 'Испанская', programs: ['Испанский язык'] }
+                    { name: 'Английская', programs: ['Разговорный клуб', 'Business English'] },
+                    { name: 'Немецкая', programs: ['Немецкий для переезда'] },
+                    { name: 'Китайская', programs: ['Китайский для бизнеса'] },
+                    { name: 'Французская', programs: ['Французский с нуля'] },
+                    { name: 'Испанская', programs: ['Испанский для путешествий'] }
                 ]
             },
             {
-                id: 'lightblue', color: '#B4E59A', name: 'Деловой центр', age: 'Взрослые', angle: 225,
+                id: 'lightblue', color: '#0EA5E9', name: 'Деловой центр', age: 'Взрослые', angle: 225,
                 stations: [
-                    { name: 'Английская', programs: ['Английский язык'] },
-                    { name: 'Немецкая', programs: ['Немецкий язык'] },
-                    { name: 'Китайская', programs: ['Китайский язык'] },
-                    { name: 'Французская', programs: ['Французский язык'] },
-                    { name: 'Испанская', programs: ['Испанский язык'] },
-                    { name: 'Профессиональная', programs: ['Английский для специальных целей'] }
+                    { name: 'Английская', programs: ['General English', 'Speaking Club'] },
+                    { name: 'Немецкая / Китайская', programs: ['Интенсивы'] },
+                    { name: 'Французская / Испанская', programs: ['Вечерние группы'] },
+                    { name: 'Профессиональная', programs: ['Английский для IT', 'Английский для медиков'] }
                 ]
             },
             {
-                id: 'green', color: '#C5D634', name: 'Летняя', age: 'Все возрасты', angle: 270,
+                id: 'green', color: '#22C55E', name: 'Летняя', age: 'Все возрасты', angle: 270,
                 stations: [
                     { name: 'Мегаполис. Лето', programs: ['Городской лагерь'] },
-                    { name: 'Индивидуальная', programs: ['Индивидуальные программы'] },
+                    { name: 'Индивидуальная', programs: ['Индивидуальные летние программы'] },
                     { name: 'Интенсивная', programs: ['Интенсивы навыковые', 'Интенсивы предметные'] },
                     { name: 'Читательская', programs: ['Летнее чтение'] }
                 ]
             },
             {
-                id: 'red', color: '#F4B5D6', name: 'Парк культуры', age: 'Семья', angle: 315,
+                id: 'red', color: '#EF4444', name: 'Парк культуры', age: 'Семья', angle: 315,
                 stations: [
                     { name: 'Спектакли', programs: ['Детские спектакли', 'Семейный театр'] },
                     { name: 'Мастер-классы', programs: ['Гончарное дело', 'Живопись'] },
-                    { name: 'Тематические мероприятия', programs: ['Праздники', 'Квесты'] },
+                    { name: 'Мероприятия', programs: ['Праздники', 'Квесты'] },
                     { name: 'Экскурсии', programs: ['Музеи', 'Выставки'] }
                 ]
             }
@@ -1202,18 +1201,22 @@
                 const endX   = CENTER + MAX_RADIUS  * Math.cos(rad);
                 const endY   = CENTER + MAX_RADIUS  * Math.sin(rad);
 
-                // Прямые лучи: линия исходит ровно из центрального круга по радиусу
-                const cpStartX = startX + (endX - startX) / 3;
-                const cpStartY = startY + (endY - startY) / 3;
-                const cpEndX = startX + 2 * (endX - startX) / 3;
-                const cpEndY = startY + 2 * (endY - startY) / 3;
+                // Изгибаем линию: «выезд» из кольца идёт почти по касательной, потом плавно
+                // выходит на радиус. Это даёт стиль референса (мягкая дуга от кольца наружу).
+                const tangentDir = rad + Math.PI / 2; // касательная к кольцу
+                const tangentLen = 150;
+                const cpStartX = startX + tangentLen * Math.cos(tangentDir);
+                const cpStartY = startY + tangentLen * Math.sin(tangentDir);
+                // Контрольная точка у конца — по направлению радиуса (плавный выход)
+                const cpEndX = endX - 220 * Math.cos(rad);
+                const cpEndY = endY - 220 * Math.sin(rad);
 
-                const pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+                const pathD = `M ${startX} ${startY} C ${cpStartX} ${cpStartY}, ${cpEndX} ${cpEndY}, ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
                 content += `
-                    <path id="${pathId}" class="metro-line" data-line="${line.id}" d="${pathD}" fill="none"
+                    <path id="${pathId}" d="${pathD}" fill="none"
                           stroke="${line.color}" stroke-width="14"
                           stroke-linecap="round" stroke-linejoin="round"/>
                 `;
@@ -1278,7 +1281,7 @@
                     const dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
 
                     content += `
-                        <g class="cursor-pointer metro-line-group" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
+                        <g class="cursor-pointer" onclick="openStationModal(${lineIdx}, ${stationIdx})">
                             <circle cx="${cx}" cy="${cy}" r="28" fill="transparent"/>
                             <circle cx="${cx}" cy="${cy}" r="11" fill="#FFFFFF"
                                     stroke="${line.color}" stroke-width="5"
@@ -1311,18 +1314,23 @@
                 const tly = above ? (ticy - iconR - 30) : (ticy + iconR + 36);
 
                 content += `
-                    <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
+                    <g pointer-events="none">
                         <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
                                 stroke="${line.color}" stroke-width="6"
                                 filter="url(#soft-shadow)"/>
                         <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
                               font-size="46">${termIconMap[line.id] || '⭐'}</text>
-                        <text x="${tlx}" y="${tly + 8}" text-anchor="middle"
+                        <text x="${tlx}" y="${tly}" text-anchor="middle"
+                              font-family="${FONT}" font-size="22" font-weight="800"
+                              fill="${TEXT_DARK}"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                              stroke-linejoin="round">Конечная станция</text>
+                        <text x="${tlx}" y="${tly + 28}" text-anchor="middle"
                               font-family="${FONT}" font-size="24" font-weight="900"
                               fill="${line.color}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                               stroke-linejoin="round">«${line.name}»</text>
-                        <text x="${tlx}" y="${tly + 34}" text-anchor="middle"
+                        <text x="${tlx}" y="${tly + 54}" text-anchor="middle"
                               font-family="${FONT}" font-size="18" font-weight="600"
                               fill="${TEXT_SOFT}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
@@ -1340,10 +1348,30 @@
                         stroke="#E5EFFA" stroke-width="2"/>
 
                 <!-- Логотип "Город Знаний" -->
-                <image href="/GorodZnaniyLOGO.png"
-                       x="${CENTER - (RING_RADIUS - 50)}" y="${CENTER - (RING_RADIUS - 50)}"
-                       width="${2 * (RING_RADIUS - 50)}" height="${2 * (RING_RADIUS - 50)}"
-                       preserveAspectRatio="xMidYMid meet" pointer-events="none"/>
+                <g transform="translate(${CENTER}, ${CENTER}) scale(0.75)" pointer-events="none">
+                    <!-- стилизованный домик -->
+                    <g transform="translate(0,-70)">
+                        <rect x="-60" y="-10" width="120" height="60" rx="6" fill="#3FB8E5"/>
+                        <rect x="-45" y="5"  width="22" height="30" fill="#FFFFFF"/>
+                        <rect x="-13" y="5"  width="22" height="30" fill="#FFFFFF"/>
+                        <rect x="23"  y="5"  width="22" height="30" fill="#FFFFFF"/>
+                        <polygon points="-66,-10 0,-58 66,-10" fill="#1F6FA8"/>
+                        <text x="-40" y="-22" font-size="22" fill="#FACC15">★</text>
+                        <text x="-10" y="-30" font-size="26" fill="#FACC15">★</text>
+                        <text x="20"  y="-22" font-size="22" fill="#FACC15">★</text>
+                    </g>
+                    <!-- лента-таблетка с текстом -->
+                    <g transform="translate(0,80)">
+                        <rect x="-130" y="-44" width="260" height="88" rx="44"
+                              fill="#3FB8E5"/>
+                        <text text-anchor="middle" y="-4"
+                              font-family="${FONT}" font-size="34" font-weight="900"
+                              fill="#FFFFFF" letter-spacing="2">ГОРОД</text>
+                        <text text-anchor="middle" y="30"
+                              font-family="${FONT}" font-size="34" font-weight="900"
+                              fill="#FFFFFF" letter-spacing="2">ЗНАНИЙ</text>
+                    </g>
+                </g>
             `;
 
             svg.innerHTML = `
@@ -1358,50 +1386,12 @@
             const legendEl = document.getElementById('metro-legend');
             if (legendEl) {
                 legendEl.innerHTML = METRO_LINES.map(l => `
-                    <button type="button" data-line="${l.id}"
-                            class="legend-item flex items-center gap-2 px-3 py-1.5 rounded-full border-2 border-transparent hover:border-[${l.color}] transition-colors cursor-pointer"
-                            style="background:rgba(255,255,255,0.6);">
-                        <span class="inline-block w-4 h-4 rounded-full" style="background:${l.color}"></span>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-3 h-3 rounded-full" style="background:${l.color}"></span>
                         <span class="text-sm md:text-base font-semibold text-[#1F2937]">${l.name}</span>
-                    </button>
+                    </div>
                 `).join('');
-                legendEl.querySelectorAll('.legend-item').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const id = btn.getAttribute('data-line');
-                        highlightMetroLine(id);
-                    });
-                });
             }
-        }
-
-        let highlightedLine = null;
-        function highlightMetroLine(id) {
-            const svg = document.getElementById('interactive-metro-map');
-            if (!svg) return;
-            const toggle = (highlightedLine === id);
-            highlightedLine = toggle ? null : id;
-            // Линии
-            svg.querySelectorAll('.metro-line').forEach(el => {
-                const same = el.getAttribute('data-line') === highlightedLine;
-                if (!highlightedLine) {
-                    el.style.opacity = '1';
-                    el.setAttribute('stroke-width', '14');
-                } else {
-                    el.style.opacity = same ? '1' : '0.18';
-                    el.setAttribute('stroke-width', same ? '20' : '14');
-                }
-            });
-            // Группы (станции и конечные)
-            svg.querySelectorAll('.metro-line-group').forEach(el => {
-                const same = el.getAttribute('data-line') === highlightedLine;
-                el.style.opacity = !highlightedLine ? '1' : (same ? '1' : '0.2');
-            });
-            // Подсветка кнопок легенды
-            document.querySelectorAll('.legend-item').forEach(btn => {
-                const active = btn.getAttribute('data-line') === highlightedLine;
-                btn.style.boxShadow = active ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none';
-                btn.style.background = active ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
-            });
         }
 
         // --- ЛОГИКА ЗУМА И ПАНОРАМИРОВАНИЯ ---
