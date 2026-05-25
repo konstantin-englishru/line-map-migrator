@@ -98,7 +98,13 @@
         }
         #line-panel-overlay.is-open .panel { transform: translateY(0) scale(1); }
         #line-panel-overlay .station-card {
-
+            background: #FAFBFF;
+            border-radius: 22px;
+            padding: 18px 22px;
+            margin-bottom: 14px;
+            border-left: 8px solid;
+            box-shadow: 0 6px 18px rgba(0,0,0,.04);
+        }
         /* === Header: анимация поезда === */
         @keyframes hdrTrainRide {
             0%   { transform: translateX(-20%); }
@@ -108,25 +114,16 @@
             position: absolute;
             bottom: 14px;
             left: 0;
-            width: 100px;
-            height: 38px;
+            width: 110px;
+            height: 40px;
             pointer-events: none;
-            animation: hdrTrainRide 7s linear infinite;
+            animation: hdrTrainRide 8s linear infinite;
             animation-delay: 1s;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,.08));
+            will-change: transform;
         }
-        .hdr-train .wheel {
-            transform-origin: center;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-            background: #FAFBFF;
-            border-radius: 22px;
-            padding: 18px 22px;
-            margin-bottom: 14px;
-            border-left: 8px solid;
-            box-shadow: 0 6px 18px rgba(0,0,0,.04);
-        }
+        .hdr-train .wheel { transform-origin: center; animation: hdrSpin 1s linear infinite; transform-box: fill-box; }
+        @keyframes hdrSpin { to { transform: rotate(360deg); } }
         #line-panel-overlay .back-btn {
             display: inline-flex; align-items: center; gap: 8px;
             color: #fff; font-weight: 700;
