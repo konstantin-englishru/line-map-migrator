@@ -698,7 +698,7 @@
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
-                    <svg id="interactive-metro-map" viewBox="-120 -120 2240 2240" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+                    <svg id="interactive-metro-map" viewBox="-180 -180 2360 2360" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
                 </div>
@@ -1129,7 +1129,9 @@
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
-            const MAX_RADIUS = 880;           // длинные линии — конец = центр иконки
+            const KINK_R     = 540;           // радиус, где линия делает поворот
+            const SEG2_LEN   = 460;           // длина второго (наклонного) сегмента
+            const BEND_DEG   = 28;            // угол мягкого поворота на середине
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1148,12 +1150,21 @@
                 'lightblue': 105,  // низ        (Деловой центр)
                 'blue':      135   // низ-лево   (Студенческая)
             };
-            // Направление мягкого изгиба на середине линии (перпендикуляр к радиусу)
+            // Направление мягкого поворота на середине линии (CW = +1, CCW = -1).
+            // Подбираем так, чтобы все 8 концов разошлись по периметру и не сталкивались.
+            // Каждая линия «отворачивается» от центра в свою сторону, чтобы концы
+            // расходились по периметру и не пересекали соседние линии.
+            // Концы линий разносим по периметру — у каждого свой угол.
             const BENDS = {
-                pink: +1, purple: -1, orange: +1, yellow: -1,
-                red:  -1, green:  +1, lightblue: -1, blue:  +1
+                pink:      -1, // 225° → левый край мида (вверх)
+                purple:    +1, // 255° → верх (левее центра)
+                orange:    +1, // 285° → верх-правый угол
+                yellow:    +1, // 315° → правый край мида (вверх)
+                red:       -1, // 45°  → правый край мида (вниз)
+                green:     +1, // 75°  → низ (правее центра)
+                lightblue: +1, // 105° → низ-левый угол
+                blue:      +1  // 135° → левый край мида (вниз)
             };
-            const BEND_OFFSET = 70;
 
             let content = `
                 <defs>
@@ -1187,21 +1198,18 @@
                 const rad = degreesToRadians(angleDeg);
                 const stationsCount = line.stations.length;
 
-                // Начало линии — на кольце по касательной
+                // Линия = два прямых сегмента с мягким поворотом ровно на середине.
+                // 1) от центрального кольца до точки излома — строго по радиусу;
+                // 2) от излома до конечной — под небольшим углом BEND_DEG к радиусу.
                 const startX = CENTER + RING_RADIUS * Math.cos(rad);
                 const startY = CENTER + RING_RADIUS * Math.sin(rad);
-                const endX   = CENTER + MAX_RADIUS  * Math.cos(rad);
-                const endY   = CENTER + MAX_RADIUS  * Math.sin(rad);
+                const kinkX  = CENTER + KINK_R      * Math.cos(rad);
+                const kinkY  = CENTER + KINK_R      * Math.sin(rad);
 
-                // Точка излома примерно на середине, смещённая перпендикулярно радиусу.
-                // Линия выходит из центра прямо, затем делает мягкий поворот и снова идёт прямо.
                 const bendDir = BENDS[line.id] ?? 1;
-                const perpX = -Math.sin(rad) * bendDir;
-                const perpY =  Math.cos(rad) * bendDir;
-                const midBaseX = (startX + endX) / 2;
-                const midBaseY = (startY + endY) / 2;
-                const kinkX = midBaseX + perpX * BEND_OFFSET;
-                const kinkY = midBaseY + perpY * BEND_OFFSET;
+                const radEnd  = rad + degreesToRadians(BEND_DEG) * bendDir;
+                const endX    = kinkX + SEG2_LEN * Math.cos(radEnd);
+                const endY    = kinkY + SEG2_LEN * Math.sin(radEnd);
 
                 const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
 
