@@ -106,24 +106,33 @@
             box-shadow: 0 6px 18px rgba(0,0,0,.04);
         }
         /* === Header: анимация поезда === */
+        /* поезд: едет к станции -> стоит 2с -> едет дальше -> пауза -> цикл */
         @keyframes hdrTrainRide {
-            0%   { transform: translateX(-20vw); }
-            58%  { transform: translateX(110vw); }
-            100% { transform: translateX(110vw); }
+            0%   { transform: translateX(-25vw); }
+            38%  { transform: translateX(38vw); }   /* подъехал к станции */
+            54%  { transform: translateX(38vw); }   /* стоит ~2с (16% от 12s) */
+            88%  { transform: translateX(115vw); }  /* уехал за правый край */
+            100% { transform: translateX(115vw); }  /* короткая пауза перед циклом */
         }
-        .hdr-train {
+        @keyframes hdrWheelsRun {
+            0%, 100% { animation-play-state: running; }
+        }
+        .hdr-train-wrap {
             position: absolute;
-            bottom: 14px;
+            bottom: 12px;
             left: 0;
-            width: 110px;
-            height: 40px;
+            width: 230px;
+            height: 56px;
             pointer-events: none;
-            animation: hdrTrainRide 12s linear infinite;
-            animation-delay: 1s;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,.08));
+            animation: hdrTrainRide 12s ease-in-out infinite;
+            animation-delay: .8s;
+            filter: drop-shadow(0 5px 7px rgba(0,0,0,.10));
             will-change: transform;
+            /* Зеркальное отражение по горизонтали */
+            transform-origin: center;
         }
-        .hdr-train .wheel { transform-origin: center; animation: hdrSpin 1s linear infinite; transform-box: fill-box; }
+        .hdr-train-wrap > svg { transform: scaleX(-1); }
+        .hdr-train-wrap .wheel { transform-origin: center; animation: hdrSpin 1s linear infinite; transform-box: fill-box; }
         @keyframes hdrSpin { to { transform: rotate(360deg); } }
         #line-panel-overlay .back-btn {
             display: inline-flex; align-items: center; gap: 8px;
