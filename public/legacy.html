@@ -56,7 +56,64 @@
             color: #4A4A4A;
             overflow-x: hidden;
         }
-        
+
+        /* === Глобальный шрифт сайта: Accuratist (с фолбэком) === */
+        @font-face {
+            font-family: 'Accuratist';
+            src: local('Accuratist'),
+                 url('https://fonts.cdnfonts.com/s/95819/Accuratist.woff') format('woff');
+            font-weight: 400 900;
+            font-style: normal;
+            font-display: swap;
+        }
+        html, body, h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, li, div, label, nav {
+            font-family: 'Accuratist', 'Montserrat', 'Quicksand', 'Fredoka', system-ui, sans-serif !important;
+        }
+
+        /* === Оверлей страницы линии метро === */
+        #line-panel-overlay {
+            position: fixed; inset: 0;
+            background: rgba(31, 41, 55, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            z-index: 9999;
+            padding: 32px 16px;
+            opacity: 0;
+            transition: opacity .28s ease;
+        }
+        #line-panel-overlay.is-open { display: flex; opacity: 1; }
+        #line-panel-overlay .panel {
+            background: #fff;
+            width: 100%;
+            max-width: 760px;
+            border-radius: 32px;
+            padding: 28px 24px 36px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.18);
+            transform: translateY(16px) scale(.98);
+            transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
+        }
+        #line-panel-overlay.is-open .panel { transform: translateY(0) scale(1); }
+        #line-panel-overlay .station-card {
+            background: #FAFBFF;
+            border-radius: 22px;
+            padding: 18px 22px;
+            margin-bottom: 14px;
+            border-left: 8px solid;
+            box-shadow: 0 6px 18px rgba(0,0,0,.04);
+        }
+        #line-panel-overlay .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: #fff; font-weight: 700;
+            border: none; cursor: pointer;
+            padding: 12px 22px; border-radius: 999px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.12);
+            font-size: 1rem;
+        }
+
         /* Стилизация дверей-кнопок - НОВЫЙ ВАРИАНТ (текст разъезжается) */
         .door-btn {
             position: relative;
@@ -231,9 +288,84 @@
     <div class="w-full max-w-[1400px] bg-carBg rounded-[40px] md:rounded-[60px] shadow-soft relative flex flex-col border-8 border-white overflow-hidden">
         
         <!-- Стилизованная крыша вагона (Шапка) -->
-        <header class="bg-pastelMint w-full min-h-[8rem] md:min-h-[11rem] py-4 md:py-6 rounded-t-[32px] md:rounded-t-[52px] relative flex items-center justify-between px-6 md:px-12 border-b-4 border-white z-50">
+        <header class="w-full min-h-[8rem] md:min-h-[11rem] py-4 md:py-6 rounded-t-[32px] md:rounded-t-[52px] relative flex items-center justify-between px-6 md:px-12 border-b-4 border-white z-50 overflow-hidden"
+                style="background: linear-gradient(180deg, #EFF8E2 0%, #E6F3D8 60%, #DEF0CC 100%);">
             <!-- Блик на крыше -->
-            <div class="absolute top-2 left-10 right-10 h-4 bg-white opacity-40 rounded-full blur-sm"></div>
+            <div class="absolute top-2 left-10 right-10 h-4 bg-white opacity-40 rounded-full blur-sm pointer-events-none"></div>
+
+            <!-- Декоративный «Город Знаний» в фоне шапки -->
+            <svg class="absolute inset-x-0 bottom-0 w-full h-full pointer-events-none select-none"
+                 viewBox="0 0 1440 200" preserveAspectRatio="xMidYMax slice"
+                 style="opacity:.45;" aria-hidden="true">
+                <defs>
+                    <linearGradient id="hdr-sky" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+                        <stop offset="100%" stop-color="#ffffff" stop-opacity=".25"/>
+                    </linearGradient>
+                </defs>
+                <rect x="0" y="0" width="1440" height="200" fill="url(#hdr-sky)"/>
+                <!-- облачка -->
+                <g fill="#ffffff" opacity=".7">
+                    <ellipse cx="180" cy="40" rx="34" ry="10"/>
+                    <ellipse cx="900" cy="30" rx="40" ry="11"/>
+                    <ellipse cx="1280" cy="50" rx="28" ry="8"/>
+                </g>
+                <!-- домики города -->
+                <g stroke="#ffffff" stroke-width="2" stroke-linejoin="round">
+                    <!-- школа с часами -->
+                    <rect x="60" y="120" width="90" height="70" rx="8" fill="#F7DCEB"/>
+                    <polygon points="55,120 105,80 155,120" fill="#E4D9F4"/>
+                    <circle cx="105" cy="105" r="8" fill="#fff"/>
+                    <rect x="78" y="148" width="18" height="26" rx="3" fill="#E8EFA8"/>
+                    <rect x="112" y="148" width="18" height="26" rx="3" fill="#E8EFA8"/>
+                    <!-- книжный домик -->
+                    <rect x="200" y="140" width="80" height="50" fill="#E8EFA8"/>
+                    <rect x="200" y="125" width="80" height="15" fill="#D9EFC7"/>
+                    <rect x="200" y="110" width="80" height="15" fill="#F7DCEB"/>
+                    <!-- карандаш-башня -->
+                    <rect x="330" y="100" width="34" height="90" fill="#FFE9A8"/>
+                    <polygon points="330,100 347,70 364,100" fill="#F7DCEB"/>
+                    <!-- домик -->
+                    <rect x="430" y="140" width="80" height="50" rx="6" fill="#D9EFC7"/>
+                    <polygon points="425,140 470,100 515,140" fill="#7DD3FC" opacity=".7"/>
+                    <rect x="455" y="160" width="20" height="30" rx="3" fill="#fff"/>
+                    <!-- обсерватория -->
+                    <rect x="570" y="130" width="90" height="60" rx="8" fill="#E4D9F4"/>
+                    <path d="M555,130 a60,60 0 0,1 120,0 z" fill="#F7DCEB"/>
+                    <!-- большой домик с флагом -->
+                    <rect x="720" y="120" width="100" height="70" rx="6" fill="#FFE9A8"/>
+                    <polygon points="715,120 770,80 825,120" fill="#7DD3FC" opacity=".7"/>
+                    <line x1="770" y1="80" x2="770" y2="55" stroke="#fff" stroke-width="2"/>
+                    <polygon points="770,55 790,62 770,70" fill="#F472B6"/>
+                    <!-- домик с круглой крышей -->
+                    <rect x="860" y="140" width="80" height="50" rx="6" fill="#F7DCEB"/>
+                    <path d="M855,140 a45,40 0 0,1 90,0 z" fill="#D9EFC7"/>
+                    <!-- башенка -->
+                    <rect x="980" y="105" width="40" height="85" fill="#D9EFC7"/>
+                    <polygon points="980,105 1000,75 1020,105" fill="#F7DCEB"/>
+                    <rect x="990" y="130" width="20" height="22" fill="#fff"/>
+                    <!-- библиотека -->
+                    <rect x="1060" y="130" width="120" height="60" rx="6" fill="#E4D9F4"/>
+                    <polygon points="1055,130 1120,90 1185,130" fill="#FFE9A8"/>
+                    <rect x="1085" y="155" width="20" height="35" fill="#fff"/>
+                    <rect x="1135" y="155" width="20" height="35" fill="#fff"/>
+                    <!-- маленький домик -->
+                    <rect x="1220" y="145" width="70" height="45" rx="6" fill="#D9EFC7"/>
+                    <polygon points="1215,145 1255,115 1295,145" fill="#F7DCEB"/>
+                    <!-- последняя башня -->
+                    <rect x="1330" y="110" width="50" height="80" rx="4" fill="#FFE9A8"/>
+                    <polygon points="1330,110 1355,80 1380,110" fill="#7DD3FC" opacity=".7"/>
+                </g>
+                <!-- деревья -->
+                <g fill="#A7D89B" opacity=".75">
+                    <circle cx="310" cy="160" r="14"/>
+                    <rect x="307" y="170" width="6" height="20" fill="#A88A6A"/>
+                    <circle cx="690" cy="165" r="12"/>
+                    <rect x="687" y="173" width="6" height="18" fill="#A88A6A"/>
+                    <circle cx="1040" cy="160" r="14"/>
+                    <rect x="1037" y="170" width="6" height="20" fill="#A88A6A"/>
+                </g>
+            </svg>
 
             <!-- Логотип: Город Знаний -->
             <div class="flex items-center gap-4 z-10 cursor-pointer group shrink-0">
@@ -1159,7 +1291,7 @@
             // и не сталкивались друг с другом.
             const BENDS = {
                 pink:      -1, // 0°   → верх-правый угол
-                red:       -1, // 315° → к верху-правее
+                red:       +1, // 315° → загиб в другую сторону (вниз-вправо)
                 green:     +1, // 270° → верх-лево
                 lightblue: +1, // 225° → к левому краю
                 blue:      +1, // 180° → низ-лево
@@ -1597,77 +1729,108 @@
             tickTrain();
         }
 
-        // === Клик по легенде: подсветить линию, поезд → конечная → страница со всеми дисциплинами ===
+        // === Клик по легенде: временно подсветить линию, поезд → конечная → панель ===
+        function clearLineHighlight() {
+            highlightedLine = null;
+            const svg = document.getElementById('interactive-metro-map');
+            if (svg) {
+                svg.querySelectorAll('.metro-line').forEach(el => {
+                    el.style.opacity = '1';
+                    el.setAttribute('stroke-width', '14');
+                });
+                svg.querySelectorAll('.metro-line-group').forEach(el => {
+                    el.style.opacity = '1';
+                });
+            }
+            document.querySelectorAll('.legend-item').forEach(btn => {
+                btn.style.boxShadow = 'none';
+                btn.style.background = 'rgba(255,255,255,0.6)';
+            });
+        }
+
+        function tempHighlightLine(lineId) {
+            const svg = document.getElementById('interactive-metro-map');
+            if (!svg) return;
+            highlightedLine = lineId;
+            svg.querySelectorAll('.metro-line').forEach(el => {
+                const same = el.getAttribute('data-line') === lineId;
+                el.style.opacity = same ? '1' : '0.22';
+                el.setAttribute('stroke-width', same ? '20' : '14');
+            });
+            svg.querySelectorAll('.metro-line-group').forEach(el => {
+                const same = el.getAttribute('data-line') === lineId;
+                el.style.opacity = same ? '1' : '0.25';
+            });
+        }
+
         function goToLinePage(lineId) {
             const line = METRO_LINES.find(l => l.id === lineId);
             if (!line) return;
-            // подсветка как раньше
-            const svg = document.getElementById('interactive-metro-map');
-            if (svg) {
-                highlightedLine = lineId;
-                svg.querySelectorAll('.metro-line').forEach(el => {
-                    const same = el.getAttribute('data-line') === lineId;
-                    el.style.opacity = same ? '1' : '0.18';
-                    el.setAttribute('stroke-width', same ? '20' : '14');
-                });
-                svg.querySelectorAll('.metro-line-group').forEach(el => {
-                    const same = el.getAttribute('data-line') === lineId;
-                    el.style.opacity = same ? '1' : '0.2';
-                });
-                document.querySelectorAll('.legend-item').forEach(btn => {
-                    const active = btn.getAttribute('data-line') === lineId;
-                    btn.style.boxShadow = active ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none';
-                    btn.style.background = active ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
-                });
-            }
-            const win = window.open('', '_blank');
+            tempHighlightLine(lineId);
             try {
                 sendTrainAlongLine(lineId, true, undefined, () => {
-                    openLineDisciplinesPage(line, win);
-                    setTimeout(returnTrainToRing, 400);
+                    openLinePanel(line);
+                    // через короткую паузу убираем подсветку и возвращаем поезд
+                    setTimeout(() => {
+                        clearLineHighlight();
+                        returnTrainToRing();
+                    }, 300);
                 });
             } catch (e) {
-                openLineDisciplinesPage(line, win);
+                openLinePanel(line);
+                clearLineHighlight();
             }
         }
 
-        function openLineDisciplinesPage(line, win) {
+        function openLinePanel(line) {
             const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            let overlay = document.getElementById('line-panel-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'line-panel-overlay';
+                document.body.appendChild(overlay);
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) closeLinePanel();
+                });
+            }
             const stationsHtml = line.stations.map((st, i) => `
-                <section style="background:#fff;border-radius:24px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);border-left:8px solid ${line.color};">
-                  <h2 style="margin:0 0 10px;font-size:1.35rem;font-weight:800;color:#1F2937;">${i+1}. ${esc(st.name)}</h2>
-                  <ul style="margin:0;padding-left:1.2rem;color:#374151;line-height:1.55;">
-                    ${st.programs.map(p => `<li>${esc(p)}</li>`).join('')}
-                  </ul>
-                </section>
-            `).join('');
-            const html = `<!doctype html><html lang="ru"><head><meta charset="utf-8"/>
-                <title>${esc(line.name)} — Город Знаний</title>
-                <meta name="viewport" content="width=device-width,initial-scale=1"/>
-                <style>
-                  body{margin:0;font-family:'Montserrat','Inter',system-ui,sans-serif;background:linear-gradient(180deg,#EAF4FF,#FFF5F7);min-height:100vh;color:#1F2937;}
-                  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 64px;}
-                  .back{display:inline-flex;align-items:center;gap:8px;background:${line.color};color:#fff;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:1rem;}
-                  .back:hover{filter:brightness(.95);}
-                  h1{font-size:2.2rem;margin:18px 0 6px;font-weight:900;}
-                  .age{color:#6B7280;font-weight:600;margin-bottom:24px;}
-                </style></head><body>
-                <div class="wrap">
-                  <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад</button>
-                  <h1 style="color:${line.color}">«${esc(line.name)}»</h1>
-                  <div class="age">Конечная станция • ${esc(line.age)}</div>
-                  ${stationsHtml}
-                  <div style="text-align:center;margin-top:28px;">
-                    <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад к карте</button>
-                  </div>
+                <div class="station-card" style="border-left-color:${line.color};">
+                    <h3 style="margin:0 0 8px;font-size:1.15rem;font-weight:800;color:#1F2937;">${i+1}. ${esc(st.name)}</h3>
+                    <ul style="margin:0;padding-left:1.2rem;color:#374151;line-height:1.55;">
+                        ${st.programs.map(p => `<li>${esc(p)}</li>`).join('')}
+                    </ul>
                 </div>
-              </body></html>`;
-            const target = win || window.open('', '_blank');
-            if (!target) return;
-            target.document.open();
-            target.document.write(html);
-            target.document.close();
+            `).join('');
+            overlay.innerHTML = `
+                <div class="panel" role="dialog" aria-modal="true">
+                    <button class="back-btn" style="background:${line.color};" onclick="closeLinePanel()">← Назад к схеме</button>
+                    <div style="display:flex;align-items:center;gap:12px;margin-top:18px;">
+                        <span style="display:inline-block;width:18px;height:18px;border-radius:999px;background:${line.color};box-shadow:0 0 0 4px ${line.color}22;"></span>
+                        <h2 style="margin:0;font-size:1.8rem;font-weight:900;color:${line.color};">«${esc(line.name)}»</h2>
+                    </div>
+                    <div style="color:#6B7280;font-weight:600;margin:6px 0 18px;">Конечная станция • ${esc(line.age)}</div>
+                    ${stationsHtml}
+                    <div style="text-align:center;margin-top:18px;">
+                        <button class="back-btn" style="background:${line.color};" onclick="closeLinePanel()">← Назад к схеме</button>
+                    </div>
+                </div>
+            `;
+            // активируем плавное появление
+            requestAnimationFrame(() => overlay.classList.add('is-open'));
+            document.body.style.overflow = 'hidden';
         }
+
+        function closeLinePanel() {
+            const overlay = document.getElementById('line-panel-overlay');
+            if (overlay) {
+                overlay.classList.remove('is-open');
+                setTimeout(() => { overlay.style.display = ''; }, 280);
+            }
+            document.body.style.overflow = '';
+            clearLineHighlight();
+            returnTrainToRing();
+        }
+        window.closeLinePanel = closeLinePanel;
 
 
         // --- ЛОГИКА ЗУМА И ПАНОРАМИРОВАНИЯ ---
