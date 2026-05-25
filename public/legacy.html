@@ -698,7 +698,7 @@
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
-                    <svg id="interactive-metro-map" viewBox="0 0 1800 1800" class="w-full h-full">
+                    <svg id="interactive-metro-map" viewBox="-120 -120 2240 2240" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
                 </div>
@@ -1001,7 +1001,7 @@
     <script>
         const METRO_LINES = [
             {
-                id: 'pink', color: '#B9A6E6', name: 'Малышино', age: '3-7 лет', angle: 0,
+                id: 'pink', color: '#F4A6C7', name: 'Малышино', age: '3-7 лет', angle: 0,
                 stations: [
                     { name: 'Языковая', programs: ['Английская', 'Немецкая', 'Китайская'] },
                     { name: 'Робототехническая', programs: ['Робототехника для малышей'] },
@@ -1012,7 +1012,7 @@
                 ]
             },
             {
-                id: 'purple', color: '#B4E59A', name: 'Детский Мир', age: '7-11 лет', angle: 45,
+                id: 'purple', color: '#9B72CF', name: 'Детский Мир', age: '7-11 лет', angle: 45,
                 stations: [
                     { name: 'Языковая', programs: ['Английская', 'Немецкая', 'Китайская', 'Британская школа'] },
                     { name: 'Научная', programs: ['Математика олимпиадная', 'Научная школа', 'Грамматическая лаборатория', 'Шахматы'] },
@@ -1023,7 +1023,7 @@
                 ]
             },
             {
-                id: 'orange', color: '#C5D634', name: 'Школьная', age: '12-16 лет', angle: 90,
+                id: 'orange', color: '#F58A3C', name: 'Школьная', age: '12-16 лет', angle: 90,
                 stations: [
                     { name: 'Лингвистическая', programs: ['Английский', 'Немецкий', 'Китайский', 'Разговорный клуб', 'Вокабустер'] },
                     { name: 'Технонаучная', programs: ['Математика углублённая', 'Математика олимпиадная', 'Программирование'] },
@@ -1034,7 +1034,7 @@
                 ]
             },
             {
-                id: 'yellow', color: '#F4B5D6', name: 'Академическая', age: '17-18 лет', angle: 135,
+                id: 'yellow', color: '#F2C744', name: 'Академическая', age: '17-18 лет', angle: 135,
                 stations: [
                     { name: 'Языковая', programs: ['Английская', 'Немецкая', 'Китайская'] },
                     { name: 'Экзаменационная', programs: ['ЕГЭ', 'ОГЭ', 'Международные языковые экзамены'] },
@@ -1043,7 +1043,7 @@
                 ]
             },
             {
-                id: 'blue', color: '#B9A6E6', name: 'Студенческая', age: 'Студенты', angle: 180,
+                id: 'blue', color: '#2F6FD1', name: 'Студенческая', age: 'Студенты', angle: 180,
                 stations: [
                     { name: 'Английская', programs: ['Английский язык'] },
                     { name: 'Немецкая', programs: ['Немецкий язык'] },
@@ -1053,7 +1053,7 @@
                 ]
             },
             {
-                id: 'lightblue', color: '#B4E59A', name: 'Деловой центр', age: 'Взрослые', angle: 225,
+                id: 'lightblue', color: '#4FC3E8', name: 'Деловой центр', age: 'Взрослые', angle: 225,
                 stations: [
                     { name: 'Английская', programs: ['Английский язык'] },
                     { name: 'Немецкая', programs: ['Немецкий язык'] },
@@ -1064,7 +1064,7 @@
                 ]
             },
             {
-                id: 'green', color: '#C5D634', name: 'Летняя', age: 'Все возрасты', angle: 270,
+                id: 'green', color: '#5BBF6A', name: 'Летняя', age: 'Все возрасты', angle: 270,
                 stations: [
                     { name: 'Мегаполис. Лето', programs: ['Городской лагерь'] },
                     { name: 'Индивидуальная', programs: ['Индивидуальные программы'] },
@@ -1073,7 +1073,7 @@
                 ]
             },
             {
-                id: 'red', color: '#F4B5D6', name: 'Парк культуры', age: 'Семья', angle: 315,
+                id: 'red', color: '#E0454F', name: 'Парк культуры', age: 'Семья', angle: 315,
                 stations: [
                     { name: 'Спектакли', programs: ['Детские спектакли', 'Семейный театр'] },
                     { name: 'Мастер-классы', programs: ['Гончарное дело', 'Живопись'] },
@@ -1139,15 +1139,21 @@
             // 0° = вправо, 90° = вниз. Подобраны так, чтобы лейблы конечных уходили наружу.
             // Равномерно по кругу (с шагом 45°), порядок по часовой
             const ANGLES = {
-                'pink':      202,  // верх-лево
-                'purple':    247,  // лево-верх
-                'red':       157,  // лево-низ
-                'green':     112,  // низ-лево
-                'lightblue':  67,  // низ-право
-                'blue':       22,  // право-низ
-                'yellow':    337,  // право-верх
-                'orange':    292   // верх-право
+                'pink':      225,  // верх-лево  (Малышино)
+                'purple':    255,  // верх       (Детский Мир)
+                'orange':    285,  // верх       (Школьная)
+                'yellow':    315,  // верх-право (Академическая)
+                'red':        45,  // низ-право  (Парк культуры)
+                'green':      75,  // низ        (Летняя)
+                'lightblue': 105,  // низ        (Деловой центр)
+                'blue':      135   // низ-лево   (Студенческая)
             };
+            // Направление мягкого изгиба на середине линии (перпендикуляр к радиусу)
+            const BENDS = {
+                pink: +1, purple: -1, orange: +1, yellow: -1,
+                red:  -1, green:  +1, lightblue: -1, blue:  +1
+            };
+            const BEND_OFFSET = 70;
 
             let content = `
                 <defs>
@@ -1163,7 +1169,7 @@
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1F2937" flood-opacity="0.15"/>
                     </filter>
                 </defs>
-                <rect x="0" y="0" width="${MAP_SIZE}" height="${MAP_SIZE}" fill="url(#bg-grad)"/>
+                <rect x="-200" y="-200" width="${MAP_SIZE + 400}" height="${MAP_SIZE + 400}" fill="url(#bg-grad)"/>
                 <!-- декоративные звёздочки -->
                 <g fill="#D4E6F8" opacity="0.55">
                     <circle cx="200" cy="240" r="4"/>
@@ -1187,13 +1193,17 @@
                 const endX   = CENTER + MAX_RADIUS  * Math.cos(rad);
                 const endY   = CENTER + MAX_RADIUS  * Math.sin(rad);
 
-                // Прямые лучи: линия исходит ровно из центрального круга по радиусу
-                const cpStartX = startX + (endX - startX) / 3;
-                const cpStartY = startY + (endY - startY) / 3;
-                const cpEndX = startX + 2 * (endX - startX) / 3;
-                const cpEndY = startY + 2 * (endY - startY) / 3;
+                // Точка излома примерно на середине, смещённая перпендикулярно радиусу.
+                // Линия выходит из центра прямо, затем делает мягкий поворот и снова идёт прямо.
+                const bendDir = BENDS[line.id] ?? 1;
+                const perpX = -Math.sin(rad) * bendDir;
+                const perpY =  Math.cos(rad) * bendDir;
+                const midBaseX = (startX + endX) / 2;
+                const midBaseY = (startY + endY) / 2;
+                const kinkX = midBaseX + perpX * BEND_OFFSET;
+                const kinkY = midBaseY + perpY * BEND_OFFSET;
 
-                const pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+                const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
@@ -1206,15 +1216,26 @@
                 // Длина пути для равномерного распределения станций
                 // (используем приближение через куски — но проще: используем SVG getPointAtLength).
                 // Чтобы не зависеть от рантайма SVG, аппроксимируем кривую сэмплами.
+                // Сэмплируем полилинию из двух сегментов
                 const samples = 200;
                 const pts = [];
+                const seg1Len = Math.hypot(kinkX - startX, kinkY - startY);
+                const seg2Len = Math.hypot(endX - kinkX, endY - kinkY);
+                const fullLen = seg1Len + seg2Len;
                 let prevX = startX, prevY = startY, total = 0;
                 for (let i = 0; i <= samples; i++) {
                     const t = i / samples;
-                    // Кубическая Безье
-                    const mt = 1 - t;
-                    const x = mt*mt*mt*startX + 3*mt*mt*t*cpStartX + 3*mt*t*t*cpEndX + t*t*t*endX;
-                    const y = mt*mt*mt*startY + 3*mt*mt*t*cpStartY + 3*mt*t*t*cpEndY + t*t*t*endY;
+                    const cur = t * fullLen;
+                    let x, y;
+                    if (cur <= seg1Len) {
+                        const k = cur / Math.max(seg1Len, 0.0001);
+                        x = startX + (kinkX - startX) * k;
+                        y = startY + (kinkY - startY) * k;
+                    } else {
+                        const k = (cur - seg1Len) / Math.max(seg2Len, 0.0001);
+                        x = kinkX + (endX - kinkX) * k;
+                        y = kinkY + (endY - kinkY) * k;
+                    }
                     if (i > 0) total += Math.hypot(x - prevX, y - prevY);
                     pts.push({ x, y, len: total });
                     prevX = x; prevY = y;
@@ -1237,8 +1258,8 @@
 
                 // Отступы: первая станция чуть отступает от кольца,
                 // последняя — от конечной (иконки), чтобы не наезжать
-                const padStart = 80;
-                const padEnd   = 110;
+                const padStart = 140;
+                const padEnd   = 130;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
 
@@ -1256,11 +1277,25 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    const labelDist = 30;
-                    const lx = cx + nx * labelDist;
-                    const ly = cy + ny * labelDist;
-                    const anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
-                    const dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
+                    let labelDist = 30;
+                    let lx = cx + nx * labelDist;
+                    let ly = cy + ny * labelDist;
+                    let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
+                    let dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
+
+                    // На красной линии «Спектакли» — слева-снизу от станции для читаемости
+                    if (line.id === 'red' && station.name === 'Спектакли') {
+                        anchor = 'end';
+                        lx = cx - 28;
+                        ly = cy + 22;
+                        dyText = 0;
+                    }
+
+                    // «Мегаполис. Лето» рендерим в две строки
+                    const isMegapolis = station.name === 'Мегаполис. Лето';
+                    const nameMarkup = isMegapolis
+                        ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="22">Лето</tspan>`
+                        : station.name;
 
                     content += `
                         <g class="cursor-pointer metro-line-group" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
@@ -1272,7 +1307,7 @@
                                   font-family="${FONT}" font-size="24" font-weight="700"
                                   fill="${TEXT_DARK}" pointer-events="none"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
-                                  stroke-linejoin="round">${station.name}</text>
+                                  stroke-linejoin="round">${nameMarkup}</text>
                         </g>
                     `;
                 });
@@ -1288,12 +1323,9 @@
                 const iconR = 46;
                 const tlx = endX;       // центр иконки = конец линии
                 const ticy = endY;
-                const labelOffset = iconR + 36;
-                const lblX = endX + labelOffset * Math.cos(rad);
-                const lblY = endY + labelOffset * Math.sin(rad);
-                // Если конечная уходит вверх — текст над иконкой; иначе под ней
-                const above = Math.sin(rad) < -0.2;
-                const tly = above ? (ticy - iconR - 30) : (ticy + iconR + 36);
+                // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
+                const nameY = ticy - iconR - 36;
+                const ageY  = nameY + 24;
 
                 content += `
                     <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
@@ -1302,12 +1334,12 @@
                                 filter="url(#soft-shadow)"/>
                         <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
                               font-size="46">${termIconMap[line.id] || '⭐'}</text>
-                        <text x="${tlx}" y="${tly + 8}" text-anchor="middle"
-                              font-family="${FONT}" font-size="24" font-weight="900"
+                        <text x="${tlx}" y="${nameY}" text-anchor="middle"
+                              font-family="${FONT}" font-size="26" font-weight="900"
                               fill="${line.color}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
-                              stroke-linejoin="round">«${line.name}»</text>
-                        <text x="${tlx}" y="${tly + 34}" text-anchor="middle"
+                              stroke-linejoin="round">${line.name}</text>
+                        <text x="${tlx}" y="${ageY}" text-anchor="middle"
                               font-family="${FONT}" font-size="18" font-weight="600"
                               fill="${TEXT_SOFT}"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
@@ -1330,10 +1362,10 @@
                         <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 44}"/>
                     </clipPath>
                 </defs>
-                <image href="/GZ_logo_circle.jpg"
-                       x="${CENTER - (RING_RADIUS - 44)}" y="${CENTER - (RING_RADIUS - 44)}"
-                       width="${2 * (RING_RADIUS - 44)}" height="${2 * (RING_RADIUS - 44)}"
-                       preserveAspectRatio="xMidYMid slice"
+                <image href="/GZ_logo_text.png"
+                       x="${CENTER - (RING_RADIUS - 60)}" y="${CENTER - (RING_RADIUS - 60)}"
+                       width="${2 * (RING_RADIUS - 60)}" height="${2 * (RING_RADIUS - 60)}"
+                       preserveAspectRatio="xMidYMid meet"
                        clip-path="url(#logo-clip)" pointer-events="none"/>
 
                 <!-- Скрытый круговой путь, по которому едет поезд -->
@@ -1385,7 +1417,7 @@
                 legendEl.querySelectorAll('.legend-item').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const id = btn.getAttribute('data-line');
-                        highlightMetroLine(id);
+                        goToLinePage(id);
                     });
                 });
             }
@@ -1553,6 +1585,78 @@
             if (TRAIN_STATE.rafId) cancelAnimationFrame(TRAIN_STATE.rafId);
             setTrainPath('#train-ring-path', { mode: 'ring', speed: 1.8 });
             tickTrain();
+        }
+
+        // === Клик по легенде: подсветить линию, поезд → конечная → страница со всеми дисциплинами ===
+        function goToLinePage(lineId) {
+            const line = METRO_LINES.find(l => l.id === lineId);
+            if (!line) return;
+            // подсветка как раньше
+            const svg = document.getElementById('interactive-metro-map');
+            if (svg) {
+                highlightedLine = lineId;
+                svg.querySelectorAll('.metro-line').forEach(el => {
+                    const same = el.getAttribute('data-line') === lineId;
+                    el.style.opacity = same ? '1' : '0.18';
+                    el.setAttribute('stroke-width', same ? '20' : '14');
+                });
+                svg.querySelectorAll('.metro-line-group').forEach(el => {
+                    const same = el.getAttribute('data-line') === lineId;
+                    el.style.opacity = same ? '1' : '0.2';
+                });
+                document.querySelectorAll('.legend-item').forEach(btn => {
+                    const active = btn.getAttribute('data-line') === lineId;
+                    btn.style.boxShadow = active ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none';
+                    btn.style.background = active ? '#FFFFFF' : 'rgba(255,255,255,0.6)';
+                });
+            }
+            const win = window.open('', '_blank');
+            try {
+                sendTrainAlongLine(lineId, true, undefined, () => {
+                    openLineDisciplinesPage(line, win);
+                    setTimeout(returnTrainToRing, 400);
+                });
+            } catch (e) {
+                openLineDisciplinesPage(line, win);
+            }
+        }
+
+        function openLineDisciplinesPage(line, win) {
+            const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            const stationsHtml = line.stations.map((st, i) => `
+                <section style="background:#fff;border-radius:24px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);border-left:8px solid ${line.color};">
+                  <h2 style="margin:0 0 10px;font-size:1.35rem;font-weight:800;color:#1F2937;">${i+1}. ${esc(st.name)}</h2>
+                  <ul style="margin:0;padding-left:1.2rem;color:#374151;line-height:1.55;">
+                    ${st.programs.map(p => `<li>${esc(p)}</li>`).join('')}
+                  </ul>
+                </section>
+            `).join('');
+            const html = `<!doctype html><html lang="ru"><head><meta charset="utf-8"/>
+                <title>${esc(line.name)} — Город Знаний</title>
+                <meta name="viewport" content="width=device-width,initial-scale=1"/>
+                <style>
+                  body{margin:0;font-family:'Montserrat','Inter',system-ui,sans-serif;background:linear-gradient(180deg,#EAF4FF,#FFF5F7);min-height:100vh;color:#1F2937;}
+                  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 64px;}
+                  .back{display:inline-flex;align-items:center;gap:8px;background:${line.color};color:#fff;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:1rem;}
+                  .back:hover{filter:brightness(.95);}
+                  h1{font-size:2.2rem;margin:18px 0 6px;font-weight:900;}
+                  .age{color:#6B7280;font-weight:600;margin-bottom:24px;}
+                </style></head><body>
+                <div class="wrap">
+                  <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад</button>
+                  <h1 style="color:${line.color}">«${esc(line.name)}»</h1>
+                  <div class="age">Конечная станция • ${esc(line.age)}</div>
+                  ${stationsHtml}
+                  <div style="text-align:center;margin-top:28px;">
+                    <button class="back" onclick="window.history.length>1?window.history.back():window.close()">← Назад к карте</button>
+                  </div>
+                </div>
+              </body></html>`;
+            const target = win || window.open('', '_blank');
+            if (!target) return;
+            target.document.open();
+            target.document.write(html);
+            target.document.close();
         }
 
 
