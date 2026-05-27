@@ -224,8 +224,16 @@
             .header-mobile-cta { display: flex; }
             /* На мобилке притушаем декоративную станцию-фон, чтобы не мешала контенту */
             .site-header > .absolute.inset-0 { opacity: .25; }
-            .header-address { display: flex; align-items: flex-start; line-height: 1.25; }
-            .header-address > span { white-space: normal; word-break: break-word; }
+            .header-address {
+                display: flex; align-items: flex-start;
+                line-height: 1.25;
+                width: 100%;
+            }
+            .header-address > span {
+                white-space: normal;
+                word-break: break-word;
+                flex: 1 1 auto; min-width: 0;
+            }
         }
 
         #line-panel-overlay .back-btn {
