@@ -211,10 +211,12 @@
         /* Адрес в шапке */
         .header-address {
             display: inline-flex; align-items: center; gap: 6px;
+            max-width: 100%;
             font-size: 12px; font-weight: 600; color: #6B7280;
             background: #F6F2FB; padding: 4px 10px; border-radius: 999px;
             border: 1px solid #E4D9F4;
         }
+        .header-address > span { min-width: 0; }
 
         /* Mobile-first: вертикальная компоновка шапки на маленьких экранах */
         @media (max-width: 767px) {
@@ -222,7 +224,8 @@
             .header-mobile-cta { display: flex; }
             /* На мобилке притушаем декоративную станцию-фон, чтобы не мешала контенту */
             .site-header > .absolute.inset-0 { opacity: .25; }
-            .header-address { white-space: normal; line-height: 1.25; }
+            .header-address { display: flex; align-items: flex-start; line-height: 1.25; }
+            .header-address > span { white-space: normal; word-break: break-word; }
         }
 
         #line-panel-overlay .back-btn {
