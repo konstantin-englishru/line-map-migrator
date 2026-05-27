@@ -1702,8 +1702,15 @@
                 const tlx = endX;       // центр иконки = конец линии
                 const ticy = endY;
                 // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
-                const nameY = ticy - iconR - 36;
-                const ageY  = nameY + 24;
+                // Для оранжевой (Школьная) линии — подпись ПОД иконкой.
+                let nameY, ageY;
+                if (line.id === 'orange') {
+                    nameY = ticy + iconR + 32;
+                    ageY  = nameY + 24;
+                } else {
+                    nameY = ticy - iconR - 36;
+                    ageY  = nameY + 24;
+                }
 
                 content += `
                     <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
