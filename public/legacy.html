@@ -134,6 +134,94 @@
         .hdr-train-wrap > svg { transform: scaleX(-1); }
         .hdr-train-wrap .wheel { transform-origin: center; animation: hdrSpin 1s linear infinite; transform-box: fill-box; }
         @keyframes hdrSpin { to { transform: rotate(360deg); } }
+        /* Адаптивный размер поезда: на мобилках уменьшаем, чтобы не ломал композицию */
+        @media (max-width: 767px) {
+            .hdr-train-wrap {
+                width: 150px;
+                height: 38px;
+                bottom: 6px;
+            }
+            .hdr-train-wrap > svg { width: 150px; height: 38px; }
+        }
+
+        /* === Дофаминовые анимации для кнопок === */
+        .btn-pop, .door-btn, a.lp-cta-btn, header a, .contact-tunnel a, .cta-glow {
+            transition: transform .25s cubic-bezier(.2,.9,.3,1.4),
+                        box-shadow .25s ease, background-color .25s ease,
+                        filter .25s ease;
+        }
+        .btn-pop:hover, .door-btn:hover, a.lp-cta-btn:hover,
+        .contact-tunnel a:hover, .cta-glow:hover {
+            transform: translateY(-2px) scale(1.04);
+            filter: brightness(1.05) drop-shadow(0 6px 18px rgba(244,166,199,.45));
+        }
+        .btn-pop:active, .door-btn:active, a.lp-cta-btn:active,
+        .contact-tunnel a:active, .cta-glow:active {
+            transform: scale(.94);
+            transition: transform .08s ease;
+        }
+
+        /* === Стилизованный «туннель метро» для контактных кнопок === */
+        .contact-tunnel {
+            position: relative;
+            padding: 10px 14px;
+            border-radius: 22px;
+            background:
+                radial-gradient(ellipse 80% 100% at 50% 50%,
+                    rgba(255,255,255,.95) 0%,
+                    rgba(246,251,236,.85) 55%,
+                    rgba(228,217,244,.55) 100%);
+            box-shadow:
+                inset 0 8px 18px rgba(123, 97, 180, .18),
+                inset 0 -6px 14px rgba(255,255,255,.7),
+                0 6px 18px rgba(155, 114, 207, .15);
+            border: 1px solid rgba(255,255,255,.9);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            overflow: hidden;
+        }
+        .contact-tunnel::before,
+        .contact-tunnel::after {
+            content: '';
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            width: 14px; height: 70%;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,.18), transparent 70%);
+            pointer-events: none;
+        }
+        .contact-tunnel::before { left: 0; }
+        .contact-tunnel::after  { right: 0; }
+
+        /* Свечение для CTA «Пробное занятие» */
+        @keyframes ctaGlowPulse {
+            0%, 100% { box-shadow: 0 8px 22px rgba(244, 114, 182, .35), 0 0 0 0 rgba(244, 114, 182, .55); }
+            50%      { box-shadow: 0 14px 32px rgba(244, 114, 182, .55), 0 0 0 14px rgba(244, 114, 182, 0); }
+        }
+        .cta-glow {
+            animation: ctaGlowPulse 2.2s ease-in-out infinite;
+        }
+
+        /* Хедер: белый фон + лёгкая нижняя «платформа» */
+        .header-white {
+            background: #ffffff !important;
+            box-shadow: 0 8px 24px rgba(31, 41, 55, .06);
+        }
+
+        /* Адрес в шапке */
+        .header-address {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; font-weight: 600; color: #6B7280;
+            background: #F6F2FB; padding: 4px 10px; border-radius: 999px;
+            border: 1px solid #E4D9F4;
+        }
+
+        /* Mobile-first: вертикальная компоновка шапки на маленьких экранах */
+        @media (max-width: 767px) {
+            header.site-header { padding: 12px 14px !important; min-height: 6.5rem !important; }
+            .header-mobile-cta { display: flex; }
+        }
+
         #line-panel-overlay .back-btn {
             display: inline-flex; align-items: center; gap: 8px;
             color: #fff; font-weight: 700;
