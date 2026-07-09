@@ -2479,6 +2479,37 @@
                     a.setAttribute('rel', 'noopener');
                 }
             });
+            // Кнопки без onclick/type=submit — делаем кликабельными
+            document.querySelectorAll('button').forEach((b) => {
+                if (b.getAttribute('onclick')) return;
+                if ((b.getAttribute('type') || '').toLowerCase() === 'submit') return;
+                if (b.dataset._wired) return;
+                // Кнопки, раскрывающие dropdown (у них есть sibling с классом group-hover),
+                // на десктопе работают по hover. На тач-устройствах добавим переключение.
+                const parent = b.parentElement;
+                const dropdown = parent && parent.classList.contains('group')
+                    ? parent.querySelector(':scope > div')
+                    : null;
+                if (dropdown) {
+                    b.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const opened = dropdown.classList.toggle('force-open');
+                        dropdown.style.opacity = opened ? '1' : '';
+                        dropdown.style.visibility = opened ? 'visible' : '';
+                        dropdown.style.transform = opened ? 'scale(1)' : '';
+                    });
+                } else {
+                    const label = (b.textContent || b.getAttribute('aria-label') || '').trim();
+                    if (!label) return;
+                    const text = (b.dataset.text || label).replace(/\s+/g, ' ');
+                    b.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.open(pageUrl(text), '_blank', 'noopener');
+                    });
+                }
+                b.dataset._wired = '1';
+                b.style.cursor = 'pointer';
+            });
         }
 
         // Переопределяем открытие карточки станции — теперь это новая страница
