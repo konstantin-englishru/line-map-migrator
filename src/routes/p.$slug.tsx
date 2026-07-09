@@ -325,13 +325,13 @@ const styles = `
     --yellow: #D6E85E;
     --peach: #FFCB85;
     --sky: #9DC7EE;
-    --bg: #EFE6FB;
+    --bg: #DCE9FF;
     --ink: #3A3A3A;
     --ink-soft: #6B6B7B;
     min-height: 100vh;
     background:
-      radial-gradient(1100px 600px at 10% -10%, #F79EC7 0%, transparent 60%),
-      radial-gradient(900px 500px at 110% 10%, #9EE07A 0%, transparent 55%),
+      radial-gradient(1100px 600px at 10% -10%, #FF9EC7 0%, transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, #7AD4FF 0%, transparent 55%),
       radial-gradient(900px 700px at 50% 110%, #B79BEA 0%, transparent 60%),
       var(--bg);
     color: var(--ink);
