@@ -29,7 +29,7 @@ type CourseData = {
   faq: CourseFaq[];
 };
 
-const PALETTE = ["#F7DCEB", "#E4D9F4", "#D9EFC7", "#E8EFA8", "#FFE4B8", "#D1E5F4"];
+const PALETTE = ["#F79EC7", "#B79BEA", "#9EE07A", "#D6E85E", "#FFCB85", "#9DC7EE"];
 
 function buildCourse(title: string): CourseData {
   return {
@@ -57,10 +57,10 @@ function buildCourse(title: string): CourseData {
       "Получает мотивацию учиться дальше",
     ],
     benefits: [
-      { icon: "🎨", title: "Игровая методика", desc: "Уроки построены как путешествие — ребёнок не замечает, как учится.", color: "#F7DCEB" },
-      { icon: "👩‍🏫", title: "Опытные педагоги", desc: "Преподаватели с педагогическим образованием и любовью к детям.", color: "#E4D9F4" },
-      { icon: "📊", title: "Прозрачный прогресс", desc: "Регулярно показываем родителям результаты и план следующих шагов.", color: "#D9EFC7" },
-      { icon: "💚", title: "Уютная атмосфера", desc: "Маленькие группы, светлые классы, доброжелательная среда.", color: "#FFE4B8" },
+      { icon: "🎨", title: "Игровая методика", desc: "Уроки построены как путешествие — ребёнок не замечает, как учится.", color: "#F79EC7" },
+      { icon: "👩‍🏫", title: "Опытные педагоги", desc: "Преподаватели с педагогическим образованием и любовью к детям.", color: "#B79BEA" },
+      { icon: "📊", title: "Прозрачный прогресс", desc: "Регулярно показываем родителям результаты и план следующих шагов.", color: "#9EE07A" },
+      { icon: "💚", title: "Уютная атмосфера", desc: "Маленькие группы, светлые классы, доброжелательная среда.", color: "#FFCB85" },
     ],
     modules: [
       { icon: "1", title: "Знакомство и диагностика", desc: "Определяем уровень и составляем индивидуальный маршрут." },
@@ -319,20 +319,20 @@ const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Montserrat:wght@400;700;800;900&display=swap');
 
   .cp-page {
-    --pink: #F7DCEB;
-    --lav: #E4D9F4;
-    --mint: #D9EFC7;
-    --yellow: #E8EFA8;
-    --peach: #FFE4B8;
-    --sky: #D1E5F4;
-    --bg: #F6F2FB;
-    --ink: #4A4A4A;
+    --pink: #F79EC7;
+    --lav: #B79BEA;
+    --mint: #9EE07A;
+    --yellow: #D6E85E;
+    --peach: #FFCB85;
+    --sky: #9DC7EE;
+    --bg: #EFE6FB;
+    --ink: #3A3A3A;
     --ink-soft: #6B6B7B;
     min-height: 100vh;
     background:
-      radial-gradient(1100px 600px at 10% -10%, #F7DCEB 0%, transparent 60%),
-      radial-gradient(900px 500px at 110% 10%, #D9EFC7 0%, transparent 55%),
-      radial-gradient(900px 700px at 50% 110%, #E4D9F4 0%, transparent 60%),
+      radial-gradient(1100px 600px at 10% -10%, #F79EC7 0%, transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, #9EE07A 0%, transparent 55%),
+      radial-gradient(900px 700px at 50% 110%, #B79BEA 0%, transparent 60%),
       var(--bg);
     color: var(--ink);
     font-family: 'Accuratist', 'Montserrat', 'Quicksand', 'Fredoka', system-ui, sans-serif;
