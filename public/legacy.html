@@ -130,6 +130,7 @@
             will-change: transform;
             /* Зеркальное отражение по горизонтали */
             transform-origin: center;
+            z-index: 1;
         }
         .hdr-train-wrap > svg { transform: scaleX(-1); }
         .hdr-train-wrap .wheel { transform-origin: center; animation: hdrSpin 1s linear infinite; transform-box: fill-box; }
@@ -416,7 +417,7 @@
         </svg>
     </div>
 
-    <div class="w-full max-w-[1400px] bg-carBg rounded-[40px] md:rounded-[60px] shadow-soft relative flex flex-col border-8 border-white overflow-hidden">
+    <div class="w-full max-w-[1400px] rounded-[40px] md:rounded-[60px] shadow-soft relative flex flex-col border-8 border-white overflow-hidden" style="background:linear-gradient(180deg,#FFE3BF 0%,#FFC98A 45%,#FFB36B 100%);">
         
         <!-- Стилизованная крыша вагона (Шапка) -->
         <header class="site-header header-white w-full min-h-[8rem] md:min-h-[11rem] py-4 md:py-6 rounded-t-[32px] md:rounded-t-[52px] relative flex flex-wrap md:flex-nowrap items-center justify-between gap-3 md:gap-4 px-4 md:px-12 border-b-4 border-white z-50">
@@ -486,6 +487,58 @@
                 </g>
             </svg>
 
+            <!-- Тоннель метро справа: поезд уезжает в него -->
+            <svg class="absolute right-0 bottom-0 h-[95%] w-[240px] md:w-[320px] pointer-events-none select-none z-[2]"
+                 viewBox="0 0 320 180" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
+                <defs>
+                    <linearGradient id="tunnelWall" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#E4D9F4"/>
+                        <stop offset="60%" stop-color="#C9BEE0"/>
+                        <stop offset="100%" stop-color="#9E92C2"/>
+                    </linearGradient>
+                    <radialGradient id="tunnelMouth" cx="50%" cy="65%" r="60%">
+                        <stop offset="0%" stop-color="#1B1330"/>
+                        <stop offset="55%" stop-color="#3B2A5C"/>
+                        <stop offset="100%" stop-color="#5A4A85"/>
+                    </radialGradient>
+                </defs>
+                <!-- Кирпичная стена (правая часть) -->
+                <rect x="60" y="0" width="260" height="180" fill="url(#tunnelWall)"/>
+                <!-- Кирпичики -->
+                <g stroke="#ffffff" stroke-opacity=".55" stroke-width="1.2" fill="none">
+                    <path d="M60 20 H320 M60 40 H320 M60 60 H320 M60 80 H320 M60 100 H320 M60 120 H320 M60 140 H320 M60 160 H320"/>
+                    <path d="M90 0 V20 M140 0 V20 M190 0 V20 M240 0 V20 M290 0 V20
+                             M75 20 V40 M125 20 V40 M175 20 V40 M225 20 V40 M275 20 V40
+                             M90 40 V60 M140 40 V60 M190 40 V60 M240 40 V60 M290 40 V60
+                             M75 60 V80 M125 60 V80 M175 60 V80 M225 60 V80 M275 60 V80
+                             M90 80 V100 M140 80 V100 M190 80 V100 M240 80 V100 M290 80 V100
+                             M75 100 V120 M125 100 V120 M175 100 V120 M225 100 V120 M275 100 V120
+                             M90 120 V140 M140 120 V140 M190 120 V140 M240 120 V140 M290 120 V140
+                             M75 140 V160 M125 140 V160 M175 140 V160 M225 140 V160 M275 140 V160
+                             M90 160 V180 M140 160 V180 M190 160 V180 M240 160 V180 M290 160 V180"/>
+                </g>
+                <!-- Арка тоннеля -->
+                <path d="M0 180 L0 90 Q0 30 60 30 Q120 30 120 90 L120 180 Z" fill="url(#tunnelMouth)"/>
+                <!-- Обводка арки -->
+                <path d="M0 180 L0 90 Q0 30 60 30 Q120 30 120 90 L120 180"
+                      fill="none" stroke="#F7DCEB" stroke-width="4"/>
+                <path d="M8 180 L8 92 Q8 40 60 40 Q112 40 112 92 L112 180"
+                      fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.5"/>
+                <!-- Рельсы уходят в тоннель -->
+                <g stroke="#C9BEE0" stroke-width="2" opacity=".85">
+                    <line x1="0" y1="172" x2="120" y2="172"/>
+                    <line x1="0" y1="166" x2="120" y2="166"/>
+                </g>
+                <!-- Вывеска над тоннелем -->
+                <rect x="20" y="8" width="100" height="20" rx="6" fill="#ffffff" opacity=".92"/>
+                <text x="70" y="23" text-anchor="middle"
+                      font-family="Fredoka, Quicksand, sans-serif"
+                      font-size="12" font-weight="800" fill="#7A6FA0" letter-spacing="1.5">ТОННЕЛЬ</text>
+                <!-- Фонарик над аркой -->
+                <circle cx="60" cy="34" r="4" fill="#FFE9A8"/>
+                <circle cx="60" cy="34" r="8" fill="#FFE9A8" opacity=".35"/>
+            </svg>
+
             <!-- Поезд, проезжающий через шапку (flash-style анимация) -->
             <div class="hdr-train-wrap" aria-hidden="true">
                 <svg viewBox="0 0 260 60" width="230" height="56" xmlns="http://www.w3.org/2000/svg">
@@ -545,7 +598,7 @@
             </div>
 
             <!-- Логотип: Город Знаний -->
-            <div class="flex items-center gap-3 md:gap-5 z-10 cursor-pointer group relative min-w-0 flex-1 md:flex-none md:shrink-0">
+            <div class="flex items-center gap-3 md:gap-5 z-10 cursor-pointer group relative min-w-0 flex-1 md:flex-none md:shrink-0 md:-translate-y-3 lg:-translate-y-4">
                 <div class="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full flex items-center justify-center border-4 border-white shadow-sm transform group-hover:scale-105 transition-transform overflow-hidden">
                     <img src="/GZ_logo_circle.jpg" alt="Город Знаний" class="w-full h-full object-cover" />
                 </div>
