@@ -1420,7 +1420,17 @@
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
-            const FONT = "'Montserrat','Inter',sans-serif";
+            const MSTYLE_EARLY = (typeof loadMapStyle === 'function') ? loadMapStyle() : { labelSize: 32, labelFont: 'Accuratist' };
+            const FONT_MAP = {
+                'Accuratist': "'Accuratist','Montserrat',sans-serif",
+                'Montserrat': "'Montserrat','Inter',sans-serif",
+                'Inter':      "'Inter',sans-serif",
+                'Georgia':    "Georgia,'Times New Roman',serif",
+                'Comic':      "'Comic Sans MS','Segoe UI',cursive",
+                'Mono':       "'JetBrains Mono',monospace"
+            };
+            const FONT = FONT_MAP[MSTYLE_EARLY.labelFont] || FONT_MAP['Accuratist'];
+            const LABEL_SIZE = MSTYLE_EARLY.labelSize || 32;
 
             // Восемь линий равномерно по кругу (угол начала линии от центра)
             // 0° = вправо, 90° = вниз. Подобраны так, чтобы лейблы конечных уходили наружу.
@@ -1615,7 +1625,7 @@
                     // «Мегаполис. Лето» рендерим в две строки
                     const isMegapolis = station.name === 'Мегаполис. Лето';
                     const nameMarkup = isMegapolis
-                        ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="28">Лето</tspan>`
+                        ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="${LABEL_SIZE * 0.9}">Лето</tspan>`
                         : station.name;
 
                     // Кликабельная область: охватывает круглую станцию и её подпись.
@@ -1639,7 +1649,7 @@
                                     filter="url(#station-shadow)"/>
                             <text class="draggable-label" data-lkey="st-${line.id}-${stationIdx}"
                                   style="cursor:move;" x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
-                                  font-family="${FONT}" font-size="32" font-weight="800"
+                                  font-family="${FONT}" font-size="${LABEL_SIZE}" font-weight="800"
                                   fill="${TEXT_DARK}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">${nameMarkup}</text>
@@ -1694,12 +1704,12 @@
                         </g>
                         <g class="draggable-label" data-lkey="term-${line.id}" style="cursor:move;">
                             <text x="${tnx}" y="${nameY}" text-anchor="${termAnchor}"
-                                  font-family="${FONT}" font-size="38" font-weight="900"
+                                  font-family="${FONT}" font-size="${LABEL_SIZE * 1.18}" font-weight="900"
                                   fill="${line.color}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
                                   stroke-linejoin="round">${line.name}</text>
                             <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
-                                  font-family="${FONT}" font-size="28" font-weight="700"
+                                  font-family="${FONT}" font-size="${LABEL_SIZE * 0.88}" font-weight="700"
                                   fill="${TEXT_SOFT}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">(${line.age})</text>
@@ -1728,64 +1738,58 @@
                        preserveAspectRatio="xMidYMid meet"
                        clip-path="url(#logo-clip)" pointer-events="none"/>
 
-                <!-- Скрытый круговой путь, по которому едет поезд (кольцо увеличено, чтобы поезд не задевал станции) -->
-                <!-- Круглый тоннель, внутри которого едет поезд -->
-                <defs>
-                    <linearGradient id="tunnel-grad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%"   stop-color="#4B5B8C" stop-opacity="0.30"/>
-                        <stop offset="50%"  stop-color="#DCE7F7" stop-opacity="0.45"/>
-                        <stop offset="100%" stop-color="#4B5B8C" stop-opacity="0.30"/>
-                    </linearGradient>
-                </defs>
-                <g id="train-tunnel" pointer-events="none">
-                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 62}"
-                            fill="none" stroke="url(#tunnel-grad)" stroke-width="132"/>
-                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 128}"
-                            fill="none" stroke="#8FA6D8" stroke-width="6" opacity="0.75"/>
-                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 4}"
-                            fill="none" stroke="#8FA6D8" stroke-width="6" opacity="0.75"/>
-                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 62}"
-                            fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.6"
-                            stroke-dasharray="26 34"/>
-                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 120}"
-                            fill="none" stroke="#5A6EA8" stroke-width="14" opacity="0.18"
-                            stroke-dasharray="10 58"/>
+                <!-- Маленькие рельсы вокруг центрального круга -->
+                <g id="train-rails" pointer-events="none">
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 26}"
+                            fill="none" stroke="#C9D6EA" stroke-width="10"
+                            stroke-dasharray="3 16" opacity="0.9"/>
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 30}"
+                            fill="none" stroke="#9FB3D1" stroke-width="2.5" opacity="0.85"/>
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 22}"
+                            fill="none" stroke="#9FB3D1" stroke-width="2.5" opacity="0.85"/>
                 </g>
+                <!-- Скрытый круговой путь, по которому едет поезд -->
                 <path id="train-ring-path"
-                      d="M ${CENTER + (RING_RADIUS + 62)},${CENTER}
-                         A ${RING_RADIUS + 62},${RING_RADIUS + 62} 0 1,1 ${CENTER - (RING_RADIUS + 62)},${CENTER}
-                         A ${RING_RADIUS + 62},${RING_RADIUS + 62} 0 1,1 ${CENTER + (RING_RADIUS + 62)},${CENTER} Z"
+                      d="M ${CENTER + (RING_RADIUS + 26)},${CENTER}
+                         A ${RING_RADIUS + 26},${RING_RADIUS + 26} 0 1,1 ${CENTER - (RING_RADIUS + 26)},${CENTER}
+                         A ${RING_RADIUS + 26},${RING_RADIUS + 26} 0 1,1 ${CENTER + (RING_RADIUS + 26)},${CENTER} Z"
                       fill="none" stroke="none"/>
 
-                <!-- Поезд: локомотив + 3 вагончика (крупнее и ярче) -->
+                <!-- Поезд в стиле шапки: паровоз + 3 вагончика -->
                 <g id="metro-train" pointer-events="none">
                     ${[0,1,2,3].map(i => {
-                        const carBody = i === 0 ? '#FFD93D' : (i === 1 ? '#FF6B9D' : (i === 2 ? '#9B59FF' : '#4CD964'));
-                        const roof = i === 0 ? '#FF9F1C' : (i === 1 ? '#FF8FB0' : (i === 2 ? '#B388FF' : '#85E0A3'));
-                        const winColors = ['#81D4FA', '#FFCC80', '#CE93D8', '#A5D6A7'];
+                        const wagonColor = ['', '#F2A23A', '#5BB85B', '#9B72CF'][i];
+                        if (i === 0) {
+                            return `
+                        <g class="train-car" data-idx="0">
+                            <g transform="scale(0.85) rotate(180)">
+                                <rect x="-4" y="-26" width="12" height="10" rx="2" fill="#E94B7C"/>
+                                <rect x="-7" y="-28" width="18" height="5" rx="2" fill="#E94B7C"/>
+                                <rect x="-10" y="-16" width="36" height="20" rx="6" fill="#2DB6D6" stroke="#ffffff" stroke-width="1.5"/>
+                                <circle cx="-4" cy="-6" r="3" fill="#FFD54A"/>
+                                <circle cx="4" cy="-6" r="3" fill="#FFD54A"/>
+                                <path d="M26 -20 Q26 -24 30 -24 L48 -24 Q52 -24 52 -20 L52 4 L26 4 Z"
+                                      fill="#2DB6D6" stroke="#ffffff" stroke-width="1.5"/>
+                                <rect x="30" y="-18" width="18" height="12" rx="2" fill="#CFEAF5"/>
+                                <rect x="-14" y="4" width="68" height="6" rx="2" fill="#E94B7C"/>
+                                <g class="wheel"><circle cx="0" cy="16" r="7" fill="#E94B7C"/><circle cx="0" cy="16" r="3" fill="#ffffff"/></g>
+                                <g class="wheel"><circle cx="22" cy="16" r="9" fill="#E94B7C"/><circle cx="22" cy="16" r="4" fill="#ffffff"/></g>
+                                <g class="wheel"><circle cx="42" cy="16" r="7" fill="#E94B7C"/><circle cx="42" cy="16" r="3" fill="#ffffff"/></g>
+                            </g>
+                        </g>`;
+                        }
                         return `
                         <g class="train-car" data-idx="${i}">
-                            <rect x="-38" y="-22" width="76" height="44" rx="12"
-                                  fill="${carBody}" stroke="#1F2937" stroke-width="3"/>
-                            <rect x="-38" y="-26" width="76" height="10" rx="5"
-                                  fill="${roof}" stroke="#1F2937" stroke-width="2"/>
-                            <rect x="-28" y="-14" width="22" height="18" rx="4" fill="${winColors[0]}" stroke="#1F2937" stroke-width="2"/>
-                            <rect x="6" y="-14" width="22" height="18" rx="4" fill="${winColors[1]}" stroke="#1F2937" stroke-width="2"/>
-                            <circle cx="-18" cy="24" r="7" fill="#1F2937"/>
-                            <circle cx="18" cy="24" r="7" fill="#1F2937"/>
-                            <circle cx="-18" cy="24" r="3" fill="#94A3B8"/>
-                            <circle cx="18" cy="24" r="3" fill="#94A3B8"/>
-                            ${i === 0 ? `
-                                <rect x="-34" y="-32" width="10" height="10" fill="#FF6B6B" stroke="#1F2937" stroke-width="2" rx="2"/>
-                                <rect x="-20" y="-32" width="10" height="10" fill="#4ECDC4" stroke="#1F2937" stroke-width="2" rx="2"/>
-                                <rect x="-6" y="-32" width="10" height="10" fill="#FFE66D" stroke="#1F2937" stroke-width="2" rx="2"/>
-                                <rect x="24" y="-32" width="10" height="10" fill="#FF9F1C" stroke="#1F2937" stroke-width="2" rx="2"/>
-                                <rect x="18" y="-4" width="14" height="10" rx="2" fill="#FFEB3B" stroke="#1F2937" stroke-width="2"/>
-                            ` : `
-                                <rect x="-6" y="-4" width="12" height="8" rx="2" fill="${winColors[2]}" stroke="#1F2937" stroke-width="1.5"/>
-                            `}
-                        </g>
-                        `;
+                            <g transform="scale(0.85) rotate(180)">
+                                <rect x="-24" y="-14" width="48" height="28" rx="6" fill="${wagonColor}" stroke="#ffffff" stroke-width="1.5"/>
+                                <rect x="-18" y="-9" width="10" height="10" rx="2" fill="#CFEAF5"/>
+                                <rect x="-5"  y="-9" width="10" height="10" rx="2" fill="#CFEAF5"/>
+                                <rect x="8"   y="-9" width="10" height="10" rx="2" fill="#CFEAF5"/>
+                                <rect x="-24" y="12" width="48" height="4" fill="#E94B7C"/>
+                                <g class="wheel"><circle cx="-12" cy="22" r="6" fill="#E94B7C"/><circle cx="-12" cy="22" r="2.5" fill="#ffffff"/></g>
+                                <g class="wheel"><circle cx="14"  cy="22" r="6" fill="#E94B7C"/><circle cx="14"  cy="22" r="2.5" fill="#ffffff"/></g>
+                            </g>
+                        </g>`;
                     }).join('')}
                 </g>
                 <!-- Декоративные блики/искры позади поезда -->
@@ -1869,7 +1873,7 @@
             total: 0,
             t: 0,                  // текущая позиция головы по пути (в длинах)
             speed: 1.8,            // px за кадр (кольцо)
-            carSpacing: 98,       // расстояние между вагонами увеличено под крупный поезд
+            carSpacing: 46,       // расстояние между вагонами (компактный поезд у кольца)
             rafId: null,
             oneShot: false,
             onArrive: null,
@@ -2369,7 +2373,7 @@
         // Зафиксированные правки геометрии линий
         const LINE_GEOM_DEFAULTS = {};
         // Глобальный стиль схемы (толщина линий, прямота, жирность станций)
-        const STYLE_DEFAULTS = { lineWidth: 27, straight: 66, stRadius: 26, stStroke: 12 };
+        const STYLE_DEFAULTS = { lineWidth: 27, straight: 66, stRadius: 26, stStroke: 12, labelSize: 32, labelFont: 'Accuratist' };
         const STYLE_STORE_KEY = 'metro-style-v1';
         function loadMapStyle() {
             return Object.assign({}, STYLE_DEFAULTS, readStore(STYLE_STORE_KEY));
@@ -2513,6 +2517,17 @@
                 <input id="me-sr" type="range" min="8" max="40" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Жирность кружков: <span id="me-ss-v"></span></label>
                 <input id="me-ss" type="range" min="2" max="24" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Размер шрифта: <span id="me-fs-v"></span></label>
+                <input id="me-fs" type="range" min="16" max="64" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Шрифт станций</label>
+                <select id="me-ff" style="width:100%;padding:4px;margin-bottom:8px;border:1px solid #CBD5E1;border-radius:8px;">
+                    <option value="Accuratist">Accuratist</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Inter">Inter</option>
+                    <option value="Georgia">Georgia (с засечками)</option>
+                    <option value="Comic">Comic (детский)</option>
+                    <option value="Mono">Моноширинный</option>
+                </select>
                 <button id="me-copy" style="width:100%;padding:6px;border-radius:8px;background:#3B82F6;color:#fff;font-weight:600;margin-bottom:6px;">Скопировать JSON</button>
                 <button id="me-reset" style="width:100%;padding:6px;border-radius:8px;background:#F1F5F9;font-weight:600;">Сбросить всё</button>
             `;
@@ -2526,30 +2541,38 @@
             const str  = panel.querySelector('#me-str');
             const sr   = panel.querySelector('#me-sr');
             const ss   = panel.querySelector('#me-ss');
+            const fs   = panel.querySelector('#me-fs');
+            const ff   = panel.querySelector('#me-ff');
 
             const syncStyle = () => {
                 const s = loadMapStyle();
                 lw.value = s.lineWidth; str.value = s.straight;
                 sr.value = s.stRadius;  ss.value = s.stStroke;
+                fs.value = s.labelSize; ff.value = s.labelFont;
                 panel.querySelector('#me-lw-v').textContent  = lw.value;
                 panel.querySelector('#me-str-v').textContent = str.value;
                 panel.querySelector('#me-sr-v').textContent  = sr.value;
                 panel.querySelector('#me-ss-v').textContent  = ss.value;
+                panel.querySelector('#me-fs-v').textContent  = fs.value;
             };
             const pushStyle = () => {
                 saveMapStyle({
                     lineWidth: parseFloat(lw.value),
                     straight:  parseFloat(str.value),
                     stRadius:  parseFloat(sr.value),
-                    stStroke:  parseFloat(ss.value)
+                    stStroke:  parseFloat(ss.value),
+                    labelSize: parseFloat(fs.value),
+                    labelFont: ff.value
                 });
                 panel.querySelector('#me-lw-v').textContent  = lw.value;
                 panel.querySelector('#me-str-v').textContent = str.value;
                 panel.querySelector('#me-sr-v').textContent  = sr.value;
                 panel.querySelector('#me-ss-v').textContent  = ss.value;
+                panel.querySelector('#me-fs-v').textContent  = fs.value;
                 renderMetroMap();
             };
-            [lw, str, sr, ss].forEach(el => el.addEventListener('input', pushStyle));
+            [lw, str, sr, ss, fs].forEach(el => el.addEventListener('input', pushStyle));
+            ff.addEventListener('change', pushStyle);
 
             const sync = () => {
                 const g = loadLineGeom()[sel.value] || {};
