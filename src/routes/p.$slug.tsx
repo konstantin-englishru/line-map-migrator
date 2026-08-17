@@ -1801,28 +1801,26 @@ function CoursePage() {
   );
 }
 
+const ALFA_FORM_URL =
+  "https://gorodznaniy.s20.online/common/1/form/draw?id=7&baseColor=205EDC&borderRadius=8&css=%2F%2Fcdn.alfacrm.pro%2Flead-form%2Fform.css";
+
 function TrialForm({ cta }: { cta: string }) {
   return (
-    <form
-      className="cp-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const form = e.currentTarget;
-        form.reset();
-        const ok = form.querySelector<HTMLElement>(".cp-form-ok");
-        if (ok) ok.style.display = "block";
-      }}
-    >
-      <div className="cp-form-grid">
-        <input className="cp-input" name="parent" placeholder="Имя родителя" required />
-        <input className="cp-input" name="child" placeholder="Имя ребёнка" required />
-        <input className="cp-input" name="age" placeholder="Возраст ребёнка" required />
-        <input className="cp-input" name="phone" type="tel" placeholder="Телефон" required />
-        <input className="cp-input cp-input-wide" name="time" placeholder="Удобное время для связи" />
-      </div>
-      <button type="submit" className="cp-btn cp-btn-primary cp-btn-lg cp-form-btn">🎁 {cta}</button>
-      <p className="cp-form-ok">Спасибо! Мы перезвоним и подберём удобное время.</p>
-    </form>
+    <div className="cp-form cp-alfa-form">
+      <iframe
+        src={ALFA_FORM_URL}
+        title={cta}
+        loading="lazy"
+        style={{
+          width: "100%",
+          minHeight: 640,
+          border: 0,
+          borderRadius: 20,
+          display: "block",
+          background: "#fff",
+        }}
+      />
+    </div>
   );
 }
 
