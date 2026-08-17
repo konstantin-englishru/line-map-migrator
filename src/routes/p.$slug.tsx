@@ -1659,12 +1659,34 @@ function CoursePage() {
               <h2 className="cp-h2">{course.resultsTitle ?? "Что получит ребёнок"}</h2>
             </div>
             <div className="cp-results">
-              {course.results.map((r, i) => (
-                <div key={r} className="cp-result">
-                  <span className="cp-result-n" style={{ background: PALETTE[i % PALETTE.length] }}>{i + 1}</span>
-                  <span className="cp-result-t">{r}</span>
-                </div>
-              ))}
+              {course.results.map((r, i) => {
+                const count = course.results.length;
+                const sizeClass =
+                  count === 5
+                    ? i === 2
+                      ? "cp-result--tall"
+                      : i === 0
+                      ? "cp-result--offset-down"
+                      : i === 3
+                      ? "cp-result--offset-up"
+                      : ""
+                    : count === 4
+                    ? i === 0 || i === 3
+                      ? "cp-result--wide"
+                      : ""
+                    : count === 3
+                    ? i === 1
+                      ? "cp-result--wide"
+                      : ""
+                    : "";
+                const rotateClass = i % 3 === 0 ? "cp-result--rotate-left" : i % 3 === 1 ? "cp-result--rotate-right" : "";
+                return (
+                  <div key={r} className={`cp-result ${sizeClass} ${rotateClass}`}>
+                    <span className="cp-result-n" style={{ background: PALETTE[i % PALETTE.length] }}>{i + 1}</span>
+                    <span className="cp-result-t">{r}</span>
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}
@@ -2106,7 +2128,6 @@ const styles = `
     .cp-section { padding: 36px 16px; }
     .cp-bento { grid-template-columns: 1fr; }
     .cp-format-grid { grid-template-columns: 1fr; }
-    .cp-results { grid-template-columns: 1fr; }
     .cp-final-card { padding: 40px 22px; border-radius: 28px; }
     .cp-cta-row { flex-direction: column; align-items: stretch; }
     .cp-btn { justify-content: center; }
@@ -2131,23 +2152,49 @@ const styles = `
   .cp-visual-lead { font-size: clamp(20px, 2.6vw, 28px); font-weight: 900; margin: 0 0 16px; line-height: 1.25; }
   .cp-visual-p { font-size: 16px; line-height: 1.6; color: var(--ink-soft); margin: 0 0 14px; }
 
-  /* Results list */
+  /* Results list — bento/masonry */
   .cp-h3-center { text-align: center; }
-  .cp-results { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .cp-results {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: dense;
+    gap: 14px;
+    max-width: 980px;
+    margin: 0 auto;
+    align-items: start;
+  }
   .cp-result {
-    display: flex; align-items: center; gap: 14px; background: #fff;
-    border-radius: 22px; padding: 18px 20px; box-shadow: 0 10px 24px rgba(0,0,0,.05);
+    display: flex; align-items: center; gap: 12px; background: #fff;
+    border-radius: 20px; padding: 16px 18px; box-shadow: 0 10px 24px rgba(0,0,0,.05);
+    transition: transform .25s ease, box-shadow .25s ease;
+    min-height: 86px;
   }
-  .cp-result:nth-child(odd):last-child {
-    grid-column: 1 / -1;
-    background: linear-gradient(135deg, #FFF, #F0F6FF);
-    border: 2px solid var(--sky);
-  }
+  .cp-result:hover { transform: translateY(-4px) rotate(0deg); box-shadow: 0 16px 34px rgba(0,0,0,.08); z-index: 2; }
+  .cp-result--tall { grid-row: span 2; flex-direction: column; align-items: flex-start; justify-content: center; padding: 22px; }
+  .cp-result--tall .cp-result-n { width: 34px; height: 34px; }
+  .cp-result--tall .cp-result-t { font-size: 16px; }
+  .cp-result--wide { grid-column: span 2; }
+  .cp-result--offset-up { transform: translateY(-10px); }
+  .cp-result--offset-down { transform: translateY(10px); }
+  .cp-result--rotate-left { transform: rotate(-1.5deg); }
+  .cp-result--rotate-right { transform: rotate(1.5deg); }
+  .cp-result--offset-up.cp-result--rotate-left,
+  .cp-result--offset-up.cp-result--rotate-right,
+  .cp-result--offset-down.cp-result--rotate-left,
+  .cp-result--offset-down.cp-result--rotate-right { transform: translateY(var(--offset, 0)) rotate(var(--rotate, 0deg)); }
+  .cp-result--offset-up { --offset: -10px; }
+  .cp-result--offset-down { --offset: 10px; }
+  .cp-result--rotate-left { --rotate: -1.5deg; }
+  .cp-result--rotate-right { --rotate: 1.5deg; }
+  .cp-result--offset-up.cp-result--rotate-left { transform: translateY(-10px) rotate(-1.5deg); }
+  .cp-result--offset-up.cp-result--rotate-right { transform: translateY(-10px) rotate(1.5deg); }
+  .cp-result--offset-down.cp-result--rotate-left { transform: translateY(10px) rotate(-1.5deg); }
+  .cp-result--offset-down.cp-result--rotate-right { transform: translateY(10px) rotate(1.5deg); }
   .cp-result-n {
-    flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; color: #fff;
-    display: flex; align-items: center; justify-content: center; font-weight: 900;
+    flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px;
   }
-  .cp-result-t { font-weight: 700; font-size: 15px; line-height: 1.35; }
+  .cp-result-t { font-weight: 700; font-size: 14px; line-height: 1.35; }
 
   .cp-bento-2 { grid-template-columns: repeat(2, 1fr); }
   .cp-bento-num { font-weight: 900; font-size: 13px; opacity: .7; }
@@ -2174,6 +2221,9 @@ const styles = `
     .cp-visual-grid { grid-template-columns: 1fr; }
     .cp-format-grid-3 { grid-template-columns: repeat(2, 1fr); }
     .cp-nav { display: none; }
+    .cp-results { grid-template-columns: repeat(2, 1fr); }
+    .cp-result--tall { grid-row: auto; flex-direction: row; align-items: center; padding: 16px 18px; }
+    .cp-result--wide { grid-column: span 2; }
   }
   @media (max-width: 560px) {
     .cp-bento-2 { grid-template-columns: 1fr; }
@@ -2181,6 +2231,11 @@ const styles = `
     .cp-form-grid { grid-template-columns: 1fr; }
     .cp-hero-photo { max-height: 260px; }
     .cp-reviews-scroll { grid-template-columns: 1fr; }
+    .cp-results { grid-template-columns: 1fr; }
+    .cp-result--wide { grid-column: auto; }
+    .cp-result--tall { grid-row: auto; flex-direction: row; align-items: center; padding: 16px 18px; }
+    .cp-result--offset-up, .cp-result--offset-down { transform: none; }
+    .cp-result--rotate-left, .cp-result--rotate-right { transform: none; }
   }
 `;
 
