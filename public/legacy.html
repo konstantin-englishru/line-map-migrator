@@ -2252,8 +2252,9 @@
                 if (e.target.closest && e.target.closest('.draggable-label')) return;
                 isDraggingMap = true;
                 // Запоминаем стартовую точку с учетом текущего смещения
-                startDragX = e.clientX - mapPanX;
-                startDragY = e.clientY - mapPanY;
+                const p = clientToSvgPoint(e.clientX, e.clientY);
+                startDragX = p.x - mapPanX;
+                startDragY = p.y - mapPanY;
                 container.classList.remove('cursor-grab');
                 container.classList.add('cursor-grabbing');
             });
@@ -2261,8 +2262,9 @@
             // Перетаскивание (мышь)
             window.addEventListener('mousemove', (e) => {
                 if (!isDraggingMap) return;
-                mapPanX = e.clientX - startDragX;
-                mapPanY = e.clientY - startDragY;
+                const p = clientToSvgPoint(e.clientX, e.clientY);
+                mapPanX = p.x - startDragX;
+                mapPanY = p.y - startDragY;
                 applyMapTransform();
             });
 
@@ -2278,17 +2280,20 @@
             // Сенсорные события (перетаскивание на мобильных устройствах)
             container.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1) { // Используем один палец для перетаскивания
+                    if (e.target.closest && e.target.closest('.draggable-label')) return;
                     isDraggingMap = true;
-                    startDragX = e.touches[0].clientX - mapPanX;
-                    startDragY = e.touches[0].clientY - mapPanY;
+                    const p = clientToSvgPoint(e.touches[0].clientX, e.touches[0].clientY);
+                    startDragX = p.x - mapPanX;
+                    startDragY = p.y - mapPanY;
                 }
             }, { passive: true });
 
             container.addEventListener('touchmove', (e) => {
                 if (!isDraggingMap || e.touches.length !== 1) return;
                 e.preventDefault(); // Предотвращаем скролл самой страницы при перетаскивании карты
-                mapPanX = e.touches[0].clientX - startDragX;
-                mapPanY = e.touches[0].clientY - startDragY;
+                const p = clientToSvgPoint(e.touches[0].clientX, e.touches[0].clientY);
+                mapPanX = p.x - startDragX;
+                mapPanY = p.y - startDragY;
                 applyMapTransform();
             }, { passive: false });
 
@@ -2296,6 +2301,96 @@
                 isDraggingMap = false;
             });
         }
+
+        // Перевод координат курсора в систему координат SVG (без учёта трансформации viewport)
+        function clientToSvgPoint(clientX, clientY) {
+            const svg = document.getElementById('interactive-metro-map');
+            if (!svg || !svg.getScreenCTM) return { x: clientX, y: clientY };
+            const pt = svg.createSVGPoint();
+            pt.x = clientX; pt.y = clientY;
+            const m = svg.getScreenCTM();
+            if (!m) return { x: clientX, y: clientY };
+            const r = pt.matrixTransform(m.inverse());
+            return { x: r.x, y: r.y };
+        }
+
+        // ============ ПЕРЕТАСКИВАНИЕ ПОДПИСЕЙ СТАНЦИЙ ============
+        const LABEL_STORE_KEY = 'gz-metro-label-offsets-v1';
+
+        function loadLabelOffsets() {
+            try { return JSON.parse(localStorage.getItem(LABEL_STORE_KEY) || '{}') || {}; }
+            catch (e) { return {}; }
+        }
+        function saveLabelOffsets(map) {
+            try { localStorage.setItem(LABEL_STORE_KEY, JSON.stringify(map)); } catch (e) {}
+        }
+        function applyLabelOffsets() {
+            const offsets = loadLabelOffsets();
+            document.querySelectorAll('#interactive-metro-map .draggable-label').forEach(el => {
+                const key = el.getAttribute('data-lkey');
+                const o = offsets[key];
+                if (o) el.setAttribute('transform', `translate(${o.x}, ${o.y})`);
+                else el.removeAttribute('transform');
+            });
+        }
+        function resetLabelOffsets() {
+            saveLabelOffsets({});
+            applyLabelOffsets();
+        }
+
+        function setupLabelDragging() {
+            const svg = document.getElementById('interactive-metro-map');
+            if (!svg || svg.dataset.labelDragReady === '1') return;
+            svg.dataset.labelDragReady = '1';
+
+            let dragEl = null, startPt = null, startOff = { x: 0, y: 0 }, moved = false;
+
+            const getOffset = (el) => {
+                const t = el.getAttribute('transform');
+                const m = t && t.match(/translate\(\s*(-?[\d.]+)[ ,]+(-?[\d.]+)/);
+                return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
+            };
+
+            svg.addEventListener('pointerdown', (e) => {
+                const el = e.target.closest && e.target.closest('.draggable-label');
+                if (!el) return;
+                dragEl = el;
+                moved = false;
+                startPt = clientToSvgPoint(e.clientX, e.clientY);
+                startOff = getOffset(el);
+                el.style.opacity = '0.85';
+                e.stopPropagation();
+                e.preventDefault();
+                svg.setPointerCapture(e.pointerId);
+            });
+
+            svg.addEventListener('pointermove', (e) => {
+                if (!dragEl) return;
+                const p = clientToSvgPoint(e.clientX, e.clientY);
+                const dx = (p.x - startPt.x) / mapScale;
+                const dy = (p.y - startPt.y) / mapScale;
+                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+                dragEl.setAttribute('transform', `translate(${startOff.x + dx}, ${startOff.y + dy})`);
+                e.stopPropagation();
+            });
+
+            const endDrag = (e) => {
+                if (!dragEl) return;
+                dragEl.style.opacity = '';
+                if (moved) {
+                    const offsets = loadLabelOffsets();
+                    offsets[dragEl.getAttribute('data-lkey')] = getOffset(dragEl);
+                    saveLabelOffsets(offsets);
+                    // не открываем страницу станции после перетаскивания
+                    const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
+                    window.addEventListener('click', swallow, { capture: true, once: true });
+                }
+                dragEl = null;
+            };
+            svg.addEventListener('pointerup', endDrag);
+            svg.addEventListener('pointercancel', endDrag);
+        }
+        window.resetLabelOffsets = resetLabelOffsets;
 
         function openStationModal(lineIdx, stationIdx) {
             const line = METRO_LINES[lineIdx];
