@@ -1440,7 +1440,7 @@
             };
             // Плавные кривые: bend — суммарный «увод» ветки в градусах,
             // len — радиус конечной станции. Ни одной ломаной, только Безье.
-            const CURVES = {
+            const CURVES_BASE = {
                 pink:      { bend: -13, len: 1090 }, // вправо, широкая дуга
                 purple:    { bend: -12, len: 1040 }, // вниз-вправо
                 orange:    { bend: -26, len: 1210 }, // вниз и плавно уводит вправо
@@ -1450,6 +1450,11 @@
                 green:     { bend: +14, len: 1020 }, // вверх, уходит вправо
                 red:       { bend: -12, len: 1040 }  // вверх-вправо
             };
+            // Геометрия линий = базовая + сохранённые правки редактора
+            const CURVES = {};
+            Object.keys(CURVES_BASE).forEach(k => {
+                CURVES[k] = Object.assign({}, CURVES_BASE[k], (loadLineGeom() || {})[k] || {});
+            });
             // Аккуратные векторные пиктограммы конечных станций (сетка 24×24)
             const TERM_ICONS = {
                 lightblue: 'M4 8h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Zm5-3h6a1 1 0 0 1 1 1v2H8V6a1 1 0 0 1 1-1Z',
@@ -1620,7 +1625,7 @@
                     const clickRY = 42;
 
                     content += `
-                        <g class="cursor-pointer metro-line-group station-clickable" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
+                        <g class="cursor-pointer metro-line-group station-clickable draggable-station" data-skey="st-${line.id}-${stationIdx}" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
                             <ellipse cx="${midX}" cy="${midY}" rx="${clickRX}" ry="${clickRY}" fill="transparent" transform="rotate(${clickAngle}, ${midX}, ${midY})"/>
                             <circle class="station-marker" cx="${cx}" cy="${cy}" r="18" fill="#FFFFFF"
                                     stroke="${line.color}" stroke-width="8"
@@ -1674,7 +1679,7 @@
                 const clickRy = Math.abs(tny - ticy) / 2 + iconR + 30;
 
                 content += `
-                    <g class="cursor-pointer metro-line-group station-clickable" data-line="${line.id}" onclick="goToLinePage('${line.id}')">
+                    <g class="cursor-pointer metro-line-group station-clickable draggable-station" data-skey="term-icon-${line.id}" data-line="${line.id}" onclick="goToLinePage('${line.id}')">
                         <ellipse cx="${tlx}" cy="${clickCy}" rx="${clickRx}" ry="${clickRy}" fill="transparent"/>
                         <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
                                 stroke="${line.color}" stroke-width="8"
