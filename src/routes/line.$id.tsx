@@ -331,6 +331,7 @@ const styles = `
   .lp-final-emoji { font-size: 2.6rem; }
   .lp-final-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(1.4rem, 4vw, 2rem); margin: 8px 0; }
   .lp-final-sub { color: var(--ink-soft); max-width: 620px; margin: 0 auto 22px; line-height: 1.7; font-weight: 600; }
+  .lp-alfa-form { max-width: 560px; margin: 0 auto 14px; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 40px -24px rgba(31,41,55,.35); }
 
   .lp-others { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
   .lp-other {
