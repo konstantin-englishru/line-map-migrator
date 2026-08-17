@@ -1659,12 +1659,34 @@ function CoursePage() {
               <h2 className="cp-h2">{course.resultsTitle ?? "Что получит ребёнок"}</h2>
             </div>
             <div className="cp-results">
-              {course.results.map((r, i) => (
-                <div key={r} className="cp-result">
-                  <span className="cp-result-n" style={{ background: PALETTE[i % PALETTE.length] }}>{i + 1}</span>
-                  <span className="cp-result-t">{r}</span>
-                </div>
-              ))}
+              {course.results.map((r, i) => {
+                const count = course.results.length;
+                const sizeClass =
+                  count === 5
+                    ? i === 2
+                      ? "cp-result--tall"
+                      : i === 0
+                      ? "cp-result--offset-down"
+                      : i === 3
+                      ? "cp-result--offset-up"
+                      : ""
+                    : count === 4
+                    ? i === 0 || i === 3
+                      ? "cp-result--wide"
+                      : ""
+                    : count === 3
+                    ? i === 1
+                      ? "cp-result--wide"
+                      : ""
+                    : "";
+                const rotateClass = i % 3 === 0 ? "cp-result--rotate-left" : i % 3 === 1 ? "cp-result--rotate-right" : "";
+                return (
+                  <div key={r} className={`cp-result ${sizeClass} ${rotateClass}`}>
+                    <span className="cp-result-n" style={{ background: PALETTE[i % PALETTE.length] }}>{i + 1}</span>
+                    <span className="cp-result-t">{r}</span>
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}
