@@ -1832,3 +1832,98 @@ const styles = `
   }
 `;
 
+
+/** Страница выбора направления для станции «Индивидуальная» (Малышино). */
+const CHOICES = [
+  {
+    slug: "Логопед",
+    emoji: "🗣️",
+    color: "#F79EC7",
+    title: "Логопед",
+    sub: "Чистая, красивая речь без страха и принуждения",
+    points: ["Постановка и автоматизация звуков", "Связная речь и дыхание", "Уверенность в общении"],
+  },
+  {
+    slug: "Нейропсихолог",
+    emoji: "🧠",
+    color: "#B79BEA",
+    title: "Нейропсихолог",
+    sub: "Внимание, память и спокойствие через движение и игру",
+    points: ["Диагностика и мягкая поддержка", "Внимание, память, саморегуляция", "Индивидуальный маршрут"],
+  },
+];
+
+function ChoicePage() {
+  return (
+    <>
+      <style>{styles}</style>
+      <style>{choiceStyles}</style>
+      <main className="cp-page">
+        <header className="cp-topbar">
+          <Link to="/" className="cp-back">← К карте курсов</Link>
+          <span className="cp-brand">🧸 Малышино • станция «Индивидуальная»</span>
+          <a href="tel:+74999385858" className="cp-top-cta">+7 499 938 58 58</a>
+        </header>
+
+        <section className="cp-hero">
+          <div className="ch-head">
+            <span className="cp-badge">Индивидуальные занятия</span>
+            <h1 className="cp-h1">Выберите направление</h1>
+            <p className="cp-lead">
+              На станции «Индивидуальная» работают два специалиста. Выберите направление —
+              и мы расскажем подробно, как проходят занятия и какой результат получит ребёнок.
+            </p>
+          </div>
+
+          <div className="ch-grid">
+            {CHOICES.map((c) => (
+              <Link
+                key={c.slug}
+                to="/p/$slug"
+                params={{ slug: c.slug }}
+                className="ch-card"
+                style={{ borderColor: `${c.color}66` }}
+              >
+                <div className="ch-emoji" style={{ background: `${c.color}22` }}>{c.emoji}</div>
+                <h2 className="ch-title">{c.title}</h2>
+                <p className="ch-sub">{c.sub}</p>
+                <ul className="ch-points">
+                  {c.points.map((p) => (
+                    <li key={p}>{p}</li>
+                  ))}
+                </ul>
+                <span className="ch-cta" style={{ background: c.color }}>Открыть направление →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
+    </>
+  );
+}
+
+const choiceStyles = `
+  .ch-head { text-align: center; max-width: 760px; margin: 0 auto 34px; }
+  .ch-grid {
+    display: grid; gap: 22px; max-width: 960px; margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .ch-card {
+    display: block; background: #fff; border: 3px solid #eee; border-radius: 28px;
+    padding: 26px 24px 24px; text-decoration: none; color: inherit;
+    box-shadow: 0 26px 50px -38px rgba(31,41,55,.7);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .ch-card:hover { transform: translateY(-6px); box-shadow: 0 32px 60px -34px rgba(31,41,55,.55); }
+  .ch-emoji {
+    width: 68px; height: 68px; border-radius: 22px; display: flex;
+    align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 14px;
+  }
+  .ch-title { font-family: 'Accuratist','Montserrat',sans-serif; font-weight: 900; font-size: 1.6rem; margin: 0 0 6px; }
+  .ch-sub { margin: 0 0 14px; opacity: .75; line-height: 1.6; }
+  .ch-points { margin: 0 0 20px; padding-left: 18px; line-height: 1.8; opacity: .85; }
+  .ch-cta {
+    display: inline-block; color: #fff; font-weight: 800;
+    padding: 12px 22px; border-radius: 999px;
+  }
+`;
