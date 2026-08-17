@@ -2598,6 +2598,13 @@
             return out;
         }
         function saveLabelOffsets(map)   { writeStore(LABEL_STORE_KEY, map); }
+        function loadNameOverrides() { return Object.assign({}, NAME_DEFAULTS, readStore(NAME_STORE_KEY)); }
+        function saveNameOverrides(map) { writeStore(NAME_STORE_KEY, map); }
+        function metroName(key, fallback) {
+            const v = loadNameOverrides()[key];
+            return (v && String(v).trim()) ? String(v) : fallback;
+        }
+        window.metroName = metroName;
         function saveStationOffsets(map) { writeStore(STATION_STORE_KEY, map); }
         function saveLineGeom(map)       { writeStore(GEOM_STORE_KEY, map); }
 
