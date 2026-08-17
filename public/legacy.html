@@ -2769,6 +2769,39 @@
             const logo = panel.querySelector('#me-logo');
             const ring = panel.querySelector('#me-ring');
             const ringN = panel.querySelector('#me-ring-n');
+            const stSel  = panel.querySelector('#me-st');
+            const stName = panel.querySelector('#me-st-name');
+
+            const lineMeta = (id) => lines.find(l => l.id === id) || { stations: [], name: '' };
+            const fillStations = () => {
+                const meta = lineMeta(sel.value);
+                const opts = [`<option value="term-${meta.id}">Конечная: ${meta.name}</option>`]
+                    .concat((meta.stations || []).map((n, i) => `<option value="st-${meta.id}-${i}">${n}</option>`));
+                stSel.innerHTML = opts.join('');
+                syncName();
+            };
+            function syncName() {
+                const meta = lineMeta(sel.value);
+                const key = stSel.value || '';
+                const m = key.match(/^st-.+-(\d+)$/);
+                const base = m ? (meta.stations || [])[parseInt(m[1], 10)] : meta.name;
+                stName.value = loadNameOverrides()[key] || base || '';
+            }
+            stSel.addEventListener('change', syncName);
+            panel.querySelector('#me-st-save').addEventListener('click', () => {
+                const map = loadNameOverrides();
+                const v = stName.value.trim();
+                if (v) map[stSel.value] = v; else delete map[stSel.value];
+                saveNameOverrides(map);
+                renderMetroMap();
+            });
+            panel.querySelector('#me-st-clear').addEventListener('click', () => {
+                const map = loadNameOverrides();
+                delete map[stSel.value];
+                saveNameOverrides(map);
+                renderMetroMap();
+                syncName();
+            });
 
             const syncStyle = () => {
                 const s = loadMapStyle();
@@ -2826,7 +2859,7 @@
                 panel.querySelector('#me-len-v').textContent  = len.value;
                 renderMetroMap();
             };
-            sel.addEventListener('change', sync);
+            sel.addEventListener('change', () => { sync(); fillStations(); });
             bend.addEventListener('input', push);
             len.addEventListener('input', push);
             panel.querySelector('#me-copy').addEventListener('click', () => {
@@ -2834,7 +2867,8 @@
                     labels:   loadLabelOffsets(),
                     stations: loadStationOffsets(),
                     geom:     loadLineGeom(),
-                    style:    loadMapStyle()
+                    style:    loadMapStyle(),
+                    names:    loadNameOverrides()
                 }, null, 2);
                 navigator.clipboard && navigator.clipboard.writeText(dump);
                 alert('Настройки схемы скопированы в буфер обмена.');
@@ -2844,6 +2878,7 @@
             });
             sync();
             syncStyle();
+            fillStations();
         }
 
         function openStationModal(lineIdx, stationIdx) {
