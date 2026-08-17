@@ -7,6 +7,8 @@ import chessHeroImg from "@/assets/chess-hero.jpg";
 import chessLessonImg from "@/assets/chess-lesson.jpg";
 import artHeroImg from "@/assets/art-hero.jpg";
 import artLessonImg from "@/assets/art-lesson.jpg";
+import speechHeroImg from "@/assets/speech-hero.jpg";
+import speechLessonImg from "@/assets/speech-lesson.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
@@ -124,6 +126,8 @@ function buildCourse(title: string): CourseData {
   };
 
   if (/робот|конструир/i.test(title)) return { ...base, ...ROBOTICS_PRESCHOOL, title };
+  if (/логопед/i.test(title)) return { ...base, ...SPEECH_PRESCHOOL, title };
+  if (/нейропсихолог/i.test(title)) return { ...base, ...NEURO_PRESCHOOL, title };
   if (/шахмат/i.test(title)) return { ...base, ...CHESS_PRESCHOOL, title };
   if (/арт-лаб|арт-мастер|творческ/i.test(title)) return { ...base, ...ART_PRESCHOOL, title };
   if (/англ/i.test(title)) return { ...base, ...ENGLISH_PRESCHOOL, title };
