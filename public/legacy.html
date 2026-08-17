@@ -770,38 +770,44 @@
             </div>
 
             <div class="w-full md:w-1/2 flex items-center justify-center relative">
-                <div class="bg-white p-8 rounded-[40px] shadow-sm border-4 border-[#E6F2FF] w-full max-w-md relative overflow-hidden">
-                    <h3 class="font-heading text-2xl font-bold mb-6 text-center">Карта наших маршрутов</h3>
-                    
-                    <svg viewBox="0 0 300 250" class="w-full h-auto">
-                        <!-- Линии -->
-                        <path class="metro-line-path" d="M 30,50 Q 80,50 120,100 T 270,100" fill="none" stroke="#E0F7FA" stroke-width="12" stroke-linecap="round"/>
-                        <path class="metro-line-path" d="M 30,200 Q 120,200 150,150 T 270,150" fill="none" stroke="#FFE6F2" stroke-width="12" stroke-linecap="round"/>
-                        <path class="metro-line-path" d="M 120,30 L 120,220" fill="none" stroke="#FFFACD" stroke-width="12" stroke-linecap="round"/>
+                <div onclick="goToMetroMap()" role="button" tabindex="0" onkeypress="if(event.key==='Enter')goToMetroMap()" class="cursor-pointer bg-white p-6 md:p-8 rounded-[40px] shadow-sm border-4 border-[#E6F2FF] w-full max-w-md relative overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
+                    <h3 class="font-heading text-2xl font-bold mb-1 text-center">Карта наших маршрутов</h3>
+                    <p class="text-center text-sm font-medium opacity-60 mb-4">Нажмите, чтобы открыть полную схему</p>
 
-                        <!-- Станции -->
-                        <!-- Научная ветка -->
-                        <circle cx="70" cy="50" r="10" fill="white" stroke="#E0F7FA" stroke-width="4"/>
-                        <text x="70" y="30" font-family="'Google Sans', sans-serif" font-size="12" fill="#4A4A4A" font-weight="bold" text-anchor="middle">Научная</text>
-                        
-                        <!-- Пересадочный узел -->
-                        <circle cx="120" cy="100" r="14" fill="white" stroke="#4A4A4A" stroke-width="3"/>
-                        <circle cx="120" cy="100" r="6" fill="#FFFACD"/>
-                        <text x="140" y="95" font-family="'Google Sans', sans-serif" font-size="13" fill="#4A4A4A" font-weight="600" letter-spacing="0.5">Главная</text>
-                        
-                        <!-- Творческая ветка -->
-                        <circle cx="200" cy="150" r="10" fill="white" stroke="#FFE6F2" stroke-width="4"/>
-                        <text x="200" y="175" font-family="'Google Sans', sans-serif" font-size="12" fill="#4A4A4A" font-weight="bold" text-anchor="middle">Творческая</text>
-                        
-                        <!-- Игровая ветка -->
-                        <circle cx="120" cy="180" r="10" fill="white" stroke="#FFFACD" stroke-width="4"/>
-                        <text x="90" y="185" font-family="'Google Sans', sans-serif" font-size="12" fill="#4A4A4A" font-weight="bold">Игровая</text>
+                    <svg viewBox="0 0 340 340" class="w-full h-auto">
+                        <defs>
+                            <radialGradient id="miniMapBg" cx="50%" cy="50%" r="60%">
+                                <stop offset="0%" stop-color="#DDEEFF"/>
+                                <stop offset="100%" stop-color="#F6FBFF"/>
+                            </radialGradient>
+                        </defs>
+                        <circle cx="170" cy="170" r="165" fill="url(#miniMapBg)"/>
 
-                        <!-- Конечные -->
-                        <circle cx="270" cy="100" r="8" fill="#E0F7FA"/>
-                        <circle cx="270" cy="150" r="8" fill="#FFE6F2"/>
-                        <circle cx="120" cy="30" r="8" fill="#FFFACD"/>
-                        <circle cx="120" cy="220" r="8" fill="#FFFACD"/>
+                        <g stroke-linecap="round" stroke-width="9" fill="none">
+                            <path d="M170 170 L170 96 L170 32" stroke="#F26B6B"/>
+                            <path d="M170 170 L222 118 L268 72" stroke="#F49E4C"/>
+                            <path d="M170 170 L244 170 L308 170" stroke="#F5C542"/>
+                            <path d="M170 170 L222 222 L268 268" stroke="#5EC26A"/>
+                            <path d="M170 170 L170 244 L170 308" stroke="#3FA9D6"/>
+                            <path d="M170 170 L118 222 L72 268" stroke="#4C6FD1"/>
+                            <path d="M170 170 L96 170 L32 170" stroke="#9B72CF"/>
+                            <path d="M170 170 L118 118 L72 72" stroke="#E870AE"/>
+                        </g>
+
+                        <g fill="#fff" stroke-width="4">
+                            <circle cx="170" cy="96" r="7" stroke="#F26B6B"/><circle cx="170" cy="32" r="9" stroke="#F26B6B"/>
+                            <circle cx="222" cy="118" r="7" stroke="#F49E4C"/><circle cx="268" cy="72" r="9" stroke="#F49E4C"/>
+                            <circle cx="244" cy="170" r="7" stroke="#F5C542"/><circle cx="308" cy="170" r="9" stroke="#F5C542"/>
+                            <circle cx="222" cy="222" r="7" stroke="#5EC26A"/><circle cx="268" cy="268" r="9" stroke="#5EC26A"/>
+                            <circle cx="170" cy="244" r="7" stroke="#3FA9D6"/><circle cx="170" cy="308" r="9" stroke="#3FA9D6"/>
+                            <circle cx="118" cy="222" r="7" stroke="#4C6FD1"/><circle cx="72" cy="268" r="9" stroke="#4C6FD1"/>
+                            <circle cx="96" cy="170" r="7" stroke="#9B72CF"/><circle cx="32" cy="170" r="9" stroke="#9B72CF"/>
+                            <circle cx="118" cy="118" r="7" stroke="#E870AE"/><circle cx="72" cy="72" r="9" stroke="#E870AE"/>
+                        </g>
+
+                        <circle cx="170" cy="170" r="46" fill="#fff" stroke="#1F2937" stroke-width="3"/>
+                        <text x="170" y="162" text-anchor="middle" font-family="'Montserrat',sans-serif" font-size="14" font-weight="800" fill="#1F2937">ГОРОД</text>
+                        <text x="170" y="182" text-anchor="middle" font-family="'Montserrat',sans-serif" font-size="14" font-weight="800" fill="#1F2937">ЗНАНИЙ</text>
                     </svg>
                 </div>
             </div>
