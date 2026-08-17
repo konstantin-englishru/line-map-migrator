@@ -2119,9 +2119,6 @@ const styles = `
     .cp-bento { grid-template-columns: repeat(2, 1fr); }
     .cp-reviews { grid-template-columns: 1fr; }
     .cp-stats { grid-template-columns: repeat(2, 1fr); }
-    .cp-results { grid-template-columns: repeat(2, 1fr); }
-    .cp-result--tall { grid-row: auto; flex-direction: row; align-items: center; padding: 16px 18px; }
-    .cp-result--wide { grid-column: span 2; }
   }
   @media (max-width: 560px) {
     .cp-topbar { padding: 10px 14px; }
@@ -2131,11 +2128,6 @@ const styles = `
     .cp-section { padding: 36px 16px; }
     .cp-bento { grid-template-columns: 1fr; }
     .cp-format-grid { grid-template-columns: 1fr; }
-    .cp-results { grid-template-columns: 1fr; }
-    .cp-result--wide { grid-column: auto; }
-    .cp-result--tall { grid-row: auto; flex-direction: row; align-items: center; padding: 16px 18px; }
-    .cp-result--offset-up, .cp-result--offset-down { transform: none; }
-    .cp-result--rotate-left, .cp-result--rotate-right { transform: none; }
     .cp-final-card { padding: 40px 22px; border-radius: 28px; }
     .cp-cta-row { flex-direction: column; align-items: stretch; }
     .cp-btn { justify-content: center; }
