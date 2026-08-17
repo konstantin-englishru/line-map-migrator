@@ -1819,13 +1819,14 @@
             const legendEl = document.getElementById('metro-legend');
             if (legendEl) {
                 legendEl.innerHTML = METRO_LINES.map(l => `
-                    <a href="/line/${encodeURIComponent(l.id)}" target="_top" data-line="${l.id}"
+                    <a href="/line/${encodeURIComponent(l.id)}" target="_blank" rel="noopener" data-line="${l.id}"
                             class="legend-item flex items-center gap-2 px-3 py-1.5 rounded-full border-2 border-transparent hover:border-[${l.color}] transition-colors cursor-pointer"
                             style="background:rgba(255,255,255,0.6);">
                         <span class="inline-block w-4 h-4 rounded-full" style="background:${l.color}"></span>
                         <span class="text-sm md:text-base font-semibold text-[#1F2937]">${l.name}</span>
                     </a>
                 `).join('');
+
             }
         }
 
