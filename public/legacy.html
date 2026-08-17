@@ -979,7 +979,7 @@
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
-                    <svg id="interactive-metro-map" viewBox="-180 -180 2360 2360" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+                    <svg id="interactive-metro-map" viewBox="-260 -260 2520 2520" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
                 </div>
@@ -1416,7 +1416,7 @@
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
             const KINK_R     = 540;           // радиус, где линия делает поворот
-            const SEG2_LEN   = 460;           // длина второго (наклонного) сегмента
+            const SEG2_LEN   = 560;           // длина второго (наклонного) сегмента — увеличена, чтобы станции не слипались
             const BEND_DEG   = 28;            // угол мягкого поворота на середине
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
@@ -1713,28 +1713,46 @@
                        preserveAspectRatio="xMidYMid meet"
                        clip-path="url(#logo-clip)" pointer-events="none"/>
 
-                <!-- Скрытый круговой путь, по которому едет поезд -->
+                <!-- Скрытый круговой путь, по которому едет поезд (кольцо увеличено, чтобы поезд не задевал станции) -->
                 <path id="train-ring-path"
-                      d="M ${CENTER + (RING_RADIUS + 48)},${CENTER}
-                         A ${RING_RADIUS + 48},${RING_RADIUS + 48} 0 1,1 ${CENTER - (RING_RADIUS + 48)},${CENTER}
-                         A ${RING_RADIUS + 48},${RING_RADIUS + 48} 0 1,1 ${CENTER + (RING_RADIUS + 48)},${CENTER} Z"
+                      d="M ${CENTER + (RING_RADIUS + 62)},${CENTER}
+                         A ${RING_RADIUS + 62},${RING_RADIUS + 62} 0 1,1 ${CENTER - (RING_RADIUS + 62)},${CENTER}
+                         A ${RING_RADIUS + 62},${RING_RADIUS + 62} 0 1,1 ${CENTER + (RING_RADIUS + 62)},${CENTER} Z"
                       fill="none" stroke="none"/>
 
-                <!-- Поезд: локомотив + 3 вагончика -->
+                <!-- Поезд: локомотив + 3 вагончика (крупнее и ярче) -->
                 <g id="metro-train" pointer-events="none">
-                    ${[0,1,2,3].map(i => `
+                    ${[0,1,2,3].map(i => {
+                        const carBody = i === 0 ? '#FFD93D' : (i === 1 ? '#FF6B9D' : (i === 2 ? '#9B59FF' : '#4CD964'));
+                        const roof = i === 0 ? '#FF9F1C' : (i === 1 ? '#FF8FB0' : (i === 2 ? '#B388FF' : '#85E0A3'));
+                        const winColors = ['#81D4FA', '#FFCC80', '#CE93D8', '#A5D6A7'];
+                        return `
                         <g class="train-car" data-idx="${i}">
-                            <rect x="-30" y="-16" width="60" height="32" rx="8"
-                                  fill="${i===0 ? '#FFE066' : (i===1 ? '#F4B5D6' : (i===2 ? '#B9A6E6' : '#B4E59A'))}"
-                                  stroke="#1F2937" stroke-width="3"/>
-                            <rect x="-22" y="-10" width="18" height="13" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="2"/>
-                            <rect x="6" y="-10" width="18" height="13" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="2"/>
-                            <circle cx="-16" cy="18" r="5" fill="#1F2937"/>
-                            <circle cx="16" cy="18" r="5" fill="#1F2937"/>
-                            ${i===0 ? '<rect x="14" y="-28" width="8" height="11" fill="#F4B5D6" stroke="#1F2937" stroke-width="2"/>' : ''}
+                            <rect x="-38" y="-22" width="76" height="44" rx="12"
+                                  fill="${carBody}" stroke="#1F2937" stroke-width="3"/>
+                            <rect x="-38" y="-26" width="76" height="10" rx="5"
+                                  fill="${roof}" stroke="#1F2937" stroke-width="2"/>
+                            <rect x="-28" y="-14" width="22" height="18" rx="4" fill="${winColors[0]}" stroke="#1F2937" stroke-width="2"/>
+                            <rect x="6" y="-14" width="22" height="18" rx="4" fill="${winColors[1]}" stroke="#1F2937" stroke-width="2"/>
+                            <circle cx="-18" cy="24" r="7" fill="#1F2937"/>
+                            <circle cx="18" cy="24" r="7" fill="#1F2937"/>
+                            <circle cx="-18" cy="24" r="3" fill="#94A3B8"/>
+                            <circle cx="18" cy="24" r="3" fill="#94A3B8"/>
+                            ${i === 0 ? `
+                                <rect x="-34" y="-32" width="10" height="10" fill="#FF6B6B" stroke="#1F2937" stroke-width="2" rx="2"/>
+                                <rect x="-20" y="-32" width="10" height="10" fill="#4ECDC4" stroke="#1F2937" stroke-width="2" rx="2"/>
+                                <rect x="-6" y="-32" width="10" height="10" fill="#FFE66D" stroke="#1F2937" stroke-width="2" rx="2"/>
+                                <rect x="24" y="-32" width="10" height="10" fill="#FF9F1C" stroke="#1F2937" stroke-width="2" rx="2"/>
+                                <rect x="18" y="-4" width="14" height="10" rx="2" fill="#FFEB3B" stroke="#1F2937" stroke-width="2"/>
+                            ` : `
+                                <rect x="-6" y="-4" width="12" height="8" rx="2" fill="${winColors[2]}" stroke="#1F2937" stroke-width="1.5"/>
+                            `}
                         </g>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </g>
+                <!-- Декоративные блики/искры позади поезда -->
+                <g id="train-sparkles" pointer-events="none" fill="#FFD93D"></g>
             `;
 
             svg.innerHTML = `
@@ -1811,10 +1829,12 @@
             total: 0,
             t: 0,                  // текущая позиция головы по пути (в длинах)
             speed: 1.8,            // px за кадр (кольцо)
-            carSpacing: 74,        // расстояние между вагонами (px вдоль пути)
+            carSpacing: 98,       // расстояние между вагонами увеличено под крупный поезд
             rafId: null,
             oneShot: false,
             onArrive: null,
+            sparkles: [],           // декоративные блики позади поезда
+            sparkleTimer: 0,
         };
 
         function setTrainPath(pathSelector, opts = {}) {
@@ -1869,6 +1889,30 @@
                 const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
                 car.setAttribute('transform', `translate(${p1.x},${p1.y}) rotate(${angle})`);
             });
+
+            // --- Декоративные блики позади поезда ---
+            const sparklesGroup = document.getElementById('train-sparkles');
+            if (sparklesGroup) {
+                const lastCar = cars[cars.length - 1];
+                if (lastCar) {
+                    const transform = lastCar.getAttribute('transform');
+                    const m = /translate\(([^,]+),([^)]+)\)/.exec(transform || '');
+                    if (m) {
+                        const tx = parseFloat(m[1]), ty = parseFloat(m[2]);
+                        TRAIN_STATE.sparkleTimer++;
+                        if (TRAIN_STATE.sparkleTimer % 8 === 0) {
+                            TRAIN_STATE.sparkles.push({ x: tx, y: ty, life: 1.0 });
+                        }
+                    }
+                }
+                TRAIN_STATE.sparkles = TRAIN_STATE.sparkles.filter(s => (s.life -= 0.04) > 0);
+                sparklesGroup.innerHTML = TRAIN_STATE.sparkles.map(s => {
+                    const r = 2 + (1 - s.life) * 4;
+                    const colors = ['#FFD93D','#FF6B9D','#9B59FF','#4CD964'];
+                    const c = colors[Math.floor((1 - s.life) * colors.length) % colors.length];
+                    return `<circle cx="${s.x}" cy="${s.y}" r="${r}" fill="${c}" opacity="${s.life.toFixed(2)}"/>`;
+                }).join('');
+            }
 
             if (reachedEnd) {
                 const cb = TRAIN_STATE.onArrive;
