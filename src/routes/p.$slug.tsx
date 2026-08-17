@@ -1176,6 +1176,7 @@ export const Route = createFileRoute("/p/$slug")({
 function CoursePage() {
   const { slug } = Route.useParams();
   const title = decodeURIComponent(slug);
+  if (/индивидуальн/i.test(title)) return <ChoicePage />;
   const course = buildCourse(title);
   const trialHref = TRIAL_HREF;
 
