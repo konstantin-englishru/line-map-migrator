@@ -1628,9 +1628,10 @@
                             <circle class="station-marker" cx="${cx}" cy="${cy}" r="18" fill="#FFFFFF"
                                     stroke="${line.color}" stroke-width="8"
                                     filter="url(#station-shadow)"/>
-                            <text x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
+                            <text class="draggable-label" data-lkey="st-${line.id}-${stationIdx}"
+                                  style="cursor:move;" x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
                                   font-family="${FONT}" font-size="32" font-weight="800"
-                                  fill="${TEXT_DARK}" pointer-events="none"
+                                  fill="${TEXT_DARK}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">${nameMarkup}</text>
                         </g>
@@ -1682,16 +1683,18 @@
                            fill="${line.color}" pointer-events="none">
                             <path d="${TERM_ICONS[line.id] || TERM_ICONS.pink}"/>
                         </g>
-                        <text x="${tnx}" y="${nameY}" text-anchor="${termAnchor}"
-                              font-family="${FONT}" font-size="38" font-weight="900"
-                              fill="${line.color}" pointer-events="none"
-                              paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
-                              stroke-linejoin="round">${line.name}</text>
-                        <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
-                              font-family="${FONT}" font-size="28" font-weight="700"
-                              fill="${TEXT_SOFT}" pointer-events="none"
-                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
-                              stroke-linejoin="round">(${line.age})</text>
+                        <g class="draggable-label" data-lkey="term-${line.id}" style="cursor:move;">
+                            <text x="${tnx}" y="${nameY}" text-anchor="${termAnchor}"
+                                  font-family="${FONT}" font-size="38" font-weight="900"
+                                  fill="${line.color}"
+                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
+                                  stroke-linejoin="round">${line.name}</text>
+                            <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
+                                  font-family="${FONT}" font-size="28" font-weight="700"
+                                  fill="${TEXT_SOFT}"
+                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                                  stroke-linejoin="round">(${line.age})</text>
+                        </g>
                     </g>
                 `;
             });
