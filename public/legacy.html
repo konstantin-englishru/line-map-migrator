@@ -1558,7 +1558,10 @@
                 CURVES[k] = Object.assign({}, CURVES_BASE[k], (loadLineGeom() || {})[k] || {});
             });
             window.METRO_CURVES_BASE = CURVES_BASE;
-            window.METRO_LINES_META = METRO_LINES.map(l => ({ id: l.id, name: l.name }));
+            window.METRO_LINES_META = METRO_LINES.map(l => ({
+                id: l.id, name: l.name,
+                stations: (l.stations || []).map(s => s.name)
+            }));
             // Аккуратные векторные пиктограммы конечных станций (сетка 24×24)
             const TERM_ICONS = {
                 lightblue: 'M4 8h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Zm5-3h6a1 1 0 0 1 1 1v2H8V6a1 1 0 0 1 1-1Z',
@@ -1683,6 +1686,7 @@
 
                 line.stations.forEach((station, stationIdx) => {
                     const L = padStart + step * stationIdx;
+                    const stName = metroName(`st-${line.id}-${stationIdx}`, station.name);
                     const p = pointAtLen(L);
                     const cx = p.x, cy = p.y;
 
@@ -1707,7 +1711,7 @@
                     let dyText = ny > 0.4 ? 24 : (ny < -0.4 ? -8 : 8);
 
                     // На красной линии «Спектакли» — слева-снизу от станции для читаемости
-                    if (line.id === 'red' && station.name === 'Спектакли') {
+                    if (line.id === 'red' && stName === 'Спектакли') {
                         anchor = 'end';
                         lx = cx - 38;
                         ly = cy + 30;
@@ -1715,10 +1719,10 @@
                     }
 
                     // «Мегаполис. Лето» рендерим в две строки
-                    const isMegapolis = station.name === 'Мегаполис. Лето';
+                    const isMegapolis = stName === 'Мегаполис. Лето';
                     const nameMarkup = isMegapolis
                         ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="${LABEL_SIZE * 0.9}">Лето</tspan>`
-                        : station.name;
+                        : stName;
 
                     // Кликабельная область: охватывает круглую станцию и её подпись.
                     // В виде вытянутого овала от станции до конца текста, чтобы не
@@ -1799,7 +1803,7 @@
                                   font-family="${FONT}" font-size="${LABEL_SIZE * 1.18}" font-weight="900"
                                   fill="${line.color}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
-                                  stroke-linejoin="round">${line.name}</text>
+                                   stroke-linejoin="round">${metroName(`term-${line.id}`, line.name)}</text>
                             <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
                                   font-family="${FONT}" font-size="${LABEL_SIZE * 0.88}" font-weight="700"
                                   fill="${TEXT_SOFT}"
@@ -2550,6 +2554,9 @@
         const LABEL_STORE_KEY   = 'gz-metro-label-offsets-v1';
         const STATION_STORE_KEY = 'gz-metro-station-offsets-v1';
         const GEOM_STORE_KEY    = 'gz-metro-line-geom-v1';
+        const NAME_STORE_KEY    = 'gz-metro-names-v1';
+        // Зафиксированные переименования станций (видят все посетители)
+        const NAME_DEFAULTS = {};
         const EDIT_FLAG_KEY     = 'gz-metro-edit-mode';
 
         const METRO_EDIT = (() => {
@@ -2595,6 +2602,13 @@
             return out;
         }
         function saveLabelOffsets(map)   { writeStore(LABEL_STORE_KEY, map); }
+        function loadNameOverrides() { return Object.assign({}, NAME_DEFAULTS, readStore(NAME_STORE_KEY)); }
+        function saveNameOverrides(map) { writeStore(NAME_STORE_KEY, map); }
+        function metroName(key, fallback) {
+            const v = loadNameOverrides()[key];
+            return (v && String(v).trim()) ? String(v) : fallback;
+        }
+        window.metroName = metroName;
         function saveStationOffsets(map) { writeStore(STATION_STORE_KEY, map); }
         function saveLineGeom(map)       { writeStore(GEOM_STORE_KEY, map); }
 
@@ -2622,6 +2636,7 @@
             saveStationOffsets({});
             saveLineGeom({});
             saveMapStyle({});
+            saveNameOverrides({});
             renderMetroMap();
         }
 
@@ -2703,6 +2718,13 @@
                 <input id="me-bend" type="range" min="-60" max="60" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Длина: <span id="me-len-v"></span></label>
                 <input id="me-len" type="range" min="600" max="1600" step="10" style="width:100%;margin-bottom:8px;">
+                <div style="font-weight:700;margin:8px 0 6px;border-top:1px solid #E2E8F0;padding-top:8px;">Переименовать станцию</div>
+                <select id="me-st" style="width:100%;padding:4px;margin-bottom:6px;border:1px solid #CBD5E1;border-radius:8px;"></select>
+                <input id="me-st-name" type="text" placeholder="Новое название" style="width:100%;padding:5px;margin-bottom:6px;border:1px solid #CBD5E1;border-radius:8px;">
+                <div style="display:flex;gap:6px;margin-bottom:8px;">
+                    <button id="me-st-save" style="flex:1;padding:6px;border-radius:8px;background:#22C55E;color:#fff;font-weight:600;">Сохранить</button>
+                    <button id="me-st-clear" style="flex:1;padding:6px;border-radius:8px;background:#F1F5F9;font-weight:600;">Вернуть</button>
+                </div>
                 <div style="font-weight:700;margin:8px 0 6px;border-top:1px solid #E2E8F0;padding-top:8px;">Общий стиль</div>
                 <label style="display:block;margin-bottom:2px;">Толщина линий: <span id="me-lw-v"></span></label>
                 <input id="me-lw" type="range" min="4" max="40" step="1" style="width:100%;margin-bottom:8px;">
@@ -2748,6 +2770,39 @@
             const logo = panel.querySelector('#me-logo');
             const ring = panel.querySelector('#me-ring');
             const ringN = panel.querySelector('#me-ring-n');
+            const stSel  = panel.querySelector('#me-st');
+            const stName = panel.querySelector('#me-st-name');
+
+            const lineMeta = (id) => lines.find(l => l.id === id) || { stations: [], name: '' };
+            const fillStations = () => {
+                const meta = lineMeta(sel.value);
+                const opts = [`<option value="term-${meta.id}">Конечная: ${meta.name}</option>`]
+                    .concat((meta.stations || []).map((n, i) => `<option value="st-${meta.id}-${i}">${n}</option>`));
+                stSel.innerHTML = opts.join('');
+                syncName();
+            };
+            function syncName() {
+                const meta = lineMeta(sel.value);
+                const key = stSel.value || '';
+                const m = key.match(/^st-.+-(\d+)$/);
+                const base = m ? (meta.stations || [])[parseInt(m[1], 10)] : meta.name;
+                stName.value = loadNameOverrides()[key] || base || '';
+            }
+            stSel.addEventListener('change', syncName);
+            panel.querySelector('#me-st-save').addEventListener('click', () => {
+                const map = loadNameOverrides();
+                const v = stName.value.trim();
+                if (v) map[stSel.value] = v; else delete map[stSel.value];
+                saveNameOverrides(map);
+                renderMetroMap();
+            });
+            panel.querySelector('#me-st-clear').addEventListener('click', () => {
+                const map = loadNameOverrides();
+                delete map[stSel.value];
+                saveNameOverrides(map);
+                renderMetroMap();
+                syncName();
+            });
 
             const syncStyle = () => {
                 const s = loadMapStyle();
@@ -2805,7 +2860,7 @@
                 panel.querySelector('#me-len-v').textContent  = len.value;
                 renderMetroMap();
             };
-            sel.addEventListener('change', sync);
+            sel.addEventListener('change', () => { sync(); fillStations(); });
             bend.addEventListener('input', push);
             len.addEventListener('input', push);
             panel.querySelector('#me-copy').addEventListener('click', () => {
@@ -2813,7 +2868,8 @@
                     labels:   loadLabelOffsets(),
                     stations: loadStationOffsets(),
                     geom:     loadLineGeom(),
-                    style:    loadMapStyle()
+                    style:    loadMapStyle(),
+                    names:    loadNameOverrides()
                 }, null, 2);
                 navigator.clipboard && navigator.clipboard.writeText(dump);
                 alert('Настройки схемы скопированы в буфер обмена.');
@@ -2823,6 +2879,7 @@
             });
             sync();
             syncStyle();
+            fillStations();
         }
 
         function openStationModal(lineIdx, stationIdx) {
