@@ -2206,11 +2206,26 @@
             }
         }
 
-        function zoomMap(delta) {
-            mapScale += delta;
-            // Ограничиваем масштаб: от 0.4x (отдаление) до 3x (сильное приближение)
-            mapScale = Math.max(0.4, Math.min(mapScale, 3));
+        function zoomMapTo(next, anchor) {
+            next = Math.max(0.3, Math.min(next, 6));
+            const k = next / mapScale;
+            if (anchor) {
+                mapPanX = anchor.x - (anchor.x - mapPanX) * k;
+                mapPanY = anchor.y - (anchor.y - mapPanY) * k;
+            }
+            mapScale = next;
             applyMapTransform();
+        }
+
+        function zoomMap(delta) {
+            // Кнопки +/- : зум относительно центра области карты
+            const svg = document.getElementById('interactive-metro-map');
+            let anchor = null;
+            if (svg) {
+                const vb = svg.viewBox.baseVal;
+                anchor = { x: vb.x + vb.width / 2, y: vb.y + vb.height / 2 };
+            }
+            zoomMapTo(mapScale * Math.exp(delta * 1.2), anchor);
         }
 
         function resetMapZoom() {
@@ -2223,16 +2238,18 @@
         function setupMapInteractions() {
             const container = document.getElementById('map-container-inner');
             if (!container) return;
-            
-            // Зум колесиком мыши
+
+            // Зум колесиком/тачпадом — плавный, с привязкой к курсору
             container.addEventListener('wheel', (e) => {
-                e.preventDefault(); // Отключаем прокрутку страницы
-                const delta = e.deltaY > 0 ? -0.1 : 0.1;
-                zoomMap(delta);
+                e.preventDefault();
+                const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
+                const anchor = clientToSvgPoint(e.clientX, e.clientY);
+                zoomMapTo(mapScale * Math.exp(-dy * 0.0018), anchor);
             }, { passive: false });
 
             // Начало перетаскивания (мышь)
             container.addEventListener('mousedown', (e) => {
+                if (e.target.closest && e.target.closest('.draggable-label')) return;
                 isDraggingMap = true;
                 // Запоминаем стартовую точку с учетом текущего смещения
                 startDragX = e.clientX - mapPanX;
