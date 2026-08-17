@@ -1507,7 +1507,9 @@
                 // Линия = одна непрерывная кубическая кривая Безье.
                 // Выходит строго по радиусу из-за кольца, затем плавно уводит в сторону.
                 const cfg     = CURVES[line.id] || { bend: 0, len: 1040 };
-                const bendRad = degreesToRadians(cfg.bend);
+                const MSTYLE  = (typeof loadMapStyle === 'function') ? loadMapStyle() : { lineWidth: 14, straight: 0, stRadius: 18, stStroke: 8 };
+                const straightK = 1 - Math.min(Math.max(MSTYLE.straight, 0), 100) / 100;
+                const bendRad = degreesToRadians(cfg.bend * straightK);
                 const endRad  = rad + bendRad;
 
                 const startX = CENTER + CLEAR_R * Math.cos(rad);
@@ -1530,7 +1532,7 @@
                 const pathId = `line-path-${line.id}`;
                 content += `
                     <path id="${pathId}" class="metro-line" data-line="${line.id}" d="${pathD}" fill="none"
-                          stroke="${line.color}" stroke-width="14"
+                          stroke="${line.color}" stroke-width="${MSTYLE.lineWidth}"
                           stroke-linecap="round" stroke-linejoin="round"/>
                 `;
 
@@ -1629,11 +1631,11 @@
                     content += `
                         <g class="cursor-pointer metro-line-group station-clickable draggable-station" data-skey="st-${line.id}-${stationIdx}" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
                             <ellipse cx="${midX}" cy="${midY}" rx="${clickRX}" ry="${clickRY}" fill="transparent" transform="rotate(${clickAngle}, ${midX}, ${midY})"/>
-                            <circle class="station-marker" cx="${cx}" cy="${cy}" r="18" fill="#FFFFFF"
-                                    stroke="${line.color}" stroke-width="8"
+                            <circle class="station-marker" cx="${cx}" cy="${cy}" r="${MSTYLE.stRadius}" fill="#FFFFFF"
+                                    stroke="${line.color}" stroke-width="${MSTYLE.stStroke}"
                                     filter="url(#station-glow)"/>
-                            <circle class="station-marker" cx="${cx}" cy="${cy}" r="18" fill="#FFFFFF"
-                                    stroke="${line.color}" stroke-width="8"
+                            <circle class="station-marker" cx="${cx}" cy="${cy}" r="${MSTYLE.stRadius}" fill="#FFFFFF"
+                                    stroke="${line.color}" stroke-width="${MSTYLE.stStroke}"
                                     filter="url(#station-shadow)"/>
                             <text class="draggable-label" data-lkey="st-${line.id}-${stationIdx}"
                                   style="cursor:move;" x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
@@ -1684,7 +1686,7 @@
                     <g class="cursor-pointer metro-line-group station-clickable draggable-station" data-skey="term-icon-${line.id}" data-line="${line.id}" onclick="goToLinePage('${line.id}')">
                         <ellipse cx="${tlx}" cy="${clickCy}" rx="${clickRx}" ry="${clickRy}" fill="transparent"/>
                         <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
-                                stroke="${line.color}" stroke-width="8"
+                                stroke="${line.color}" stroke-width="${MSTYLE.stStroke}"
                                 pointer-events="none"/>
                         <g transform="translate(${tlx}, ${ticy}) scale(3.4) translate(-12, -12)"
                            fill="${line.color}" pointer-events="none">
