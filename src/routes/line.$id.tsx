@@ -60,10 +60,10 @@ function LinePage() {
             <p className="lp-tagline">{line.age} · {stationCount} станций · {programCount} программ</p>
             {lead && <p className="lp-lead">{lead}</p>}
             <div className="lp-cta-row">
-              <a href="/p/Записаться%20на%20пробное%20занятие" className="lp-btn lp-btn-primary">
+              <a href="#line-form" className="lp-btn lp-btn-primary">
                 🎁 Записаться на пробное
               </a>
-              <a href="/p/Получить%20консультацию" className="lp-btn lp-btn-ghost">
+              <a href="tel:+74999385858" className="lp-btn lp-btn-ghost">
                 📞 Получить консультацию
               </a>
             </div>
