@@ -1565,7 +1565,7 @@
 
                 // Отступы: первая станция чуть отступает от кольца,
                 // последняя — от конечной (иконки), чтобы не наезжать
-                const padStart = 170;
+                const padStart = line.id === 'orange' ? 320 : 170;
                 const padEnd   = 235;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
