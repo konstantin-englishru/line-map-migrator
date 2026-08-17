@@ -2792,6 +2792,9 @@
             renderMetroMap();
             setupMapInteractions(); // Запускаем слушатели событий для карты
             setupExternalNavigation();
+            setupMetroEditorPanel();
+            const resetBtn = document.querySelector('[onclick="resetLabelOffsets()"]');
+            if (resetBtn && !METRO_EDIT) resetBtn.style.display = 'none';
         });
 
         // Превращает пункты меню/футера и клики по станциям в открытие новых вкладок
