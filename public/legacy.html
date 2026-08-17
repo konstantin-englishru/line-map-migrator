@@ -1558,7 +1558,10 @@
                 CURVES[k] = Object.assign({}, CURVES_BASE[k], (loadLineGeom() || {})[k] || {});
             });
             window.METRO_CURVES_BASE = CURVES_BASE;
-            window.METRO_LINES_META = METRO_LINES.map(l => ({ id: l.id, name: l.name }));
+            window.METRO_LINES_META = METRO_LINES.map(l => ({
+                id: l.id, name: l.name,
+                stations: (l.stations || []).map(s => s.name)
+            }));
             // Аккуратные векторные пиктограммы конечных станций (сетка 24×24)
             const TERM_ICONS = {
                 lightblue: 'M4 8h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Zm5-3h6a1 1 0 0 1 1 1v2H8V6a1 1 0 0 1 1-1Z',
