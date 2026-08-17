@@ -2866,5 +2866,44 @@
             }
         }
     </script>
+
+    <!-- Скрытая ссылка/кнопка для режима правки схемы -->
+    <style>
+      #admin-edit-trigger {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        z-index: 9999;
+        opacity: 0.18;
+        transition: opacity 0.2s ease;
+      }
+      #admin-edit-trigger:hover { opacity: 1; }
+      #admin-edit-trigger a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.85);
+        color: #fff;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        font-size: 16px;
+      }
+    </style>
+    <div id="admin-edit-trigger" title="Редактор схемы (edit=1)">
+      <a href="?edit=1" target="_blank" rel="noopener" aria-label="Открыть редактор схемы">✎</a>
+    </div>
+
+    <script>
+      // Горячая клавиша для редактора: Ctrl/Cmd + Shift + E
+      document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.code === 'KeyE') {
+          e.preventDefault();
+          window.open(window.location.pathname + '?edit=1', '_blank', 'noopener');
+        }
+      });
+    </script>
 </body>
 </html>
