@@ -60,10 +60,10 @@ function LinePage() {
             <p className="lp-tagline">{line.age} · {stationCount} станций · {programCount} программ</p>
             {lead && <p className="lp-lead">{lead}</p>}
             <div className="lp-cta-row">
-              <a href="/p/Записаться%20на%20пробное%20занятие" className="lp-btn lp-btn-primary">
+              <a href="#line-form" className="lp-btn lp-btn-primary">
                 🎁 Записаться на пробное
               </a>
-              <a href="/p/Получить%20консультацию" className="lp-btn lp-btn-ghost">
+              <a href="tel:+74999385858" className="lp-btn lp-btn-ghost">
                 📞 Получить консультацию
               </a>
             </div>
@@ -126,18 +126,30 @@ function LinePage() {
         </section>
 
         {/* CTA */}
-        <section className="lp-final">
+        <section className="lp-final" id="line-form">
           <div className="lp-final-card">
             <div className="lp-final-emoji">🚂</div>
             <h2 className="lp-final-title">Поехали по ветке «{line.name}»?</h2>
             <p className="lp-final-sub">
-              Запишитесь на бесплатное пробное занятие — познакомимся, подберём станцию
+              Запишитесь на пробное занятие — познакомимся, подберём станцию
               и составим маршрут именно для вашего ребёнка.
             </p>
-            <div className="lp-cta-row lp-cta-center">
-              <a href="/p/Записаться%20на%20пробное%20занятие" className="lp-btn lp-btn-primary lp-btn-lg">
-                🎁 Записаться на пробное
-              </a>
+            <div className="lp-alfa-form">
+              <iframe
+                src="https://gorodznaniy.s20.online/common/1/form/draw?id=7&baseColor=205EDC&borderRadius=8&css=%2F%2Fcdn.alfacrm.pro%2Flead-form%2Fform.css"
+                title="Записаться на пробное занятие"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  minHeight: 640,
+                  border: 0,
+                  borderRadius: 20,
+                  display: "block",
+                  background: "#fff",
+                }}
+              />
+            </div>
+            <div className="lp-cta-row lp-cta-center" style={{ marginTop: 18 }}>
               <a href="tel:+74999385858" className="lp-btn lp-btn-ghost lp-btn-lg">
                 📞 +7 499 938 58 58
               </a>
@@ -319,6 +331,7 @@ const styles = `
   .lp-final-emoji { font-size: 2.6rem; }
   .lp-final-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(1.4rem, 4vw, 2rem); margin: 8px 0; }
   .lp-final-sub { color: var(--ink-soft); max-width: 620px; margin: 0 auto 22px; line-height: 1.7; font-weight: 600; }
+  .lp-alfa-form { max-width: 560px; margin: 0 auto 14px; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 40px -24px rgba(31,41,55,.35); }
 
   .lp-others { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
   .lp-other {
