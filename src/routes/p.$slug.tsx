@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import heroImg from "@/assets/english-hero.jpg";
+import lessonImg from "@/assets/english-lesson.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
@@ -11,28 +13,54 @@ type CourseModule = { title: string; desc: string; icon: string };
 type CourseBenefit = { title: string; desc: string; icon: string; color: string };
 type CourseReview = { name: string; role: string; text: string; avatar: string };
 type CourseFaq = { q: string; a: string };
+type CourseCard = { title: string; desc: string; icon: string; color: string };
+type FormatCard = { title: string; desc: string; icon: string };
 
 type CourseData = {
   emoji: string;
+  station?: string;
   title: string;
   tagline: string;
+  h1?: string;
   description: string;
   primaryCta: string;
   secondaryCta: string;
+  heroImage?: string;
+  heroImageAlt?: string;
   stats: { value: string; label: string }[];
+  visual?: { image: string; alt: string; lead: string; paragraphs: string[] };
+  aboutTitle?: string;
+  aboutSub?: string;
+  forWhomCards?: CourseCard[];
   forWhom: string[];
+  resultsTitle?: string;
   results: string[];
+  benefitsTitle?: string;
+  benefitsSub?: string;
   benefits: CourseBenefit[];
+  programTitle?: string;
+  programSub?: string;
   modules: CourseModule[];
+  formatTitle?: string;
+  formatSub?: string;
+  formatCards?: FormatCard[];
   format: { duration: string; schedule: string; mode: string; method: string; teacher: string };
+  reviewsTitle?: string;
   reviews: CourseReview[];
+  faqTitle?: string;
   faq: CourseFaq[];
+  finalTitle?: string;
+  finalSub?: string;
+  phone?: string;
+  nav?: { label: string; href: string }[];
 };
 
 const PALETTE = ["#F79EC7", "#B79BEA", "#9EE07A", "#D6E85E", "#FFCB85", "#9DC7EE"];
 
+const TRIAL_HREF = "#trial-form";
+
 function buildCourse(title: string): CourseData {
-  return {
+  const base: CourseData = {
     emoji: "🎓",
     title,
     tagline: "Современный курс в «Городе Знаний»",
@@ -85,10 +113,232 @@ function buildCourse(title: string): CourseData {
       { q: "С какого возраста можно начать?", a: "Подбираем программу под возраст ребёнка — от 4 лет и старше. На пробном занятии поможем определить уровень." },
       { q: "Что если ребёнок пропустит занятие?", a: "Мы предложим отработку или дадим материалы для самостоятельного изучения." },
       { q: "Можно ли заниматься онлайн?", a: "Да, у нас есть онлайн-формат с теми же педагогами и методикой." },
-      { q: "Как проходит пробное занятие?", a: "Знакомимся с ребёнком, проводим мини-диагностику и показываем формат работы. Это бесплатно и ни к чему не обязывает." },
+      { q: "Как проходит пробное занятие?", a: "Знакомимся с ребёнком, проводим мини-диагностику и показываем формат работы. Это ни к чему не обязывает." },
     ],
   };
+
+  if (/англ/i.test(title)) return { ...base, ...ENGLISH_PRESCHOOL, title };
+  return base;
 }
+
+const ENGLISH_PRESCHOOL: Partial<CourseData> = {
+  emoji: "🧸",
+  station: "Малышино • станция «Языковая»",
+  tagline: "Языковая станция «Малышино»",
+  h1: "Английский для дошкольников — первый иностранный язык без слёз, скуки и школьных учебников",
+  description:
+    "Ребёнок будет понимать английский через 1 месяц, заговорит на английском через 3 месяца, даже если вы сами не знаете языка. Без зубрёжки, без страха ошибки, без «сядь и делай». Только игра, эмоции и живое общение.",
+  primaryCta: "Хочу попробовать — запишите на пробное занятие",
+  secondaryCta: "Записаться на пробное",
+  heroImage: heroImg,
+  heroImageAlt:
+    "Педагог и двое детей 4–6 лет сидят на ковре с карточками, кубиками с буквами и игрушками — занятие английским в «Малышино»",
+  nav: [
+    { label: "О курсе", href: "#about" },
+    { label: "Как проходит обучение", href: "#program" },
+    { label: "Форматы", href: "#formats" },
+    { label: "Отзывы", href: "#reviews" },
+    { label: "FAQ", href: "#faq" },
+  ],
+  stats: [
+    { value: "4,9 из 5", label: "Средняя оценка родителей по итогам года" },
+    { value: "19+ лет", label: "Совокупный опыт работы наших педагогов с дошкольниками" },
+    { value: "96% детей", label: "Начинают говорить простыми фразами за 3 месяца" },
+    { value: "400+ выпускников", label: "Поступили в школы с углублённым английским" },
+  ],
+  visual: {
+    image: lessonImg,
+    alt: "Педагог показывает карточки с животными улыбающемуся ребёнку, рядом другие дети — живое занятие в светлом уютном центре",
+    lead: "Английский для дошкольников — это не про выучить 500 слов и сдать тест.",
+    paragraphs: [
+      "Это про то, чтобы ребёнок начал думать на языке раньше, чем начнёт учить грамматику. Чтобы он не стеснялся говорить. Чтобы пошёл в первый класс с базой, с которой легко осваивать любую программу.",
+      "В этом возрасте мозг как губка — он впитывает язык через то, что слышит и чувствует. И наша задача — создать среду, где это впитывание происходит без усилий, через естественную для ребёнка деятельность — игру и общение.",
+    ],
+  },
+  aboutTitle: "Английский для дошкольников от 3 до 7 лет — мягкое погружение в язык без учебников и оценок",
+  aboutSub:
+    "Ребёнок не замечает, что учится. Он просто играет, поёт, общается — и язык входит сам. Без напряжения, без «повтори», без страха ошибиться. Это не урок. Это игра, в которой все говорят на новом языке.",
+  forWhomCards: [
+    {
+      icon: "🌱",
+      color: "#F79EC7",
+      title: "Для детей, которые не изучали английский",
+      desc: "Мягкое начало, чтобы ребёнок не испугался и не закрылся. Без давления, только живой интерес.",
+    },
+    {
+      icon: "💛",
+      color: "#FFCB85",
+      title: "Для родителей, ищущих современный и тёплый подход",
+      desc: "Для тех, кто понимает, что язык в дошкольном возрасте — прямой путь к свободной речи в будущем.",
+    },
+    {
+      icon: "🔑",
+      color: "#B79BEA",
+      title: "Для детей, которые уже ходили на занятия, но «не пошло»",
+      desc: "Педагог не нашёл подход, было скучно, ребёнок плакал или просто сидел и молчал. Мы обещаем, что обязательно найдём ключик.",
+    },
+    {
+      icon: "🚀",
+      color: "#9EE07A",
+      title: "Для родителей, которые думают о будущем",
+      desc: "Это не про «выучить программу». Это про снятие тревоги перед новым предметом.",
+    },
+  ],
+  resultsTitle: "Что получит ребёнок",
+  results: [
+    "Говорение без страха ошибки",
+    "Понимание речи на слух без мысленного перевода",
+    "Уверенность в себе к школе",
+    "Мотивацию на дальнейшее обучение",
+    "Развитое мышление, память, внимание и самостоятельность",
+  ],
+  benefitsTitle: "4 причины, почему дети заговорили на английском за 3 месяца",
+  benefitsSub: "Почему родители выбирают именно этот курс",
+  benefits: [
+    {
+      icon: "🎲",
+      color: "#F79EC7",
+      title: "Игра: единственный метод обучения",
+      desc: "Ребёнок не учит — он играет. А в игре запоминает слова, фразы, интонации. Мы создаём среду, где английский становится естественным и живым.",
+    },
+    {
+      icon: "🧠",
+      color: "#B79BEA",
+      title: "Нейропрактики: без «научных слов»",
+      desc: "Движение, ритм, смена активности — через это мы помогаем мозгу ребёнка лучше запоминать: он просто танцует, хлопает, повторяет. А слова остаются.",
+    },
+    {
+      icon: "🤗",
+      color: "#9EE07A",
+      title: "Комфорт: каждого ребёнка видим и слышим",
+      desc: "Группы до 8 человек — педагог успевает заметить, когда ребёнок стесняется, когда тянет руку, когда отвлёкся. Каждый получает внимание.",
+    },
+    {
+      icon: "🏆",
+      color: "#FFCB85",
+      title: "Результат: уже через 3 месяца",
+      desc: "Вы увидите первые фразы через 12 занятий. Не «выучил 10 слов», а «начал говорить». Мы работаем на результат. И показываем его вам — честно и прозрачно.",
+    },
+  ],
+  programTitle: "Как проходит обучение — 5 этапов от первых звуков до первых фраз",
+  programSub:
+    "Программа выстроена так, чтобы ребёнок двигался от простого к сложному — без стресса, с ощущением успеха на каждом этапе",
+  modules: [
+    {
+      icon: "1",
+      title: "Знакомство. Привыкаю к языку",
+      desc: "Первые 2–3 занятия — знакомство. Ребёнок привыкает, реагирует на простые команды, учится слышать и не бояться незнакомых звуков. Составляем индивидуальный портрет и маршрут.",
+    },
+    {
+      icon: "2",
+      title: "База. Понимаю без перевода",
+      desc: "Начинает понимать простые вопросы и команды без перевода на русский. Педагог показывает, повторяет, использует жесты. Закладываем базу, формируем ключевые навыки.",
+    },
+    {
+      icon: "3",
+      title: "Практика. Пробую говорить",
+      desc: "Первые слова и простые фразы. Ребёнок начинает отвечать на вопросы, называть предметы, просить. Говорит о том, что видит вокруг себя. Тренируем навыки.",
+    },
+    {
+      icon: "4",
+      title: "Углубление. Строю предложения",
+      desc: "Объединяет слова в простые предложения. Рассказывает о себе, о семье, о любимых игрушках. Учится задавать вопросы и отвечать на них.",
+    },
+    {
+      icon: "5",
+      title: "Результат. Говорю свободно на знакомые темы",
+      desc: "Свободное общение в пределах изученных тем. Ребёнок не боится говорить, использует простые фразы в игре, общается с педагогом и другими детьми.",
+    },
+  ],
+  formatTitle: "Форматы обучения",
+  formatSub: "Главный принцип — удобно для ребёнка и родителя.",
+  formatCards: [
+    {
+      icon: "🏫",
+      title: "Очно в центре",
+      desc: "Живое общение, эмоции, контакт с педагогом и другими детьми. Онлайн для дошкольников не работает — мы за живое присутствие.",
+    },
+    { icon: "👧", title: "Мини-группы до 8 детей", desc: "Не больше. Чтобы каждого видели, слышали и успевали вовлечь." },
+    {
+      icon: "⏱",
+      title: "2 раза в неделю по 40–60 минут",
+      desc: "Оптимально для дошкольников. Ребёнок успевает включиться, но не устаёт. И регулярность даёт результат.",
+    },
+    {
+      icon: "💬",
+      title: "Обратная связь после каждого занятия",
+      desc: "Вы знаете, что прошли и как ребёнок себя чувствовал. Никакой неизвестности.",
+    },
+    {
+      icon: "🎂",
+      title: "Группы по возрастам",
+      desc: "3–4, 5–6, 6–7 лет. У каждого возраста свои особенности, свой темп, свои игры. Мы не смешиваем, чтобы никому не было ни слишком легко, ни слишком сложно.",
+    },
+    { icon: "🎓", title: "Педагоги", desc: "С высшим лингвистическим педагогическим образованием. И никак иначе." },
+  ],
+  reviewsTitle: "Что говорят родители",
+  reviews: [
+    {
+      name: "Анна",
+      role: "мама Миши (5 лет)",
+      avatar: "👩",
+      text: "Мы пришли с нуля, ни слова не знали. Через 2 месяца сын начал говорить простые фразы, через 4 — уже просил по-английски игрушки. Я сама не знаю языка, но вижу, что ребёнок полюбил английский! Спасибо педагогу за терпение и любовь к детям",
+    },
+    {
+      name: "Екатерина",
+      role: "мама Софии (4 года)",
+      avatar: "🧑",
+      text: "Дочь бежит на занятия с радостью. При этом она была очень застенчивой и боялась говорить. Здесь раскрылась! Педагог нашла подход, теперь дочка общается с другими детьми и даже поёт песенки на английском дома. Для меня это чудо",
+    },
+    {
+      name: "Ольга",
+      role: "мама Артёма (6 лет)",
+      avatar: "👩‍🦰",
+      text: "Пробовали заниматься по книгам — не шло. Ребёнок плакал, говорил «не хочу». Здесь — совершенно другое. Игра, движение, эмоции. И язык идёт сам собой. Артём смотрит мультфильмы на английском и уже не просит перевести. Я в приятном шоке от результата за 3 месяца!",
+    },
+    {
+      name: "Ирина",
+      role: "мама Данила (7 лет)",
+      avatar: "👱‍♀️",
+      text: "Мы пришли, чтобы ребёнок не боялся английского в школе. Итог — он не просто не боится, он любит этот язык! Сам задаёт вопросы дома, просит ещё. Помочь не могу, учила немецкий, но я спокойна за первый класс. Спасибо большое!",
+    },
+  ],
+  faqTitle: "Остались вопросы? Мы ответили на самые частые",
+  faq: [
+    {
+      q: "С какого возраста можно начать заниматься английским для детей?",
+      a: "Мы работаем с детьми с 3 лет. В этом возрасте ребёнок уже готов воспринимать иностранную речь через игру и песни. Если ребёнок младше — мы рекомендуем подождать, чтобы не перегружать в момент активного познания мира.",
+    },
+    {
+      q: "Есть ли пробное занятие?",
+      a: "Да, конечно. Мы приглашаем на пробное занятие, чтобы вы увидели формат, познакомились с педагогом и поняли, подходит ли ребёнку. Без обязательств. Просто попробовать.",
+    },
+    {
+      q: "Как проходят занятия — индивидуально или в группе?",
+      a: "Для дошкольников мы проводим занятия в мини-группах до 8 детей. Почему это важно? Дети учатся общаться друг с другом, слышать речь других, не теряются в толпе, и педагог успевает уделить внимание каждому. Индивидуальные занятия только по запросу, если ребёнку нужна дополнительная поддержка либо есть индивидуальные особенности.",
+    },
+    {
+      q: "Как я могу следить за прогрессом ребёнка?",
+      a: "После каждого занятия педагог даёт обратную связь в группе в мессенджере или лично: что прошли, что получилось, что требует повторения. Раз в 2 месяца — индивидуальный отчёт с рекомендациями. Вы всегда знаете, как идёт процесс.",
+    },
+    {
+      q: "Сколько длится занятие и как часто заниматься?",
+      a: "Занятия длятся 40–60 минут (зависит от возраста) и проходят 2 раза в неделю. Это оптимальный режим для дошкольников — достаточно для прогресса и без перегруза. Если хотите чаще — можно обсудить индивидуально.",
+    },
+    {
+      q: "Что делать, если ребёнок не хочет заниматься?",
+      a: "Ребёнок не может хотеть или не хотеть делать то, чем он ещё не занимался. Ему просто страшно. Задача 1 — попробовать. На уроке мы не заставляем. Если ребёнок стесняется или не включается — мы даём ему время, подбираем подход, используем игру. Иногда нужно просто привыкнуть к новому пространству. И включиться в процесс мягко.",
+    },
+    {
+      q: "Как записаться и сколько стоит курс?",
+      a: "Оставьте заявку на сайте — наш администратор очень скоро свяжется с вами. Расскажет о стоимости, подберёт удобное время, ответит на все вопросы.",
+    },
+  ],
+  finalTitle: "Готовы, чтобы ваш ребёнок заговорил на английском играючи?",
+  finalSub:
+    "Оставьте заявку — и мы перезвоним, договоримся о встрече-знакомстве, где покажем центр, проведём диагностику, расскажем подробно о нас и ответим на все вопросы.",
+  phone: "+7 499 938 58 58",
+};
 
 export const Route = createFileRoute("/p/$slug")({
   head: ({ params }) => {
@@ -101,7 +351,9 @@ export const Route = createFileRoute("/p/$slug")({
           content: `Курс «${title}» в детском развивающем центре «Город Знаний»: программа, формат, преподаватели, отзывы и запись на пробное занятие.`,
         },
         { property: "og:title", content: `${title} — Город Знаний` },
-        { property: "og:description", content: `Курс «${title}» в центре «Город Знаний». Запишитесь на бесплатное пробное занятие.` },
+        { property: "og:description", content: `Курс «${title}» в центре «Город Знаний». Запишитесь на пробное занятие.` },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },
@@ -112,8 +364,7 @@ function CoursePage() {
   const { slug } = Route.useParams();
   const title = decodeURIComponent(slug);
   const course = buildCourse(title);
-  const trialHref = `/p/${encodeURIComponent("Записаться на пробное занятие")}`;
-  const consultHref = `/p/${encodeURIComponent("Бесплатная консультация")}`;
+  const trialHref = TRIAL_HREF;
 
   return (
     <>
@@ -122,74 +373,151 @@ function CoursePage() {
         {/* ===== Top bar ===== */}
         <header className="cp-topbar">
           <Link to="/" className="cp-back">← К карте курсов</Link>
-          <span className="cp-brand">🚇 Город Знаний</span>
-          <a href={trialHref} className="cp-top-cta">Пробное занятие</a>
+          <span className="cp-brand">🧸 {course.station ?? "Город Знаний"}</span>
+          {course.nav && (
+            <nav className="cp-nav">
+              {course.nav.map((n) => (
+                <a key={n.href} href={n.href} className="cp-nav-link">{n.label}</a>
+              ))}
+            </nav>
+          )}
+          <a href={trialHref} className="cp-top-cta">Записаться на пробное</a>
         </header>
 
         {/* ===== Hero ===== */}
         <section className="cp-hero">
           <div className="cp-hero-grid">
             <div className="cp-hero-text">
-              <span className="cp-badge">Курс • {course.tagline}</span>
-              <h1 className="cp-h1">{course.title}</h1>
+              <span className="cp-badge">{course.tagline}</span>
+              <h1 className="cp-h1">{course.h1 ?? course.title}</h1>
               <p className="cp-lead">{course.description}</p>
               <div className="cp-cta-row">
                 <a href={trialHref} className="cp-btn cp-btn-primary">🚂 {course.primaryCta}</a>
-                <a href={consultHref} className="cp-btn cp-btn-ghost">💬 {course.secondaryCta}</a>
-              </div>
-              <div className="cp-stats">
-                {course.stats.map((s) => (
-                  <div key={s.label} className="cp-stat">
-                    <div className="cp-stat-v">{s.value}</div>
-                    <div className="cp-stat-l">{s.label}</div>
-                  </div>
-                ))}
               </div>
             </div>
             <div className="cp-hero-art">
-              <div className="cp-blob cp-blob-1" />
-              <div className="cp-blob cp-blob-2" />
-              <div className="cp-blob cp-blob-3" />
-              <div className="cp-hero-card">
-                <div className="cp-hero-emoji">{course.emoji}</div>
-                <div className="cp-hero-card-title">{course.title}</div>
-                <div className="cp-hero-card-sub">пробное занятие бесплатно</div>
+              {course.heroImage ? (
+                <img
+                  src={course.heroImage}
+                  alt={course.heroImageAlt ?? course.title}
+                  width={1280}
+                  height={960}
+                  className="cp-hero-photo"
+                />
+              ) : (
+                <>
+                  <div className="cp-blob cp-blob-1" />
+                  <div className="cp-blob cp-blob-2" />
+                  <div className="cp-blob cp-blob-3" />
+                  <div className="cp-hero-card">
+                    <div className="cp-hero-emoji">{course.emoji}</div>
+                    <div className="cp-hero-card-title">{course.title}</div>
+                    <div className="cp-hero-card-sub">пробное занятие</div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* ===== Статистика ===== */}
+          <div className="cp-stats">
+            {course.stats.map((s) => (
+              <div key={s.label} className="cp-stat">
+                <div className="cp-stat-v">{s.value}</div>
+                <div className="cp-stat-l">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== Визуальный блок ===== */}
+        {course.visual && (
+          <section className="cp-section cp-visual">
+            <div className="cp-visual-grid">
+              <img
+                src={course.visual.image}
+                alt={course.visual.alt}
+                loading="lazy"
+                width={1280}
+                height={960}
+                className="cp-visual-photo"
+              />
+              <div className="cp-visual-text">
+                <p className="cp-visual-lead">{course.visual.lead}</p>
+                {course.visual.paragraphs.map((p) => (
+                  <p key={p} className="cp-visual-p">{p}</p>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ===== About ===== */}
-        <section className="cp-section">
+        <section className="cp-section" id="about">
           <div className="cp-section-head">
-            <h2 className="cp-h2">О курсе</h2>
-            <p className="cp-sub">Кому подойдёт и какие задачи решает</p>
+            <h2 className="cp-h2">{course.aboutTitle ?? "О курсе"}</h2>
+            <p className="cp-sub">{course.aboutSub ?? "Кому подойдёт и какие задачи решает"}</p>
           </div>
-          <div className="cp-two-col">
-            <div className="cp-soft-card">
-              <h3 className="cp-h3">👨‍👩‍👧 Для кого</h3>
-              <ul className="cp-list">
-                {course.forWhom.map((t) => <li key={t}>{t}</li>)}
-              </ul>
+
+          {/* Для кого */}
+          {course.forWhomCards ? (
+            <>
+              <h3 className="cp-h3 cp-h3-center">Для кого этот курс</h3>
+              <div className="cp-bento cp-bento-2">
+                {course.forWhomCards.map((c) => (
+                  <div key={c.title} className="cp-bento-card" style={{ background: c.color }}>
+                    <div className="cp-bento-icon">{c.icon}</div>
+                    <h4 className="cp-bento-title">{c.title}</h4>
+                    <p className="cp-bento-desc">{c.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="cp-two-col">
+              <div className="cp-soft-card">
+                <h3 className="cp-h3">👨‍👩‍👧 Для кого</h3>
+                <ul className="cp-list">
+                  {course.forWhom.map((t) => <li key={t}>{t}</li>)}
+                </ul>
+              </div>
+              <div className="cp-soft-card cp-soft-card-alt">
+                <h3 className="cp-h3">🎯 Результаты</h3>
+                <ul className="cp-list">
+                  {course.results.map((t) => <li key={t}>{t}</li>)}
+                </ul>
+              </div>
             </div>
-            <div className="cp-soft-card cp-soft-card-alt">
-              <h3 className="cp-h3">🎯 Результаты</h3>
-              <ul className="cp-list">
-                {course.results.map((t) => <li key={t}>{t}</li>)}
-              </ul>
-            </div>
-          </div>
+          )}
         </section>
 
+        {/* ===== Что получит ребёнок ===== */}
+        {course.forWhomCards && (
+          <section className="cp-section" id="results">
+            <div className="cp-section-head">
+              <h2 className="cp-h2">{course.resultsTitle ?? "Что получит ребёнок"}</h2>
+            </div>
+            <div className="cp-results">
+              {course.results.map((r, i) => (
+                <div key={r} className="cp-result">
+                  <span className="cp-result-n" style={{ background: PALETTE[i % PALETTE.length] }}>{i + 1}</span>
+                  <span className="cp-result-t">{r}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* ===== Benefits ===== */}
-        <section className="cp-section">
+        <section className="cp-section" id="why">
           <div className="cp-section-head">
-            <h2 className="cp-h2">Почему выбирают этот курс</h2>
-            <p className="cp-sub">Четыре причины, по которым родители доверяют нам</p>
+            <h2 className="cp-h2">{course.benefitsTitle ?? "Почему выбирают этот курс"}</h2>
+            <p className="cp-sub">{course.benefitsSub ?? "Четыре причины, по которым родители доверяют нам"}</p>
           </div>
           <div className="cp-bento">
-            {course.benefits.map((b) => (
+            {course.benefits.map((b, i) => (
               <div key={b.title} className="cp-bento-card" style={{ background: b.color }}>
+                <div className="cp-bento-num">№{i + 1}</div>
                 <div className="cp-bento-icon">{b.icon}</div>
                 <h4 className="cp-bento-title">{b.title}</h4>
                 <p className="cp-bento-desc">{b.desc}</p>
@@ -199,10 +527,10 @@ function CoursePage() {
         </section>
 
         {/* ===== Program ===== */}
-        <section className="cp-section">
+        <section className="cp-section" id="program">
           <div className="cp-section-head">
-            <h2 className="cp-h2">Программа обучения</h2>
-            <p className="cp-sub">Путь ученика — шаг за шагом, как остановки на ветке метро</p>
+            <h2 className="cp-h2">{course.programTitle ?? "Программа обучения"}</h2>
+            <p className="cp-sub">{course.programSub ?? "Путь ученика — шаг за шагом, как остановки на ветке метро"}</p>
           </div>
           <div className="cp-timeline">
             {course.modules.map((m, i) => (
@@ -218,29 +546,43 @@ function CoursePage() {
         </section>
 
         {/* ===== Format ===== */}
-        <section className="cp-section">
+        <section className="cp-section" id="formats">
           <div className="cp-section-head">
-            <h2 className="cp-h2">Формат обучения</h2>
-            <p className="cp-sub">Удобно и для ребёнка, и для родителей</p>
+            <h2 className="cp-h2">{course.formatTitle ?? "Формат обучения"}</h2>
+            <p className="cp-sub">{course.formatSub ?? "Удобно и для ребёнка, и для родителей"}</p>
           </div>
-          <div className="cp-format-grid">
-            <FormatItem icon="⏱" label="Длительность" value={course.format.duration} />
-            <FormatItem icon="📅" label="Расписание" value={course.format.schedule} />
-            <FormatItem icon="🏫" label="Формат" value={course.format.mode} />
-            <FormatItem icon="🧩" label="Методика" value={course.format.method} />
-            <FormatItem icon="👩‍🏫" label="Преподаватели" value={course.format.teacher} />
-          </div>
+          {course.formatCards ? (
+            <div className="cp-format-grid cp-format-grid-3">
+              {course.formatCards.map((f) => (
+                <div key={f.title} className="cp-fmt cp-fmt-card">
+                  <div className="cp-fmt-icon">{f.icon}</div>
+                  <div>
+                    <div className="cp-fmt-value">{f.title}</div>
+                    <p className="cp-fmt-desc">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="cp-format-grid">
+              <FormatItem icon="⏱" label="Длительность" value={course.format.duration} />
+              <FormatItem icon="📅" label="Расписание" value={course.format.schedule} />
+              <FormatItem icon="🏫" label="Формат" value={course.format.mode} />
+              <FormatItem icon="🧩" label="Методика" value={course.format.method} />
+              <FormatItem icon="👩‍🏫" label="Преподаватели" value={course.format.teacher} />
+            </div>
+          )}
         </section>
 
         {/* ===== Reviews ===== */}
-        <section className="cp-section">
+        <section className="cp-section" id="reviews">
           <div className="cp-section-head">
-            <h2 className="cp-h2">Отзывы родителей</h2>
+            <h2 className="cp-h2">{course.reviewsTitle ?? "Отзывы родителей"}</h2>
             <p className="cp-sub">Истории учеников «Города Знаний»</p>
           </div>
-          <div className="cp-reviews">
+          <div className="cp-reviews cp-reviews-scroll">
             {course.reviews.map((r) => (
-              <article key={r.name} className="cp-review">
+              <article key={r.role} className="cp-review">
                 <div className="cp-review-stars">★ ★ ★ ★ ★</div>
                 <p className="cp-review-text">«{r.text}»</p>
                 <div className="cp-review-author">
@@ -256,10 +598,9 @@ function CoursePage() {
         </section>
 
         {/* ===== FAQ ===== */}
-        <section className="cp-section">
+        <section className="cp-section" id="faq">
           <div className="cp-section-head">
-            <h2 className="cp-h2">Частые вопросы</h2>
-            <p className="cp-sub">Если не нашли ответ — напишите нам</p>
+            <h2 className="cp-h2">{course.faqTitle ?? "Частые вопросы"}</h2>
           </div>
           <div className="cp-faq">
             {course.faq.map((f, i) => (
@@ -274,32 +615,53 @@ function CoursePage() {
           </div>
         </section>
 
-        {/* ===== Final CTA ===== */}
-        <section className="cp-final">
+        {/* ===== Final CTA + форма заявки ===== */}
+        <section className="cp-final" id="trial-form">
           <div className="cp-final-card">
             <div className="cp-final-emoji">🚂</div>
-            <h2 className="cp-final-title">Готовы начать путешествие?</h2>
+            <h2 className="cp-final-title">{course.finalTitle ?? "Готовы начать путешествие?"}</h2>
             <p className="cp-final-sub">
-              Запишитесь на бесплатное пробное занятие — познакомимся, проведём диагностику и
-              покажем, как будет учиться ваш ребёнок.
+              {course.finalSub ??
+                "Запишитесь на пробное занятие — познакомимся, проведём диагностику и покажем, как будет учиться ваш ребёнок."}
             </p>
-            <div className="cp-cta-row cp-cta-row-center">
-              <a href={trialHref} className="cp-btn cp-btn-primary cp-btn-lg">
-                🎁 {course.primaryCta}
-              </a>
-              <a href={consultHref} className="cp-btn cp-btn-ghost cp-btn-lg">
-                📞 {course.secondaryCta}
-              </a>
-            </div>
+            <TrialForm cta="Записаться на пробное занятие" />
+            <p className="cp-final-phone">
+              Или позвоните нам: {course.phone ? <a href={`tel:${course.phone.replace(/[^+\d]/g, "")}`}>{course.phone}</a> : "+7 (___) ___-__-__"}
+            </p>
           </div>
         </section>
 
         <footer className="cp-footer">
           <Link to="/" className="cp-back">← Вернуться на карту курсов</Link>
-          <span className="cp-footer-tel">+7 499 938 58 58</span>
+          {course.phone && <span className="cp-footer-tel">{course.phone}</span>}
         </footer>
       </main>
     </>
+  );
+}
+
+function TrialForm({ cta }: { cta: string }) {
+  return (
+    <form
+      className="cp-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        form.reset();
+        const ok = form.querySelector<HTMLElement>(".cp-form-ok");
+        if (ok) ok.style.display = "block";
+      }}
+    >
+      <div className="cp-form-grid">
+        <input className="cp-input" name="parent" placeholder="Имя родителя" required />
+        <input className="cp-input" name="child" placeholder="Имя ребёнка" required />
+        <input className="cp-input" name="age" placeholder="Возраст ребёнка" required />
+        <input className="cp-input" name="phone" type="tel" placeholder="Телефон" required />
+        <input className="cp-input cp-input-wide" name="time" placeholder="Удобное время для связи" />
+      </div>
+      <button type="submit" className="cp-btn cp-btn-primary cp-btn-lg cp-form-btn">🎁 {cta}</button>
+      <p className="cp-form-ok">Спасибо! Мы перезвоним и подберём удобное время.</p>
+    </form>
   );
 }
 
@@ -589,4 +951,70 @@ const styles = `
     .cp-btn { justify-content: center; }
     .cp-footer { flex-direction: column; }
   }
+
+  /* Nav */
+  .cp-nav { display: flex; gap: 16px; flex-wrap: wrap; margin-left: auto; margin-right: 8px; }
+  .cp-nav-link { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 14px; }
+  .cp-nav-link:hover { color: #B07AC9; }
+
+  /* Hero photo */
+  .cp-hero-photo {
+    width: 100%; height: 100%; max-height: 460px; object-fit: cover;
+    border-radius: 36px; border: 6px solid #fff; box-shadow: 0 26px 60px rgba(0,0,0,.14);
+  }
+  .cp-hero-art { height: auto; }
+
+  /* Visual block */
+  .cp-visual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: center; }
+  .cp-visual-photo { width: 100%; border-radius: 32px; border: 6px solid #fff; box-shadow: 0 20px 46px rgba(0,0,0,.12); }
+  .cp-visual-lead { font-size: clamp(20px, 2.6vw, 28px); font-weight: 900; margin: 0 0 16px; line-height: 1.25; }
+  .cp-visual-p { font-size: 16px; line-height: 1.6; color: var(--ink-soft); margin: 0 0 14px; }
+
+  /* Results list */
+  .cp-h3-center { text-align: center; }
+  .cp-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .cp-result {
+    display: flex; align-items: center; gap: 14px; background: #fff;
+    border-radius: 22px; padding: 18px 20px; box-shadow: 0 10px 24px rgba(0,0,0,.05);
+  }
+  .cp-result-n {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 900;
+  }
+  .cp-result-t { font-weight: 700; font-size: 15px; line-height: 1.35; }
+
+  .cp-bento-2 { grid-template-columns: repeat(2, 1fr); }
+  .cp-bento-num { font-weight: 900; font-size: 13px; opacity: .7; }
+
+  .cp-format-grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 1180px; }
+  .cp-fmt-card { flex-direction: column; }
+  .cp-fmt-desc { margin: 6px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+
+  /* Form */
+  .cp-form { position: relative; max-width: 680px; margin: 0 auto; text-align: left; }
+  .cp-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .cp-input {
+    width: 100%; padding: 14px 18px; border-radius: 16px; border: 2px solid #fff;
+    background: #fff; font: inherit; font-size: 15px; box-shadow: 0 8px 20px rgba(0,0,0,.05);
+  }
+  .cp-input:focus { outline: none; border-color: #F79EC7; }
+  .cp-input-wide { grid-column: 1 / -1; }
+  .cp-form-btn { width: 100%; justify-content: center; border: none; cursor: pointer; font: inherit; font-weight: 800; }
+  .cp-form-ok { display: none; margin: 14px 0 0; text-align: center; font-weight: 700; color: #2F7A3A; }
+  .cp-final-phone { position: relative; margin: 18px 0 0; color: var(--ink-soft); font-size: 15px; }
+  .cp-final-phone a { color: var(--ink); font-weight: 800; text-decoration: none; }
+
+  @media (max-width: 980px) {
+    .cp-visual-grid { grid-template-columns: 1fr; }
+    .cp-format-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .cp-nav { display: none; }
+  }
+  @media (max-width: 560px) {
+    .cp-bento-2 { grid-template-columns: 1fr; }
+    .cp-format-grid-3 { grid-template-columns: 1fr; }
+    .cp-form-grid { grid-template-columns: 1fr; }
+    .cp-hero-photo { max-height: 260px; }
+    .cp-reviews-scroll { grid-template-columns: 1fr; }
+  }
 `;
+
