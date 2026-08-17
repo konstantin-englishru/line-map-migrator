@@ -1683,6 +1683,7 @@
 
                 line.stations.forEach((station, stationIdx) => {
                     const L = padStart + step * stationIdx;
+                    const stName = metroName(`st-${line.id}-${stationIdx}`, station.name);
                     const p = pointAtLen(L);
                     const cx = p.x, cy = p.y;
 
@@ -1707,7 +1708,7 @@
                     let dyText = ny > 0.4 ? 24 : (ny < -0.4 ? -8 : 8);
 
                     // На красной линии «Спектакли» — слева-снизу от станции для читаемости
-                    if (line.id === 'red' && station.name === 'Спектакли') {
+                    if (line.id === 'red' && stName === 'Спектакли') {
                         anchor = 'end';
                         lx = cx - 38;
                         ly = cy + 30;
@@ -1715,10 +1716,10 @@
                     }
 
                     // «Мегаполис. Лето» рендерим в две строки
-                    const isMegapolis = station.name === 'Мегаполис. Лето';
+                    const isMegapolis = stName === 'Мегаполис. Лето';
                     const nameMarkup = isMegapolis
                         ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="${LABEL_SIZE * 0.9}">Лето</tspan>`
-                        : station.name;
+                        : stName;
 
                     // Кликабельная область: охватывает круглую станцию и её подпись.
                     // В виде вытянутого овала от станции до конца текста, чтобы не
@@ -1799,7 +1800,7 @@
                                   font-family="${FONT}" font-size="${LABEL_SIZE * 1.18}" font-weight="900"
                                   fill="${line.color}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
-                                  stroke-linejoin="round">${line.name}</text>
+                                   stroke-linejoin="round">${metroName(`term-${line.id}`, line.name)}</text>
                             <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
                                   font-family="${FONT}" font-size="${LABEL_SIZE * 0.88}" font-weight="700"
                                   fill="${TEXT_SOFT}"
