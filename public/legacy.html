@@ -1729,6 +1729,28 @@
                        clip-path="url(#logo-clip)" pointer-events="none"/>
 
                 <!-- Скрытый круговой путь, по которому едет поезд (кольцо увеличено, чтобы поезд не задевал станции) -->
+                <!-- Круглый тоннель, внутри которого едет поезд -->
+                <defs>
+                    <linearGradient id="tunnel-grad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%"   stop-color="#4B5B8C" stop-opacity="0.30"/>
+                        <stop offset="50%"  stop-color="#DCE7F7" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="#4B5B8C" stop-opacity="0.30"/>
+                    </linearGradient>
+                </defs>
+                <g id="train-tunnel" pointer-events="none">
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 62}"
+                            fill="none" stroke="url(#tunnel-grad)" stroke-width="132"/>
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 128}"
+                            fill="none" stroke="#8FA6D8" stroke-width="6" opacity="0.75"/>
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS - 4}"
+                            fill="none" stroke="#8FA6D8" stroke-width="6" opacity="0.75"/>
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 62}"
+                            fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.6"
+                            stroke-dasharray="26 34"/>
+                    <circle cx="${CENTER}" cy="${CENTER}" r="${RING_RADIUS + 120}"
+                            fill="none" stroke="#5A6EA8" stroke-width="14" opacity="0.18"
+                            stroke-dasharray="10 58"/>
+                </g>
                 <path id="train-ring-path"
                       d="M ${CENTER + (RING_RADIUS + 62)},${CENTER}
                          A ${RING_RADIUS + 62},${RING_RADIUS + 62} 0 1,1 ${CENTER - (RING_RADIUS + 62)},${CENTER}
