@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getLine, METRO_LINES } from "@/lib/lines-data";
+import { getLine, METRO_LINES, type MetroLine } from "@/lib/lines-data";
 
 export const Route = createFileRoute("/line/$id")({
   head: ({ params }) => {
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/line/$id")({
       ],
     };
   },
-  loader: ({ params }) => {
+  loader: ({ params }): { line: MetroLine } => {
     const line = getLine(params.id);
     if (!line) throw notFound();
     return { line };
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/line/$id")({
 });
 
 function LinePage() {
-  const { line } = Route.useLoaderData();
+  const { line } = Route.useLoaderData() as { line: MetroLine };
   const others = METRO_LINES.filter((l) => l.id !== line.id);
   const [lead, ...rest] = line.legend;
   const stationCount = line.stations.length;

@@ -2063,23 +2063,21 @@
             const line = METRO_LINES.find(l => l.id === lineId);
             if (!line) return;
             tempHighlightLine(lineId);
+            let done = false;
             const go = () => {
+                if (done) return;
+                done = true;
                 const url = '/line/' + lineId;
                 try { (window.top || window).location.href = url; }
                 catch (e) { window.location.href = url; }
             };
             try {
-                sendTrainAlongLine(lineId, true, undefined, () => {
-                    go();
-                    // через короткую паузу убираем подсветку и возвращаем поезд
-                    setTimeout(() => {
-                        clearLineHighlight();
-                        returnTrainToRing();
-                    }, 300);
-                });
+                sendTrainAlongLine(lineId, true, undefined, go);
             } catch (e) {
-                go();
+                /* игнорируем — переход всё равно произойдёт по таймеру */
             }
+            // страховка: если анимация не отработала, переходим сами
+            setTimeout(go, 900);
         }
 
         const LINE_LEGENDS = {
