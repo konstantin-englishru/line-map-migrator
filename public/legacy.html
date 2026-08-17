@@ -1275,7 +1275,7 @@
                 <div class="text-center mt-6"><button type="button" id="reviews-more" class="lp-cta-btn" style="border:none;cursor:pointer;">Показать ещё отзывы</button></div>
             </div>
         </section>
-        <div class="lp-cta-float"><a href="/p/Все%20отзывы" class="lp-cta-btn"><span class="dot"></span>💬 Читать все отзывы</a></div>
+        <div class="lp-cta-float"><a href="#callback-form" class="lp-cta-btn"><span class="dot"></span>📝 Записаться на диагностику</a></div>
 
         <!-- 10. FAQ -->
         <section class="lp-section" style="background:#FFE0BF;">
@@ -1299,8 +1299,8 @@
         <section id="callback-form" class="lp-section" style="background:linear-gradient(135deg,#FFF4A3 0%,#FFC2DA 50%,#DFC7FF 100%);">
             <div class="lp-wrap text-center">
                 <div class="text-6xl mb-4">🚂</div>
-                <h2 class="lp-title" style="font-size:2.5rem;">Запишитесь на бесплатное пробное</h2>
-                <p class="lp-sub">60 минут, никаких обязательств. Покажем, как ребёнок начинает учиться с удовольствием.</p>
+                <h2 class="lp-title" style="font-size:2.5rem;">Запишитесь на пробное</h2>
+                <p class="lp-sub">Диагностика – это определение начального уровня сформированности знаний или навыков по выбранному направлению. Это не тестирование, не экзамен. Нам только нужно понять, какова исходная точка. Это поможет определить наиболее точно, в какой группе ребенку будет хорошо, а работа будет продуктивна. Для родителя – это знакомство с центром и его обитателями.</p>
                 <form onsubmit="event.preventDefault(); window.location.href='/p/Заявка%20отправлена';" class="max-w-xl mx-auto bg-white p-6 md:p-8 rounded-[32px] shadow-soft border-4 border-white grid gap-3">
                     <input required type="text" placeholder="Имя родителя" class="w-full p-4 rounded-2xl border-2 border-doorFrame focus:outline-none focus:border-pastelMint font-body">
                     <input required type="tel" placeholder="+7 (___) ___-__-__" class="w-full p-4 rounded-2xl border-2 border-doorFrame focus:outline-none focus:border-pastelMint font-body">
@@ -1331,27 +1331,26 @@
             <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl text-center md:text-left">
                 <!-- Контакты -->
                 <div class="bg-white p-6 rounded-[24px] shadow-sm">
-                    <h5 class="font-heading font-bold text-xl mb-3 flex items-center justify-center md:justify-start gap-2">
+                    <h5 class="font-heading font-bold text-xl mb-3 flex items-center justify-center md:justify-start gap-2 text-textMain">
                         <svg class="w-5 h-5 text-pastelMint fill-current" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         Депо (Адрес)
                     </h5>
-                    <p class="font-medium text-sm opacity-80 mb-2">ул. Волшебная, д. 12, к. 3</p>
-                    <p class="font-medium text-sm opacity-80">м. Сказочная</p>
+                    <p class="font-medium text-sm text-textMain mb-2">ул. Ясеневая, д. 26</p>
+                    <p class="font-medium text-sm text-textMain">м. Зябликово</p>
                 </div>
 
                 <!-- Связь -->
                 <div class="bg-white p-6 rounded-[24px] shadow-sm">
-                    <h5 class="font-heading font-bold text-xl mb-3 flex items-center justify-center md:justify-start gap-2">
+                    <h5 class="font-heading font-bold text-xl mb-3 flex items-center justify-center md:justify-start gap-2 text-textMain">
                         <svg class="w-5 h-5 text-pastelPink fill-current" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-                        Связь с машинистом
+                        Связь
                     </h5>
-                    <p class="font-medium text-sm opacity-80 mb-2">+7 499 938 58 58</p>
-                    <p class="font-medium text-sm opacity-80">hello@gorod-znaniy.ru</p>
+                    <p class="font-medium text-sm text-textMain">+7 499 938 58 58</p>
                 </div>
 
                 <!-- Соцсети -->
                 <div class="bg-white p-6 rounded-[24px] shadow-sm flex flex-col items-center justify-center">
-                    <h5 class="font-heading font-bold text-lg mb-4">Наш телеграф:</h5>
+                    <h5 class="font-heading font-bold text-lg mb-4 text-textMain">Наш телеграф:</h5>
                     <div class="flex gap-4">
                         <a href="#" class="w-10 h-10 bg-pastelMint rounded-full flex items-center justify-center hover:scale-110 transition-transform text-textMain font-bold">VK</a>
                         <a href="#" class="w-10 h-10 bg-pastelLavender rounded-full flex items-center justify-center hover:scale-110 transition-transform text-textMain font-bold">TG</a>
@@ -1361,11 +1360,9 @@
             
             <!-- Юридическая информация -->
             <div class="mt-10 flex flex-col md:flex-row gap-4 md:gap-8 justify-center items-center text-center w-full border-t-2 border-gray-300 pt-8 max-w-5xl">
-                <a href="#" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelPink transition-colors border-b border-transparent hover:border-pastelPink">Сведения об образовательной организации</a>
+                <span class="text-sm font-medium opacity-40 cursor-default pointer-events-none">Сведения об образовательной организации</span>
                 <span class="hidden md:block opacity-30">•</span>
                 <a href="#" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelPink transition-colors border-b border-transparent hover:border-pastelPink">Политика конфиденциальности</a>
-                <span class="hidden md:block opacity-30">•</span>
-                <a href="#" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelPink transition-colors border-b border-transparent hover:border-pastelPink">Договор оферты</a>
                 <span class="hidden md:block opacity-30">•</span>
                 <a href="#" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelLavender transition-colors border-b border-transparent hover:border-pastelLavender inline-flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
