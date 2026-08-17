@@ -959,7 +959,7 @@
         <!-- ================= НОВАЯ СЕКЦИЯ: ИНТЕРАКТИВНАЯ КАРТА И ИГРОТЕКА ================= -->
         
         <!-- Секция: Интерактивная карта "Город Знаний" -->
-        <section id="metro-map-section" class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: radial-gradient(ellipse 70% 60% at 50% 55%, #C7E2FF 0%, #DDEEFF 55%, #EAF6FF 100%);">
+        <section id="metro-map-section" class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: #FFFFFF;">
             <div class="max-w-6xl mx-auto text-center mb-8">
                 <h3 style="font-family:'Montserrat',sans-serif;letter-spacing:0.02em;" class="text-2xl md:text-4xl font-extrabold uppercase text-[#1F2937] leading-tight">
                     План транспортной системы<br/>
@@ -976,6 +976,7 @@
                     <button onclick="zoomMap(0.2)" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-2xl font-bold text-textMain hover:bg-pastelMint hover:scale-110 active:scale-90 transition-all focus:outline-none">+</button>
                     <button onclick="zoomMap(-0.2)" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-3xl font-bold text-textMain hover:bg-pastelMint hover:scale-110 active:scale-90 transition-all focus:outline-none">-</button>
                     <button onclick="resetMapZoom()" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-xl font-bold text-textMain hover:bg-pastelMint hover:scale-110 active:scale-90 transition-all focus:outline-none" title="Вернуть к исходному виду">⟲</button>
+                    <button onclick="resetLabelOffsets()" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-base font-bold text-textMain hover:bg-pastelPink hover:scale-110 active:scale-90 transition-all focus:outline-none" title="Сбросить подписи станций">⤺</button>
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
@@ -1442,7 +1443,7 @@
             const CURVES = {
                 pink:      { bend: -13, len: 1090 }, // вправо, широкая дуга
                 purple:    { bend: -12, len: 1040 }, // вниз-вправо
-                orange:    { bend:  -5, len: 1210 }, // вниз, почти вертикально
+                orange:    { bend: -26, len: 1210 }, // вниз и плавно уводит вправо
                 yellow:    { bend: +12, len: 1040 }, // вниз-влево
                 blue:      { bend: +13, len: 1090 }, // влево, широкая дуга
                 lightblue: { bend: +12, len: 1040 }, // вверх-влево
@@ -1464,8 +1465,7 @@
             let content = `
                 <defs>
                     <radialGradient id="bg-grad" cx="50%" cy="50%" r="60%">
-                        <stop offset="0%"   stop-color="#EAF4FF" stop-opacity="1"/>
-                        <stop offset="60%"  stop-color="#F4F9FF" stop-opacity="1"/>
+                        <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
                         <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"/>
                     </radialGradient>
                     <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -1479,7 +1479,7 @@
                         <feDropShadow dx="0" dy="0" stdDeviation="9" flood-color="#FFFFFF" flood-opacity="0.55"/>
                     </filter>
                 </defs>
-                <rect x="-200" y="-200" width="${MAP_SIZE + 400}" height="${MAP_SIZE + 400}" fill="url(#bg-grad)"/>
+                <rect x="-4000" y="-4000" width="${MAP_SIZE + 8000}" height="${MAP_SIZE + 8000}" fill="#FFFFFF"/>
                 <!-- декоративные звёздочки -->
                 <g fill="#D4E6F8" opacity="0.55">
                     <circle cx="200" cy="240" r="4"/>
@@ -1628,9 +1628,10 @@
                             <circle class="station-marker" cx="${cx}" cy="${cy}" r="18" fill="#FFFFFF"
                                     stroke="${line.color}" stroke-width="8"
                                     filter="url(#station-shadow)"/>
-                            <text x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
+                            <text class="draggable-label" data-lkey="st-${line.id}-${stationIdx}"
+                                  style="cursor:move;" x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
                                   font-family="${FONT}" font-size="32" font-weight="800"
-                                  fill="${TEXT_DARK}" pointer-events="none"
+                                  fill="${TEXT_DARK}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">${nameMarkup}</text>
                         </g>
@@ -1682,16 +1683,18 @@
                            fill="${line.color}" pointer-events="none">
                             <path d="${TERM_ICONS[line.id] || TERM_ICONS.pink}"/>
                         </g>
-                        <text x="${tnx}" y="${nameY}" text-anchor="${termAnchor}"
-                              font-family="${FONT}" font-size="38" font-weight="900"
-                              fill="${line.color}" pointer-events="none"
-                              paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
-                              stroke-linejoin="round">${line.name}</text>
-                        <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
-                              font-family="${FONT}" font-size="28" font-weight="700"
-                              fill="${TEXT_SOFT}" pointer-events="none"
-                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
-                              stroke-linejoin="round">(${line.age})</text>
+                        <g class="draggable-label" data-lkey="term-${line.id}" style="cursor:move;">
+                            <text x="${tnx}" y="${nameY}" text-anchor="${termAnchor}"
+                                  font-family="${FONT}" font-size="38" font-weight="900"
+                                  fill="${line.color}"
+                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
+                                  stroke-linejoin="round">${line.name}</text>
+                            <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
+                                  font-family="${FONT}" font-size="28" font-weight="700"
+                                  fill="${TEXT_SOFT}"
+                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                                  stroke-linejoin="round">(${line.age})</text>
+                        </g>
                     </g>
                 `;
             });
@@ -1768,6 +1771,9 @@
 
             // --- Запуск анимации поезда ---
             startMetroTrain();
+            // --- Пользовательские позиции подписей + перетаскивание ---
+            applyLabelOffsets();
+            setupLabelDragging();
 
             // Легенда в HTML (под SVG) — не загораживает карту
             const legendEl = document.getElementById('metro-legend');
@@ -2200,11 +2206,26 @@
             }
         }
 
-        function zoomMap(delta) {
-            mapScale += delta;
-            // Ограничиваем масштаб: от 0.4x (отдаление) до 3x (сильное приближение)
-            mapScale = Math.max(0.4, Math.min(mapScale, 3));
+        function zoomMapTo(next, anchor) {
+            next = Math.max(0.3, Math.min(next, 6));
+            const k = next / mapScale;
+            if (anchor) {
+                mapPanX = anchor.x - (anchor.x - mapPanX) * k;
+                mapPanY = anchor.y - (anchor.y - mapPanY) * k;
+            }
+            mapScale = next;
             applyMapTransform();
+        }
+
+        function zoomMap(delta) {
+            // Кнопки +/- : зум относительно центра области карты
+            const svg = document.getElementById('interactive-metro-map');
+            let anchor = null;
+            if (svg) {
+                const vb = svg.viewBox.baseVal;
+                anchor = { x: vb.x + vb.width / 2, y: vb.y + vb.height / 2 };
+            }
+            zoomMapTo(mapScale * Math.exp(delta * 1.2), anchor);
         }
 
         function resetMapZoom() {
@@ -2217,20 +2238,23 @@
         function setupMapInteractions() {
             const container = document.getElementById('map-container-inner');
             if (!container) return;
-            
-            // Зум колесиком мыши
+
+            // Зум колесиком/тачпадом — плавный, с привязкой к курсору
             container.addEventListener('wheel', (e) => {
-                e.preventDefault(); // Отключаем прокрутку страницы
-                const delta = e.deltaY > 0 ? -0.1 : 0.1;
-                zoomMap(delta);
+                e.preventDefault();
+                const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
+                const anchor = clientToSvgPoint(e.clientX, e.clientY);
+                zoomMapTo(mapScale * Math.exp(-dy * 0.0018), anchor);
             }, { passive: false });
 
             // Начало перетаскивания (мышь)
             container.addEventListener('mousedown', (e) => {
+                if (e.target.closest && e.target.closest('.draggable-label')) return;
                 isDraggingMap = true;
                 // Запоминаем стартовую точку с учетом текущего смещения
-                startDragX = e.clientX - mapPanX;
-                startDragY = e.clientY - mapPanY;
+                const p = clientToSvgPoint(e.clientX, e.clientY);
+                startDragX = p.x - mapPanX;
+                startDragY = p.y - mapPanY;
                 container.classList.remove('cursor-grab');
                 container.classList.add('cursor-grabbing');
             });
@@ -2238,8 +2262,9 @@
             // Перетаскивание (мышь)
             window.addEventListener('mousemove', (e) => {
                 if (!isDraggingMap) return;
-                mapPanX = e.clientX - startDragX;
-                mapPanY = e.clientY - startDragY;
+                const p = clientToSvgPoint(e.clientX, e.clientY);
+                mapPanX = p.x - startDragX;
+                mapPanY = p.y - startDragY;
                 applyMapTransform();
             });
 
@@ -2255,17 +2280,20 @@
             // Сенсорные события (перетаскивание на мобильных устройствах)
             container.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1) { // Используем один палец для перетаскивания
+                    if (e.target.closest && e.target.closest('.draggable-label')) return;
                     isDraggingMap = true;
-                    startDragX = e.touches[0].clientX - mapPanX;
-                    startDragY = e.touches[0].clientY - mapPanY;
+                    const p = clientToSvgPoint(e.touches[0].clientX, e.touches[0].clientY);
+                    startDragX = p.x - mapPanX;
+                    startDragY = p.y - mapPanY;
                 }
             }, { passive: true });
 
             container.addEventListener('touchmove', (e) => {
                 if (!isDraggingMap || e.touches.length !== 1) return;
                 e.preventDefault(); // Предотвращаем скролл самой страницы при перетаскивании карты
-                mapPanX = e.touches[0].clientX - startDragX;
-                mapPanY = e.touches[0].clientY - startDragY;
+                const p = clientToSvgPoint(e.touches[0].clientX, e.touches[0].clientY);
+                mapPanX = p.x - startDragX;
+                mapPanY = p.y - startDragY;
                 applyMapTransform();
             }, { passive: false });
 
@@ -2273,6 +2301,96 @@
                 isDraggingMap = false;
             });
         }
+
+        // Перевод координат курсора в систему координат SVG (без учёта трансформации viewport)
+        function clientToSvgPoint(clientX, clientY) {
+            const svg = document.getElementById('interactive-metro-map');
+            if (!svg || !svg.getScreenCTM) return { x: clientX, y: clientY };
+            const pt = svg.createSVGPoint();
+            pt.x = clientX; pt.y = clientY;
+            const m = svg.getScreenCTM();
+            if (!m) return { x: clientX, y: clientY };
+            const r = pt.matrixTransform(m.inverse());
+            return { x: r.x, y: r.y };
+        }
+
+        // ============ ПЕРЕТАСКИВАНИЕ ПОДПИСЕЙ СТАНЦИЙ ============
+        const LABEL_STORE_KEY = 'gz-metro-label-offsets-v1';
+
+        function loadLabelOffsets() {
+            try { return JSON.parse(localStorage.getItem(LABEL_STORE_KEY) || '{}') || {}; }
+            catch (e) { return {}; }
+        }
+        function saveLabelOffsets(map) {
+            try { localStorage.setItem(LABEL_STORE_KEY, JSON.stringify(map)); } catch (e) {}
+        }
+        function applyLabelOffsets() {
+            const offsets = loadLabelOffsets();
+            document.querySelectorAll('#interactive-metro-map .draggable-label').forEach(el => {
+                const key = el.getAttribute('data-lkey');
+                const o = offsets[key];
+                if (o) el.setAttribute('transform', `translate(${o.x}, ${o.y})`);
+                else el.removeAttribute('transform');
+            });
+        }
+        function resetLabelOffsets() {
+            saveLabelOffsets({});
+            applyLabelOffsets();
+        }
+
+        function setupLabelDragging() {
+            const svg = document.getElementById('interactive-metro-map');
+            if (!svg || svg.dataset.labelDragReady === '1') return;
+            svg.dataset.labelDragReady = '1';
+
+            let dragEl = null, startPt = null, startOff = { x: 0, y: 0 }, moved = false;
+
+            const getOffset = (el) => {
+                const t = el.getAttribute('transform');
+                const m = t && t.match(/translate\(\s*(-?[\d.]+)[ ,]+(-?[\d.]+)/);
+                return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
+            };
+
+            svg.addEventListener('pointerdown', (e) => {
+                const el = e.target.closest && e.target.closest('.draggable-label');
+                if (!el) return;
+                dragEl = el;
+                moved = false;
+                startPt = clientToSvgPoint(e.clientX, e.clientY);
+                startOff = getOffset(el);
+                el.style.opacity = '0.85';
+                e.stopPropagation();
+                e.preventDefault();
+                svg.setPointerCapture(e.pointerId);
+            });
+
+            svg.addEventListener('pointermove', (e) => {
+                if (!dragEl) return;
+                const p = clientToSvgPoint(e.clientX, e.clientY);
+                const dx = (p.x - startPt.x) / mapScale;
+                const dy = (p.y - startPt.y) / mapScale;
+                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+                dragEl.setAttribute('transform', `translate(${startOff.x + dx}, ${startOff.y + dy})`);
+                e.stopPropagation();
+            });
+
+            const endDrag = (e) => {
+                if (!dragEl) return;
+                dragEl.style.opacity = '';
+                if (moved) {
+                    const offsets = loadLabelOffsets();
+                    offsets[dragEl.getAttribute('data-lkey')] = getOffset(dragEl);
+                    saveLabelOffsets(offsets);
+                    // не открываем страницу станции после перетаскивания
+                    const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
+                    window.addEventListener('click', swallow, { capture: true, once: true });
+                }
+                dragEl = null;
+            };
+            svg.addEventListener('pointerup', endDrag);
+            svg.addEventListener('pointercancel', endDrag);
+        }
+        window.resetLabelOffsets = resetLabelOffsets;
 
         function openStationModal(lineIdx, stationIdx) {
             const line = METRO_LINES[lineIdx];
