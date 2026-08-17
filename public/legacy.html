@@ -1713,11 +1713,11 @@
                        preserveAspectRatio="xMidYMid meet"
                        clip-path="url(#logo-clip)" pointer-events="none"/>
 
-                <!-- Скрытый круговой путь, по которому едет поезд -->
+                <!-- Скрытый круговой путь, по которому едет поезд (кольцо увеличено, чтобы поезд не задевал станции) -->
                 <path id="train-ring-path"
-                      d="M ${CENTER + (RING_RADIUS + 48)},${CENTER}
-                         A ${RING_RADIUS + 48},${RING_RADIUS + 48} 0 1,1 ${CENTER - (RING_RADIUS + 48)},${CENTER}
-                         A ${RING_RADIUS + 48},${RING_RADIUS + 48} 0 1,1 ${CENTER + (RING_RADIUS + 48)},${CENTER} Z"
+                      d="M ${CENTER + (RING_RADIUS + 62)},${CENTER}
+                         A ${RING_RADIUS + 62},${RING_RADIUS + 62} 0 1,1 ${CENTER - (RING_RADIUS + 62)},${CENTER}
+                         A ${RING_RADIUS + 62},${RING_RADIUS + 62} 0 1,1 ${CENTER + (RING_RADIUS + 62)},${CENTER} Z"
                       fill="none" stroke="none"/>
 
                 <!-- Поезд: локомотив + 3 вагончика (крупнее и ярче) -->
