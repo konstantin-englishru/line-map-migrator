@@ -1890,6 +1890,30 @@
                 car.setAttribute('transform', `translate(${p1.x},${p1.y}) rotate(${angle})`);
             });
 
+            // --- Декоративные блики позади поезда ---
+            const sparklesGroup = document.getElementById('train-sparkles');
+            if (sparklesGroup) {
+                const lastCar = cars[cars.length - 1];
+                if (lastCar) {
+                    const transform = lastCar.getAttribute('transform');
+                    const m = /translate\(([^,]+),([^)]+)\)/.exec(transform || '');
+                    if (m) {
+                        const tx = parseFloat(m[1]), ty = parseFloat(m[2]);
+                        TRAIN_STATE.sparkleTimer++;
+                        if (TRAIN_STATE.sparkleTimer % 8 === 0) {
+                            TRAIN_STATE.sparkles.push({ x: tx, y: ty, life: 1.0 });
+                        }
+                    }
+                }
+                TRAIN_STATE.sparkles = TRAIN_STATE.sparkles.filter(s => (s.life -= 0.04) > 0);
+                sparklesGroup.innerHTML = TRAIN_STATE.sparkles.map(s => {
+                    const r = 2 + (1 - s.life) * 4;
+                    const colors = ['#FFD93D','#FF6B9D','#9B59FF','#4CD964'];
+                    const c = colors[Math.floor((1 - s.life) * colors.length) % colors.length];
+                    return `<circle cx="${s.x}" cy="${s.y}" r="${r}" fill="${c}" opacity="${s.life.toFixed(2)}"/>`;
+                }).join('');
+            }
+
             if (reachedEnd) {
                 const cb = TRAIN_STATE.onArrive;
                 TRAIN_STATE.onArrive = null;
