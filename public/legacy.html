@@ -1771,6 +1771,9 @@
 
             // --- Запуск анимации поезда ---
             startMetroTrain();
+            // --- Пользовательские позиции подписей + перетаскивание ---
+            applyLabelOffsets();
+            setupLabelDragging();
 
             // Легенда в HTML (под SVG) — не загораживает карту
             const legendEl = document.getElementById('metro-legend');
