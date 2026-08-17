@@ -1164,6 +1164,7 @@ const ENGLISH_PRESCHOOL: Partial<CourseData> = {
 
 export const Route = createFileRoute("/p/$slug")({
   head: ({ params }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     const title = decodeURIComponent(params.slug);
     return {
       meta: [
