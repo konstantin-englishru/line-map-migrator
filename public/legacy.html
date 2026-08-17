@@ -959,7 +959,7 @@
         <!-- ================= НОВАЯ СЕКЦИЯ: ИНТЕРАКТИВНАЯ КАРТА И ИГРОТЕКА ================= -->
         
         <!-- Секция: Интерактивная карта "Город Знаний" -->
-        <section id="metro-map-section" class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: radial-gradient(ellipse 70% 60% at 50% 55%, #C7E2FF 0%, #DDEEFF 55%, #EAF6FF 100%);">
+        <section id="metro-map-section" class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: #FFFFFF;">
             <div class="max-w-6xl mx-auto text-center mb-8">
                 <h3 style="font-family:'Montserrat',sans-serif;letter-spacing:0.02em;" class="text-2xl md:text-4xl font-extrabold uppercase text-[#1F2937] leading-tight">
                     План транспортной системы<br/>
@@ -976,6 +976,7 @@
                     <button onclick="zoomMap(0.2)" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-2xl font-bold text-textMain hover:bg-pastelMint hover:scale-110 active:scale-90 transition-all focus:outline-none">+</button>
                     <button onclick="zoomMap(-0.2)" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-3xl font-bold text-textMain hover:bg-pastelMint hover:scale-110 active:scale-90 transition-all focus:outline-none">-</button>
                     <button onclick="resetMapZoom()" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-xl font-bold text-textMain hover:bg-pastelMint hover:scale-110 active:scale-90 transition-all focus:outline-none" title="Вернуть к исходному виду">⟲</button>
+                    <button onclick="resetLabelOffsets()" class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-2xl shadow-md border-2 border-doorFrame flex items-center justify-center text-base font-bold text-textMain hover:bg-pastelPink hover:scale-110 active:scale-90 transition-all focus:outline-none" title="Сбросить подписи станций">⤺</button>
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
