@@ -1107,40 +1107,60 @@
                 <h2 class="lp-title">Как мы это решаем</h2>
                 <p class="lp-sub">Четыре опоры нашей методики — каждая работает на главное: ребёнок хочет учиться сам.</p>
                 <div class="lp-grid lp-grid-2">
-                    <div class="lp-card flex gap-4">
+                    <div class="lp-card flex gap-4 items-start">
                         <div class="w-14 h-14 shrink-0 rounded-2xl bg-pastelMint flex items-center justify-center border-2 border-white shadow-sm">
                             <svg class="w-7 h-7 text-textMain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
                         </div>
-                        <div>
-                            <h3 class="font-heading font-bold text-xl mb-1">Качество без компромиссов</h3>
-                            <p class="opacity-80">Мы проверяем всё. Каждую программу — до того, как запустить. Каждого педагога — до того, как допустить к детям. Каждое занятие — через наблюдение и обратную связь. Если что-то не работает — мы это меняем. Не раз в год, а сразу. Качество для нас — не слово в рекламе, а ежедневная практика. Мы несём за неё ответственность. И вы это знаете.</p>
+                        <div class="flex-1">
+                            <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full text-left flex justify-between items-center gap-3 font-heading font-bold text-xl mb-1 hover:opacity-80 transition-opacity">
+                                Качество без компромиссов
+                                <svg class="arrow w-5 h-5 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="hidden opacity-80">
+                                <p>Мы проверяем всё. Каждую программу — до того, как запустить. Каждого педагога — до того, как допустить к детям. Каждое занятие — через наблюдение и обратную связь. Если что-то не работает — мы это меняем. Не раз в год, а сразу. Качество для нас — не слово в рекламе, а ежедневная практика. Мы несём за неё ответственность. И вы это знаете.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="lp-card flex gap-4">
+                    <div class="lp-card flex gap-4 items-start">
                         <div class="w-14 h-14 shrink-0 rounded-2xl bg-pastelPink flex items-center justify-center border-2 border-white shadow-sm">
                             <svg class="w-7 h-7 text-textMain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                         </div>
-                        <div>
-                            <h3 class="font-heading font-bold text-xl mb-1">Индивидуализация и гуманное обучение</h3>
-                            <p class="opacity-80">Ребенок — не винтик в системе. Мы не «подгоняем» его под программу. Мы слышим его темп, его вопросы, его сомнения. Мы не ставим оценки, не сравниваем, не заставляем через «не хочу». Мы ищем подход, который работает именно для него. И мы верим: обучение не должно быть насилием. Это должно быть уважением. К ребенку, к его возрасту, к его праву ошибаться и пробовать снова.</p>
+                        <div class="flex-1">
+                            <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full text-left flex justify-between items-center gap-3 font-heading font-bold text-xl mb-1 hover:opacity-80 transition-opacity">
+                                Индивидуализация и гуманное обучение
+                                <svg class="arrow w-5 h-5 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="hidden opacity-80">
+                                <p>Ребенок — не винтик в системе. Мы не «подгоняем» его под программу. Мы слышим его темп, его вопросы, его сомнения. Мы не ставим оценки, не сравниваем, не заставляем через «не хочу». Мы ищем подход, который работает именно для него. И мы верим: обучение не должно быть насилием. Это должно быть уважением. К ребенку, к его возрасту, к его праву ошибаться и пробовать снова.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="lp-card flex gap-4">
+                    <div class="lp-card flex gap-4 items-start">
                         <div class="w-14 h-14 shrink-0 rounded-2xl bg-pastelLavender flex items-center justify-center border-2 border-white shadow-sm">
                             <svg class="w-7 h-7 text-textMain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.04Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.04Z"/></svg>
                         </div>
-                        <div>
-                            <h3 class="font-heading font-bold text-xl mb-1">Нейроподход в каждом занятии</h3>
-                            <p class="opacity-80">Мы не просто «учим предметам». Мы помогаем мозгу учиться эффективнее. Нейроупражнения встроены в каждое занятие — через движение, ритм, смену активности. Без лишней «научности», просто — как естественная часть процесса. Ребенок не замечает, что его мозг «тренируют». Ему просто становится легче запоминать, дольше удерживать внимание и быстрее включаться в работу. Это работает. И это видно.</p>
+                        <div class="flex-1">
+                            <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full text-left flex justify-between items-center gap-3 font-heading font-bold text-xl mb-1 hover:opacity-80 transition-opacity">
+                                Нейроподход в каждом занятии
+                                <svg class="arrow w-5 h-5 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="hidden opacity-80">
+                                <p>Мы не просто «учим предметам». Мы помогаем мозгу учиться эффективнее. Нейроупражнения встроены в каждое занятие — через движение, ритм, смену активности. Без лишней «научности», просто — как естественная часть процесса. Ребенок не замечает, что его мозг «тренируют». Ему просто становится легче запоминать, дольше удерживать внимание и быстрее включаться в работу. Это работает. И это видно.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="lp-card flex gap-4">
+                    <div class="lp-card flex gap-4 items-start">
                         <div class="w-14 h-14 shrink-0 rounded-2xl bg-pastelYellow flex items-center justify-center border-2 border-white shadow-sm">
                             <svg class="w-7 h-7 text-textMain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="11" width="12" height="9" rx="2"/><path d="M12 2v9"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
                         </div>
-                        <div>
-                            <h3 class="font-heading font-bold text-xl mb-1">Игровые форматы</h3>
-                            <p class="opacity-80">Не уговариваем и не заставляем. Увлекаем. Квесты, смены активностей, командные миссии — знания приходят через действие, а не через зубрежку. В игре ребенок не боится ошибиться. В игре он пробует, исследует, ищет. И в игре учится легко и без напряжения. Именно так появляется внутренняя мотивация: не «надо», а «хочу».</p>
+                        <div class="flex-1">
+                            <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full text-left flex justify-between items-center gap-3 font-heading font-bold text-xl mb-1 hover:opacity-80 transition-opacity">
+                                Игровые форматы
+                                <svg class="arrow w-5 h-5 shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="hidden opacity-80">
+                                <p>Не уговариваем и не заставляем. Увлекаем. Квесты, смены активностей, командные миссии — знания приходят через действие, а не через зубрежку. В игре ребенок не боится ошибиться. В игре он пробует, исследует, ищет. И в игре учится легко и без напряжения. Именно так появляется внутренняя мотивация: не «надо», а «хочу».</p>
+                            </div>
                         </div>
                     </div>
                 </div>
