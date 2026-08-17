@@ -1420,7 +1420,17 @@
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
-            const FONT = "'Montserrat','Inter',sans-serif";
+            const MSTYLE_EARLY = (typeof loadMapStyle === 'function') ? loadMapStyle() : { labelSize: 32, labelFont: 'Accuratist' };
+            const FONT_MAP = {
+                'Accuratist': "'Accuratist','Montserrat',sans-serif",
+                'Montserrat': "'Montserrat','Inter',sans-serif",
+                'Inter':      "'Inter',sans-serif",
+                'Georgia':    "Georgia,'Times New Roman',serif",
+                'Comic':      "'Comic Sans MS','Segoe UI',cursive",
+                'Mono':       "'JetBrains Mono',monospace"
+            };
+            const FONT = FONT_MAP[MSTYLE_EARLY.labelFont] || FONT_MAP['Accuratist'];
+            const LABEL_SIZE = MSTYLE_EARLY.labelSize || 32;
 
             // Восемь линий равномерно по кругу (угол начала линии от центра)
             // 0° = вправо, 90° = вниз. Подобраны так, чтобы лейблы конечных уходили наружу.
