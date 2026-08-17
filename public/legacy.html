@@ -817,7 +817,7 @@
         <section class="w-full px-6 md:px-12 pb-12 z-10" style="background:linear-gradient(120deg,#FFE7AF 0%,#FFD2BC 25%,#F4BEC7 55%,#E8B8E3 80%,#D9C0F3 100%);">
             <h3 class="font-heading text-3xl md:text-4xl font-bold text-center mb-10 flex items-center justify-center gap-4">
                 <svg class="w-8 h-8 text-pastelPink fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                Загляните в наши окна
+                Секреты нашего Города
                 <svg class="w-8 h-8 text-pastelPink fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             </h3>
 
@@ -855,11 +855,11 @@
                                 <circle cx="70" cy="105" r="4" fill="#4A4A4A"/>
                             </svg>
                         </div>
-                        <h4 class="font-heading text-2xl font-bold mb-2 bg-white/80 px-4 py-1 rounded-2xl">Творческая линия</h4>
-                        <p class="text-center font-medium opacity-80 mb-6 bg-white/80 p-2 rounded-xl text-sm">Рисование, лепка, аппликация. Развиваем фантазию и мелкую моторику.</p>
-                        
-                        <button class="door-btn group mt-auto bg-pastelPink text-textMain font-heading font-bold px-8 py-3 rounded-2xl border-2 border-white shadow-sm w-full hover:bg-pink-200 relative flex items-center justify-center" data-text="Записаться">
-                            <span class="invisible">Записаться</span>
+                        <h4 class="font-heading text-2xl font-bold mb-2 bg-white/80 px-4 py-1 rounded-2xl text-center">Безопасное пространство</h4>
+                        <p class="text-center font-medium opacity-80 mb-6 bg-white/80 p-2 rounded-xl text-sm">Безопасность — для ребенка, спокойствие — для родителей</p>
+
+                        <button onclick="openSecretPanel('safe')" class="door-btn group mt-auto bg-pastelPink text-textMain font-heading font-bold px-8 py-3 rounded-2xl border-2 border-white shadow-sm w-full hover:bg-pink-200 relative flex items-center justify-center" data-text="Узнать подробнее">
+                            <span class="invisible">Узнать подробнее</span>
                             <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xl">➔</span>
                         </button>
                     </div>
@@ -894,11 +894,11 @@
                                 <path d="M25 90 Q30 95 35 90" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round"/>
                             </svg>
                         </div>
-                        <h4 class="font-heading text-2xl font-bold mb-2 bg-white/80 px-4 py-1 rounded-2xl">Станция "Узнавайка"</h4>
-                        <p class="text-center font-medium opacity-80 mb-6 bg-white/80 p-2 rounded-xl text-sm">Раннее развитие для малышей. Буквы, цифры, окружающий мир в игре.</p>
-                        
-                        <button class="door-btn group mt-auto bg-pastelMint text-textMain font-heading font-bold px-8 py-3 rounded-2xl border-2 border-white shadow-sm w-full hover:bg-teal-100 relative flex items-center justify-center" data-text="Подробнее">
-                            <span class="invisible">Подробнее</span>
+                        <h4 class="font-heading text-2xl font-bold mb-2 bg-white/80 px-4 py-1 rounded-2xl text-center">Бережные педагоги</h4>
+                        <p class="text-center font-medium opacity-80 mb-6 bg-white/80 p-2 rounded-xl text-sm">Педагоги, которые точно знают, что ребенок — личность, а не винтик в системе</p>
+
+                        <button onclick="openSecretPanel('teachers')" class="door-btn group mt-auto bg-pastelMint text-textMain font-heading font-bold px-8 py-3 rounded-2xl border-2 border-white shadow-sm w-full hover:bg-teal-100 relative flex items-center justify-center" data-text="Узнать больше">
+                            <span class="invisible">Узнать больше</span>
                             <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xl">➔</span>
                         </button>
                     </div>
@@ -935,11 +935,11 @@
                                 <circle cx="75" cy="90" r="6" fill="#FFF"/>
                             </svg>
                         </div>
-                        <h4 class="font-heading text-2xl font-bold mb-2 bg-white/80 px-4 py-1 rounded-2xl">Научная ветка</h4>
-                        <p class="text-center font-medium opacity-80 mb-6 bg-white/80 p-2 rounded-xl text-sm">Робототехника и веселые опыты. Изучаем законы физики своими руками.</p>
-                        
-                        <button class="door-btn group mt-auto bg-pastelYellow text-textMain font-heading font-bold px-8 py-3 rounded-2xl border-2 border-white shadow-sm w-full hover:bg-yellow-200 relative flex items-center justify-center" data-text="Расписание">
-                            <span class="invisible">Расписание</span>
+                        <h4 class="font-heading text-2xl font-bold mb-2 bg-white/80 px-4 py-1 rounded-2xl text-center">Наш подход (методика)</h4>
+                        <p class="text-center font-medium opacity-80 mb-6 bg-white/80 p-2 rounded-xl text-sm">Место, где любят учить. Место, где любят учиться. Готовим к контрольным и к жизни.</p>
+
+                        <button onclick="openSecretPanel('method')" class="door-btn group mt-auto bg-pastelYellow text-textMain font-heading font-bold px-8 py-3 rounded-2xl border-2 border-white shadow-sm w-full hover:bg-yellow-200 relative flex items-center justify-center" data-text="Узнать про наши принципы">
+                            <span class="invisible">Узнать про наши принципы</span>
                             <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xl">➔</span>
                         </button>
                     </div>
