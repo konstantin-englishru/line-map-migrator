@@ -2106,6 +2106,7 @@ const styles = `
     .cp-section { padding: 36px 16px; }
     .cp-bento { grid-template-columns: 1fr; }
     .cp-format-grid { grid-template-columns: 1fr; }
+    .cp-results { grid-template-columns: 1fr; }
     .cp-final-card { padding: 40px 22px; border-radius: 28px; }
     .cp-cta-row { flex-direction: column; align-items: stretch; }
     .cp-btn { justify-content: center; }
