@@ -2377,7 +2377,7 @@
         // Зафиксированные правки геометрии линий
         const LINE_GEOM_DEFAULTS = {};
         // Глобальный стиль схемы (толщина линий, прямота, жирность станций)
-        const STYLE_DEFAULTS = { lineWidth: 27, straight: 66, stRadius: 26, stStroke: 12, labelSize: 32, labelFont: 'Accuratist', logoScale: 1 };
+        const STYLE_DEFAULTS = { lineWidth: 27, straight: 66, stRadius: 26, stStroke: 12, labelSize: 32, labelFont: 'Accuratist', logoScale: 1.2 };
         const STYLE_STORE_KEY = 'metro-style-v1';
         function loadMapStyle() {
             return Object.assign({}, STYLE_DEFAULTS, readStore(STYLE_STORE_KEY));
