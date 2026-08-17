@@ -710,105 +710,45 @@
             </div>
             
             <div class="flex flex-col gap-3">
-                <!-- Пункт: Главная -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent">
-                    <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelMint transition-colors">
-                        Главная
-                        <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Начало пути</a>
-                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Схема центра</a>
-                    </div>
-                </div>
-
                 <!-- Пункт: О нас -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent">
                     <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelLavender transition-colors">
                         О нас
                         <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">История центра</a>
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Лицензии и документы</a>
-                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Галерея (Фото/Видео)</a>
+                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">история компании</a>
+                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Сведения об образовательной организации</a>
+                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Фото/видео галерея</a>
                     </div>
                 </div>
 
-                <!-- Пункт: Услуги -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <!-- Пункт: Программы -->
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent">
                     <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelYellow transition-colors">
-                        Услуги
+                        Программы
                         <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Малышам (3-7 лет)</a>
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Школьникам (7-16 лет)</a>
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Старшеклассникам</a>
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Студентам и Взрослым</a>
-                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Летние программы</a>
-                    </div>
-                </div>
-
-                <!-- Пункт: Педагоги -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelMint transition-colors">
-                        Педагоги
-                        <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Наши машинисты</a>
-                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Логопеды и психологи</a>
-                    </div>
-                </div>
-
-                <!-- Пункт: Отзывы -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-blue-100 transition-colors">
-                        Отзывы
-                        <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Текстовые отзывы</a>
-                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Видео-впечатления</a>
-                    </div>
-                </div>
-
-                <!-- Пункт: Новости и статьи -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelPink transition-colors">
-                        Новости и статьи
-                        <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">События депо</a>
-                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Блог для родителей</a>
-                    </div>
-                </div>
-
-                <!-- Пункт: Игры -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg text-pink-500 hover:bg-pink-100 transition-colors">
-                        Игры
-                        <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" onclick="document.getElementById('mobile-menu').classList.add('translate-x-full'); startInteractiveGame()" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium text-pink-600">Викторина "Готов к школе"</a>
+                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">для дошкольников</a>
+                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Для младших школьников</a>
+                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Для школьников (средняя школа)</a>
+                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Для школьников (старшая школа)</a>
+                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Для взрослых</a>
+                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Досуг</a>
                     </div>
                 </div>
 
                 <!-- Пункт: Контакты -->
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')" class="w-full px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelLavender transition-colors">
-                        Контакты
-                        <svg class="arrow w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="hidden flex flex-col bg-gray-50 border-t-2 border-gray-100">
-                        <a href="#" class="px-6 py-3 border-b border-gray-200 hover:bg-gray-100 font-medium">Связь с нами</a>
-                        <a href="#" class="px-6 py-3 hover:bg-gray-100 font-medium">Реквизиты</a>
-                    </div>
-                </div>
-                
+                <a href="#" class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelLavender transition-colors">
+                    Контакты
+                </a>
+
+                <!-- Пункт: Полезные статьи -->
+                <a href="#" class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelPink transition-colors">
+                    Полезные статьи
+                </a>
+            </div>
                 <!-- Контакты-кнопки (Мобильная) -->
                 <div class="mt-4 grid grid-cols-3 gap-2">
                     <a href="tel:+74999385858" class="flex justify-center items-center gap-2 bg-white py-3 rounded-2xl font-heading font-bold text-sm shadow-sm border border-pastelPink/60">
