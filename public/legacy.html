@@ -2517,6 +2517,17 @@
                 <input id="me-sr" type="range" min="8" max="40" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Жирность кружков: <span id="me-ss-v"></span></label>
                 <input id="me-ss" type="range" min="2" max="24" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Размер шрифта: <span id="me-fs-v"></span></label>
+                <input id="me-fs" type="range" min="16" max="64" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Шрифт станций</label>
+                <select id="me-ff" style="width:100%;padding:4px;margin-bottom:8px;border:1px solid #CBD5E1;border-radius:8px;">
+                    <option value="Accuratist">Accuratist</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Inter">Inter</option>
+                    <option value="Georgia">Georgia (с засечками)</option>
+                    <option value="Comic">Comic (детский)</option>
+                    <option value="Mono">Моноширинный</option>
+                </select>
                 <button id="me-copy" style="width:100%;padding:6px;border-radius:8px;background:#3B82F6;color:#fff;font-weight:600;margin-bottom:6px;">Скопировать JSON</button>
                 <button id="me-reset" style="width:100%;padding:6px;border-radius:8px;background:#F1F5F9;font-weight:600;">Сбросить всё</button>
             `;
@@ -2530,30 +2541,38 @@
             const str  = panel.querySelector('#me-str');
             const sr   = panel.querySelector('#me-sr');
             const ss   = panel.querySelector('#me-ss');
+            const fs   = panel.querySelector('#me-fs');
+            const ff   = panel.querySelector('#me-ff');
 
             const syncStyle = () => {
                 const s = loadMapStyle();
                 lw.value = s.lineWidth; str.value = s.straight;
                 sr.value = s.stRadius;  ss.value = s.stStroke;
+                fs.value = s.labelSize; ff.value = s.labelFont;
                 panel.querySelector('#me-lw-v').textContent  = lw.value;
                 panel.querySelector('#me-str-v').textContent = str.value;
                 panel.querySelector('#me-sr-v').textContent  = sr.value;
                 panel.querySelector('#me-ss-v').textContent  = ss.value;
+                panel.querySelector('#me-fs-v').textContent  = fs.value;
             };
             const pushStyle = () => {
                 saveMapStyle({
                     lineWidth: parseFloat(lw.value),
                     straight:  parseFloat(str.value),
                     stRadius:  parseFloat(sr.value),
-                    stStroke:  parseFloat(ss.value)
+                    stStroke:  parseFloat(ss.value),
+                    labelSize: parseFloat(fs.value),
+                    labelFont: ff.value
                 });
                 panel.querySelector('#me-lw-v').textContent  = lw.value;
                 panel.querySelector('#me-str-v').textContent = str.value;
                 panel.querySelector('#me-sr-v').textContent  = sr.value;
                 panel.querySelector('#me-ss-v').textContent  = ss.value;
+                panel.querySelector('#me-fs-v').textContent  = fs.value;
                 renderMetroMap();
             };
-            [lw, str, sr, ss].forEach(el => el.addEventListener('input', pushStyle));
+            [lw, str, sr, ss, fs].forEach(el => el.addEventListener('input', pushStyle));
+            ff.addEventListener('change', pushStyle);
 
             const sync = () => {
                 const g = loadLineGeom()[sel.value] || {};
