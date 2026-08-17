@@ -3074,20 +3074,11 @@
             });
         }
 
-        // Переопределяем открытие карточки станции — теперь это новая страница
+        // Клик по станции — открываем лендинг ветки (страницы курсов больше не используем)
         function openStationModal(lineIdx, stationIdx) {
             const line = METRO_LINES[lineIdx];
-            const station = line.stations[stationIdx];
-            const title = line.name + ' — ' + station.name;
-            // Сначала отправляем поезд к выбранной станции, по прибытии открываем страницу
-            try {
-                sendTrainAlongLine(line.id, false, stationIdx, () => {
-                    window.open(pageUrl(title), '_blank', 'noopener');
-                    setTimeout(returnTrainToRing, 400);
-                });
-            } catch (e) {
-                window.open(pageUrl(title), '_blank', 'noopener');
-            }
+            if (!line) return;
+            goToLinePage(line.id);
         }
     </script>
 
