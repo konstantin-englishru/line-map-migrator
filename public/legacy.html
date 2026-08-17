@@ -979,7 +979,7 @@
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
-                    <svg id="interactive-metro-map" viewBox="-340 -280 2680 2620" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+                    <svg id="interactive-metro-map" viewBox="-340 -280 2680 2800" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
                 </div>
@@ -1415,7 +1415,7 @@
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
-            const CLEAR_R    = 300;           // свободная зона вокруг центрального круга
+            const CLEAR_R    = 214;           // линии стыкуются с центральным кольцом
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1442,7 +1442,7 @@
             const CURVES = {
                 pink:      { bend: -13, len: 1090 }, // вправо, широкая дуга
                 purple:    { bend: -12, len: 1040 }, // вниз-вправо
-                orange:    { bend:  -5, len: 1010 }, // вниз, почти вертикально
+                orange:    { bend:  -5, len: 1210 }, // вниз, почти вертикально
                 yellow:    { bend: +12, len: 1040 }, // вниз-влево
                 blue:      { bend: +13, len: 1090 }, // влево, широкая дуга
                 lightblue: { bend: +12, len: 1040 }, // вверх-влево
@@ -1565,7 +1565,7 @@
 
                 // Отступы: первая станция чуть отступает от кольца,
                 // последняя — от конечной (иконки), чтобы не наезжать
-                const padStart = 90;
+                const padStart = line.id === 'orange' ? 320 : 170;
                 const padEnd   = 235;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
@@ -1657,7 +1657,7 @@
                     // подпись над иконкой по центру — иначе уезжает за край схемы
                     tnx = tlx;
                     tny = ticy - iconR - 128;
-                    if (line.id === 'pink') { tnx = tlx + 40; tny -= 24; }
+                    if (line.id === 'pink') { tnx = tlx + 100; tny -= 34; }
                     termAnchor = 'middle';
                 } else {
                     tnx = tlx + ux * labelOff;
