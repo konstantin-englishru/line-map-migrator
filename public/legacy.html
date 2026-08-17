@@ -2414,9 +2414,9 @@
                 const label = (a.textContent || '').trim();
                 if (!label) return;
                 a.setAttribute('href', pageUrl(label));
-                // Ссылки в header/footer открываем в том же окне (user-friendly),
+                // Ссылки в header/footer и мобильном меню открываем в том же окне (user-friendly),
                 // остальные (если вдруг останутся) — в новой вкладке.
-                if (!a.closest('header') && !a.closest('footer')) {
+                if (!a.closest('header') && !a.closest('footer') && !a.closest('#mobile-menu')) {
                     a.setAttribute('target', '_blank');
                     a.setAttribute('rel', 'noopener');
                 }
