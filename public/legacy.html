@@ -3229,11 +3229,17 @@
         }
 
         // Клик по станции — открываем страницу курса станции
+        // Отдельные лендинги для конкретных станций
+        const STATION_PAGE_OVERRIDES = {
+            'pink|Языковая': 'Английский язык для дошкольников',
+            'pink|Робототехническая': 'Робототехника для дошкольников'
+        };
         function openStationModal(lineIdx, stationIdx) {
             const line = METRO_LINES[lineIdx];
             const station = line && line.stations[stationIdx];
             if (!station) return;
-            const title = line.name + ' — ' + station.name;
+            const override = STATION_PAGE_OVERRIDES[line.id + '|' + station.name];
+            const title = override || (line.name + ' — ' + station.name);
             try {
                 sendTrainAlongLine(line.id, false, stationIdx, () => {
                     window.open(pageUrl(title), '_blank', 'noopener');
