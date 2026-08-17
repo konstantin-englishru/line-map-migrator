@@ -3074,11 +3074,20 @@
             });
         }
 
-        // Клик по станции — открываем лендинг ветки (страницы курсов больше не используем)
+        // Клик по станции — открываем страницу курса станции
         function openStationModal(lineIdx, stationIdx) {
             const line = METRO_LINES[lineIdx];
-            if (!line) return;
-            goToLinePage(line.id);
+            const station = line && line.stations[stationIdx];
+            if (!station) return;
+            const title = line.name + ' — ' + station.name;
+            try {
+                sendTrainAlongLine(line.id, false, stationIdx, () => {
+                    window.open(pageUrl(title), '_blank', 'noopener');
+                    setTimeout(returnTrainToRing, 400);
+                });
+            } catch (e) {
+                window.open(pageUrl(title), '_blank', 'noopener');
+            }
         }
     </script>
 

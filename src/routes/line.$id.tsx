@@ -102,7 +102,7 @@ function LinePage() {
                 <ul className="lp-programs">
                   {st.programs.map((p) => (
                     <li key={p}>
-                      <span className="lp-prog">{p}</span>
+                      <a href={`/p/${encodeURIComponent(p)}`} className="lp-prog">{p}</a>
                     </li>
                   ))}
                 </ul>
