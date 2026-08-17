@@ -9,6 +9,12 @@ import artHeroImg from "@/assets/art-hero.jpg";
 import artLessonImg from "@/assets/art-lesson.jpg";
 import speechHeroImg from "@/assets/speech-hero.jpg";
 import speechLessonImg from "@/assets/speech-lesson.jpg";
+import prepHeroImg from "@/assets/school-prep-hero.jpg";
+import prepLessonImg from "@/assets/school-prep-lesson.jpg";
+import complexHeroImg from "@/assets/complex-dev-hero.jpg";
+import complexLessonImg from "@/assets/complex-dev-lesson.jpg";
+import neurofitHeroImg from "@/assets/neurofit-hero.jpg";
+import neurofitLessonImg from "@/assets/neurofit-lesson.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
@@ -126,6 +132,9 @@ function buildCourse(title: string): CourseData {
   };
 
   if (/робот|конструир/i.test(title)) return { ...base, ...ROBOTICS_PRESCHOOL, title };
+  if (/подготовк/i.test(title)) return { ...base, ...SCHOOL_PREP, title };
+  if (/нейрофитнес/i.test(title)) return { ...base, ...NEUROFIT_PRESCHOOL, title };
+  if (/комплексн|развити\w* интеллекта/i.test(title)) return { ...base, ...COMPLEX_DEV, title };
   if (/логопед/i.test(title)) return { ...base, ...SPEECH_PRESCHOOL, title };
   if (/нейропсихолог/i.test(title)) return { ...base, ...NEURO_PRESCHOOL, title };
   if (/шахмат/i.test(title)) return { ...base, ...CHESS_PRESCHOOL, title };
