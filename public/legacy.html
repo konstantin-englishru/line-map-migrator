@@ -2063,9 +2063,14 @@
             const line = METRO_LINES.find(l => l.id === lineId);
             if (!line) return;
             tempHighlightLine(lineId);
+            const go = () => {
+                const url = '/line/' + lineId;
+                try { (window.top || window).location.href = url; }
+                catch (e) { window.location.href = url; }
+            };
             try {
                 sendTrainAlongLine(lineId, true, undefined, () => {
-                    openLinePanel(line);
+                    go();
                     // через короткую паузу убираем подсветку и возвращаем поезд
                     setTimeout(() => {
                         clearLineHighlight();
@@ -2073,8 +2078,7 @@
                     }, 300);
                 });
             } catch (e) {
-                openLinePanel(line);
-                clearLineHighlight();
+                go();
             }
         }
 
