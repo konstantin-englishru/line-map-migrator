@@ -2132,10 +2132,15 @@ const styles = `
 
   /* Results list */
   .cp-h3-center { text-align: center; }
-  .cp-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .cp-results { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .cp-result {
     display: flex; align-items: center; gap: 14px; background: #fff;
     border-radius: 22px; padding: 18px 20px; box-shadow: 0 10px 24px rgba(0,0,0,.05);
+  }
+  .cp-result:nth-child(odd):last-child {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #FFF, #F0F6FF);
+    border: 2px solid var(--sky);
   }
   .cp-result-n {
     flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; color: #fff;
