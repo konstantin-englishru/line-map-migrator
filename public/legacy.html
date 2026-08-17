@@ -2503,6 +2503,15 @@
                 <input id="me-bend" type="range" min="-60" max="60" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Длина: <span id="me-len-v"></span></label>
                 <input id="me-len" type="range" min="600" max="1600" step="10" style="width:100%;margin-bottom:8px;">
+                <div style="font-weight:700;margin:8px 0 6px;border-top:1px solid #E2E8F0;padding-top:8px;">Общий стиль</div>
+                <label style="display:block;margin-bottom:2px;">Толщина линий: <span id="me-lw-v"></span></label>
+                <input id="me-lw" type="range" min="4" max="40" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Прямота линий: <span id="me-str-v"></span>%</label>
+                <input id="me-str" type="range" min="0" max="100" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Размер станций: <span id="me-sr-v"></span></label>
+                <input id="me-sr" type="range" min="8" max="40" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Жирность кружков: <span id="me-ss-v"></span></label>
+                <input id="me-ss" type="range" min="2" max="24" step="1" style="width:100%;margin-bottom:8px;">
                 <button id="me-copy" style="width:100%;padding:6px;border-radius:8px;background:#3B82F6;color:#fff;font-weight:600;margin-bottom:6px;">Скопировать JSON</button>
                 <button id="me-reset" style="width:100%;padding:6px;border-radius:8px;background:#F1F5F9;font-weight:600;">Сбросить всё</button>
             `;
@@ -2512,6 +2521,34 @@
             sel.innerHTML = lines.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
             const bend = panel.querySelector('#me-bend');
             const len  = panel.querySelector('#me-len');
+            const lw   = panel.querySelector('#me-lw');
+            const str  = panel.querySelector('#me-str');
+            const sr   = panel.querySelector('#me-sr');
+            const ss   = panel.querySelector('#me-ss');
+
+            const syncStyle = () => {
+                const s = loadMapStyle();
+                lw.value = s.lineWidth; str.value = s.straight;
+                sr.value = s.stRadius;  ss.value = s.stStroke;
+                panel.querySelector('#me-lw-v').textContent  = lw.value;
+                panel.querySelector('#me-str-v').textContent = str.value;
+                panel.querySelector('#me-sr-v').textContent  = sr.value;
+                panel.querySelector('#me-ss-v').textContent  = ss.value;
+            };
+            const pushStyle = () => {
+                saveMapStyle({
+                    lineWidth: parseFloat(lw.value),
+                    straight:  parseFloat(str.value),
+                    stRadius:  parseFloat(sr.value),
+                    stStroke:  parseFloat(ss.value)
+                });
+                panel.querySelector('#me-lw-v').textContent  = lw.value;
+                panel.querySelector('#me-str-v').textContent = str.value;
+                panel.querySelector('#me-sr-v').textContent  = sr.value;
+                panel.querySelector('#me-ss-v').textContent  = ss.value;
+                renderMetroMap();
+            };
+            [lw, str, sr, ss].forEach(el => el.addEventListener('input', pushStyle));
 
             const sync = () => {
                 const g = loadLineGeom()[sel.value] || {};
@@ -2536,7 +2573,8 @@
                 const dump = JSON.stringify({
                     labels:   loadLabelOffsets(),
                     stations: loadStationOffsets(),
-                    geom:     loadLineGeom()
+                    geom:     loadLineGeom(),
+                    style:    loadMapStyle()
                 }, null, 2);
                 navigator.clipboard && navigator.clipboard.writeText(dump);
                 alert('Настройки схемы скопированы в буфер обмена.');
@@ -2545,6 +2583,7 @@
                 if (confirm('Сбросить все ручные правки схемы?')) resetLabelOffsets();
             });
             sync();
+            syncStyle();
         }
 
         function openStationModal(lineIdx, stationIdx) {
