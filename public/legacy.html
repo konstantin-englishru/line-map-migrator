@@ -979,7 +979,7 @@
                 </div>
                 
                 <div id="map-container-inner" class="w-full h-full relative cursor-grab active:cursor-grabbing" style="overflow:visible;background:transparent;">
-                    <svg id="interactive-metro-map" viewBox="-260 -260 2520 2520" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
+                    <svg id="interactive-metro-map" viewBox="-340 -280 2680 2620" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                         <!-- Интерактивная карта генерируется через JavaScript -->
                     </svg>
                 </div>
@@ -1415,9 +1415,7 @@
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
             const RING_RADIUS = 210;          // компактное центральное кольцо
-            const KINK_R     = 540;           // радиус, где линия делает поворот
-            const SEG2_LEN   = 560;           // длина второго (наклонного) сегмента — увеличена, чтобы станции не слипались
-            const BEND_DEG   = 28;            // угол мягкого поворота на середине
+            const CLEAR_R    = 300;           // свободная зона вокруг центрального круга
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
@@ -1439,19 +1437,28 @@
                 'orange':     90,  // низ         (Школьная)
                 'purple':     45   // низ-право   (Детский Мир)
             };
-            // Направление мягкого поворота на середине линии (CW = +1, CCW = -1).
-            // Кардинальные направления (0/90/180/270) поворачиваем к ближайшему
-            // углу, диагонали — наружу, чтобы все 8 концов сошлись по периметру
-            // и не сталкивались друг с другом.
-            const BENDS = {
-                pink:      -1, // 0°   → верх-правый угол
-                red:       +1, // 315° → загиб в другую сторону (вниз-вправо)
-                green:     +1, // 270° → верх-лево
-                lightblue: +1, // 225° → к левому краю
-                blue:      +1, // 180° → низ-лево
-                yellow:    +1, // 135° → к низу-правее
-                orange:    -1, // 90°  → низ-право
-                purple:    -1  // 45°  → к правому краю
+            // Плавные кривые: bend — суммарный «увод» ветки в градусах,
+            // len — радиус конечной станции. Ни одной ломаной, только Безье.
+            const CURVES = {
+                pink:      { bend: -13, len: 1090 }, // вправо, широкая дуга
+                purple:    { bend: -12, len: 1040 }, // вниз-вправо
+                orange:    { bend:  -5, len: 1010 }, // вниз, почти вертикально
+                yellow:    { bend: +12, len: 1040 }, // вниз-влево
+                blue:      { bend: +13, len: 1090 }, // влево, широкая дуга
+                lightblue: { bend: +12, len: 1040 }, // вверх-влево
+                green:     { bend: +14, len: 1020 }, // вверх, уходит вправо
+                red:       { bend: -12, len: 1040 }  // вверх-вправо
+            };
+            // Аккуратные векторные пиктограммы конечных станций (сетка 24×24)
+            const TERM_ICONS = {
+                lightblue: 'M4 8h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Zm5-3h6a1 1 0 0 1 1 1v2H8V6a1 1 0 0 1 1-1Z',
+                blue:      'M4 4h6a2 2 0 0 1 2 2v14a3 3 0 0 0-2-1H4V4Zm16 0h-6a2 2 0 0 0-2 2v14a3 3 0 0 1 2-1h6V4Z',
+                yellow:    'M12 3 1 9l11 6 9-4.9V17h2V9L12 3ZM5 13.2V17l7 4 7-4v-3.8l-7 3.8-7-3.8Z',
+                orange:    'M12 2 2 8v13h7v-6h6v6h7V8L12 2Z',
+                purple:    'M7 8V7a5 5 0 0 1 10 0v1h1a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h1Zm2 0h6V7a3 3 0 1 0-6 0v1Zm0 5h6v2H9v-2Z',
+                pink:      'M12 2.5 14.6 8l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 19l1-6L3.4 8.9l6-.9L12 2.5Z',
+                red:       'M3 5h8v6a4 4 0 0 1-8 0V5Zm10 3h8v6a4 4 0 0 1-8 0V8Z',
+                green:     'M12 7.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9ZM12 1l1.7 3.2h-3.4L12 1Zm0 22-1.7-3.2h3.4L12 23ZM1 12l3.2-1.7v3.4L1 12Zm22 0-3.2 1.7v-3.4L23 12ZM4.2 4.2l3.5.9-2.6 2.6-.9-3.5Zm15.6 15.6-3.5-.9 2.6-2.6.9 3.5Zm0-15.6-.9 3.5-2.6-2.6 3.5-.9ZM4.2 19.8l.9-3.5 2.6 2.6-3.5.9Z'
             };
 
             let content = `
@@ -1490,20 +1497,27 @@
                 const rad = degreesToRadians(angleDeg);
                 const stationsCount = line.stations.length;
 
-                // Линия = два прямых сегмента с мягким поворотом ровно на середине.
-                // 1) от центрального кольца до точки излома — строго по радиусу;
-                // 2) от излома до конечной — под небольшим углом BEND_DEG к радиусу.
-                const startX = CENTER + RING_RADIUS * Math.cos(rad);
-                const startY = CENTER + RING_RADIUS * Math.sin(rad);
-                const kinkX  = CENTER + KINK_R      * Math.cos(rad);
-                const kinkY  = CENTER + KINK_R      * Math.sin(rad);
+                // Линия = одна непрерывная кубическая кривая Безье.
+                // Выходит строго по радиусу из-за кольца, затем плавно уводит в сторону.
+                const cfg     = CURVES[line.id] || { bend: 0, len: 1040 };
+                const bendRad = degreesToRadians(cfg.bend);
+                const endRad  = rad + bendRad;
 
-                const bendDir = BENDS[line.id] ?? 1;
-                const radEnd  = rad + degreesToRadians(BEND_DEG) * bendDir;
-                const endX    = kinkX + SEG2_LEN * Math.cos(radEnd);
-                const endY    = kinkY + SEG2_LEN * Math.sin(radEnd);
+                const startX = CENTER + CLEAR_R * Math.cos(rad);
+                const startY = CENTER + CLEAR_R * Math.sin(rad);
+                const endX   = CENTER + cfg.len * Math.cos(endRad);
+                const endY   = CENTER + cfg.len * Math.sin(endRad);
 
-                const pathD = `M ${startX} ${startY} L ${kinkX} ${kinkY} L ${endX} ${endY}`;
+                const span   = cfg.len - CLEAR_R;
+                // Первая контрольная точка — строго по радиусу (гладкий выход из хаба)
+                const c1X = CENTER + (CLEAR_R + span * 0.55) * Math.cos(rad);
+                const c1Y = CENTER + (CLEAR_R + span * 0.55) * Math.sin(rad);
+                // Вторая — вдоль касательной у конечной станции (гладкий вход)
+                const tanRad = rad + bendRad * 3;
+                const c2X = endX - span * 0.34 * Math.cos(tanRad);
+                const c2Y = endY - span * 0.34 * Math.sin(tanRad);
+
+                const pathD = `M ${startX} ${startY} C ${c1X} ${c1Y}, ${c2X} ${c2Y}, ${endX} ${endY}`;
 
                 // Уникальный id у пути нужен, чтобы аккуратно расположить станции на нём
                 const pathId = `line-path-${line.id}`;
@@ -1517,25 +1531,18 @@
                 // (используем приближение через куски — но проще: используем SVG getPointAtLength).
                 // Чтобы не зависеть от рантайма SVG, аппроксимируем кривую сэмплами.
                 // Сэмплируем полилинию из двух сегментов
-                const samples = 200;
+                const samples = 300;
                 const pts = [];
-                const seg1Len = Math.hypot(kinkX - startX, kinkY - startY);
-                const seg2Len = Math.hypot(endX - kinkX, endY - kinkY);
-                const fullLen = seg1Len + seg2Len;
+                const bez = (t) => {
+                    const u = 1 - t;
+                    return {
+                        x: u*u*u*startX + 3*u*u*t*c1X + 3*u*t*t*c2X + t*t*t*endX,
+                        y: u*u*u*startY + 3*u*u*t*c1Y + 3*u*t*t*c2Y + t*t*t*endY
+                    };
+                };
                 let prevX = startX, prevY = startY, total = 0;
                 for (let i = 0; i <= samples; i++) {
-                    const t = i / samples;
-                    const cur = t * fullLen;
-                    let x, y;
-                    if (cur <= seg1Len) {
-                        const k = cur / Math.max(seg1Len, 0.0001);
-                        x = startX + (kinkX - startX) * k;
-                        y = startY + (kinkY - startY) * k;
-                    } else {
-                        const k = (cur - seg1Len) / Math.max(seg2Len, 0.0001);
-                        x = kinkX + (endX - kinkX) * k;
-                        y = kinkY + (endY - kinkY) * k;
-                    }
+                    const { x, y } = bez(i / samples);
                     if (i > 0) total += Math.hypot(x - prevX, y - prevY);
                     pts.push({ x, y, len: total });
                     prevX = x; prevY = y;
@@ -1558,8 +1565,8 @@
 
                 // Отступы: первая станция чуть отступает от кольца,
                 // последняя — от конечной (иконки), чтобы не наезжать
-                const padStart = 140;
-                const padEnd   = 130;
+                const padStart = 90;
+                const padEnd   = 235;
                 const usable = total - padStart - padEnd;
                 const step = stationsCount > 1 ? usable / (stationsCount - 1) : 0;
 
@@ -1577,26 +1584,16 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    let labelDist = 44;
+                    // Интеллектуальное размещение: на почти горизонтальных участках
+                    // подписи чередуются сверху/снизу, чтобы не наезжать друг на друга.
+                    const horizontal = Math.abs(p.tx / tlen) > 0.78;
+                    if (horizontal && stationIdx % 2 === 1) { nx = -nx; ny = -ny; }
+
+                    let labelDist = horizontal ? 52 : 44;
                     let lx = cx + nx * labelDist;
                     let ly = cy + ny * labelDist;
                     let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
                     let dyText = ny > 0.4 ? 24 : (ny < -0.4 ? -8 : 8);
-
-                    // Розовая линия: «Робототехническая» — длинное имя,
-                    // отодвигаем дальше наружу, чтобы не наезжало на «Языковую».
-                    if (line.id === 'pink' && station.name === 'Робототехническая') {
-                        labelDist = 86;
-                        lx = cx + nx * labelDist;
-                        ly = cy + ny * labelDist;
-                        dyText += 10;
-                    }
-                    if (line.id === 'pink' && station.name === 'Языковая') {
-                        labelDist = 34;
-                        lx = cx + nx * labelDist;
-                        ly = cy + ny * labelDist;
-                        dyText -= 6;
-                    }
 
                     // На красной линии «Спектакли» — слева-снизу от станции для читаемости
                     if (line.id === 'red' && station.name === 'Спектакли') {
@@ -1640,12 +1637,7 @@
                     `;
                 });
 
-                // ----- Конечная станция (лейбл + иконка) -----
-                const termIconMap = {
-                    pink:      '🚆', purple: '🎒', orange: '🏫',
-                    yellow:    '🎓', blue:   '🏛', lightblue: '🏙',
-                    green:     '☀',  red:    '🎭'
-                };
+                // ----- Конечная станция (лейбл + векторная пиктограмма) -----
                 // Иконка конечной станции совпадает с концом линии (линия входит в круг),
                 // а текст уходит дальше наружу.
                 const iconR = 72;
@@ -1653,38 +1645,49 @@
                 const ticy = endY;
                 // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
                 // Для оранжевой (Школьная) линии — подпись ПОД иконкой.
-                let nameY, ageY;
-                let clickTop, clickBottom, clickCy;
-                if (line.id === 'orange') {
-                    nameY = ticy + iconR + 46;
-                    ageY  = nameY + 34;
-                    clickTop    = ticy - iconR - 12;
-                    clickBottom = ageY + 22;
-                    clickCy     = (clickTop + clickBottom) / 2;
+                // Подпись конечной уходит РАДИАЛЬНО НАРУЖУ от центра —
+                // так она никогда не наезжает на последнюю станцию линии.
+                const outLen = Math.hypot(endX - CENTER, endY - CENTER) || 1;
+                const ux = (endX - CENTER) / outLen;
+                const uy = (endY - CENTER) / outLen;
+                const labelOff = iconR + 46;
+                const sideways = Math.abs(ux) > 0.6;   // почти горизонтальная линия
+                let tnx, tny, termAnchor;
+                if (sideways) {
+                    // подпись над иконкой по центру — иначе уезжает за край схемы
+                    tnx = tlx;
+                    tny = ticy - iconR - 128;
+                    if (line.id === 'pink') { tnx = tlx + 40; tny -= 24; }
+                    termAnchor = 'middle';
                 } else {
-                    nameY = ticy - iconR - 50;
-                    ageY  = nameY + 34;
-                    clickTop    = nameY - 28;
-                    clickBottom = ticy + iconR + 12;
-                    clickCy     = (clickTop + clickBottom) / 2;
+                    tnx = tlx + ux * labelOff;
+                    tny = ticy + uy * labelOff;
+                    if (uy < -0.2) tny -= 34;
+                    else tny += 4;
+                    termAnchor = ux > 0.3 ? 'start' : (ux < -0.3 ? 'end' : 'middle');
                 }
-                const clickRx = iconR + 28;
-                const clickRy = (clickBottom - clickTop) / 2 + 10;
+                const nameY = tny;
+                const ageY  = tny + 34;
+                const clickCy = (ticy + tny) / 2;
+                const clickRx = iconR + 60 + Math.abs(ux) * 120;
+                const clickRy = Math.abs(tny - ticy) / 2 + iconR + 30;
 
                 content += `
                     <g class="cursor-pointer metro-line-group station-clickable" data-line="${line.id}" onclick="goToLinePage('${line.id}')">
                         <ellipse cx="${tlx}" cy="${clickCy}" rx="${clickRx}" ry="${clickRy}" fill="transparent"/>
                         <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
                                 stroke="${line.color}" stroke-width="8"
-                                filter="url(#soft-shadow)" pointer-events="none"/>
-                        <text x="${tlx}" y="${ticy + 26}" text-anchor="middle"
-                              font-size="64" pointer-events="none">${termIconMap[line.id] || '⭐'}</text>
-                        <text x="${tlx}" y="${nameY}" text-anchor="middle"
+                                pointer-events="none"/>
+                        <g transform="translate(${tlx}, ${ticy}) scale(3.4) translate(-12, -12)"
+                           fill="${line.color}" pointer-events="none">
+                            <path d="${TERM_ICONS[line.id] || TERM_ICONS.pink}"/>
+                        </g>
+                        <text x="${tnx}" y="${nameY}" text-anchor="${termAnchor}"
                               font-family="${FONT}" font-size="38" font-weight="900"
                               fill="${line.color}" pointer-events="none"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
                               stroke-linejoin="round">${line.name}</text>
-                        <text x="${tlx}" y="${ageY}" text-anchor="middle"
+                        <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
                               font-family="${FONT}" font-size="28" font-weight="700"
                               fill="${TEXT_SOFT}" pointer-events="none"
                               paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
