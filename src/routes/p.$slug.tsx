@@ -2026,12 +2026,13 @@ const styles = `
   .cp-fmt-value { font-size: 16px; font-weight: 700; margin-top: 4px; }
 
   /* Reviews */
-  .cp-reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .cp-reviews { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .cp-review {
     background: #fff; border-radius: 28px; padding: 26px;
     box-shadow: 0 14px 30px rgba(0,0,0,.06);
     display: flex; flex-direction: column; gap: 14px;
   }
+  .cp-review:nth-child(odd):last-child { grid-column: 1 / -1; }
   .cp-review-stars { color: #F59E0B; letter-spacing: 2px; font-size: 14px; }
   .cp-review-text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink); flex: 1; }
   .cp-review-author { display: flex; align-items: center; gap: 12px; }
