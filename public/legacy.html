@@ -161,7 +161,15 @@
             transition: transform .08s ease;
         }
 
-        /* === Стилизованный «туннель метро» для контактных кнопок === */
+        /* === Станции схемы метро: увеличенные, яркие, кликабельные === */
+        .station-clickable { transition: opacity 0.2s ease; }
+        .station-clickable:hover { opacity: 0.95; }
+        .station-marker { transition: r 0.2s ease, stroke-width 0.2s ease; }
+        .station-clickable:hover .station-marker { r: 21; stroke-width: 10; }
+        .station-clickable:hover text { fill: #111827; }
+
+        /* === Бегущий поезд вокруг центрального кольца === */
+        #metro-train { will-change: transform; }
         .contact-tunnel {
             position: relative;
             padding: 10px 14px;
@@ -954,10 +962,11 @@
         <section id="metro-map-section" class="w-full px-4 md:px-12 py-12 z-10 relative" style="background: radial-gradient(ellipse 70% 60% at 50% 55%, #C7E2FF 0%, #DDEEFF 55%, #EAF6FF 100%);">
             <div class="max-w-6xl mx-auto text-center mb-8">
                 <h3 style="font-family:'Montserrat',sans-serif;letter-spacing:0.02em;" class="text-2xl md:text-4xl font-extrabold uppercase text-[#1F2937] leading-tight">
-                    Схема метро образовательного центра<br/>
-                    <span class="text-[#1F2937]">«Город Знаний»</span>
+                    План транспортной системы<br/>
+                    <span class="text-[#1F2937]">ГОРОДА ЗНАНИЙ</span>
                 </h3>
-                <p style="font-family:'Montserrat',sans-serif;letter-spacing:0.05em;" class="mt-3 text-sm md:text-base font-semibold uppercase tracking-wider text-[#6B7280]">Станции по возрасту учеников</p>
+                <p style="font-family:'Montserrat',sans-serif;letter-spacing:0.05em;" class="mt-3 text-sm md:text-base font-bold uppercase tracking-wider text-[#6B7280]">нажимайте на станции, поезд довезет вас туда, куда нужно ребенку</p>
+                <p class="mt-4 max-w-3xl mx-auto text-base md:text-lg font-medium text-[#4B5563] leading-relaxed">Мы придумали город, где каждая улица ведет к открытию, а каждый маршрут — к новому навыку. Здесь не бывает тупиков — только пересадки на более интересные направления. Ребенок может сесть на поезд в 3 года и выйти из него в 17 — совершенно другим человеком: уверенным, любознительным, умеющим учиться. А выбирать маршрут будете вы. Или он сам. А мы обещаем достраивать рельсы — надежные, удобные, с заботой о каждом пассажире.</p>
             </div>
 
             <div class="w-full max-w-6xl mx-auto relative p-2 md:p-6" style="aspect-ratio: 1/1;">
@@ -1458,6 +1467,10 @@
                     <filter id="station-shadow" x="-50%" y="-50%" width="200%" height="200%">
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1F2937" flood-opacity="0.15"/>
                     </filter>
+                    <filter id="station-glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#FFFFFF" flood-opacity="0.95"/>
+                        <feDropShadow dx="0" dy="0" stdDeviation="9" flood-color="#FFFFFF" flood-opacity="0.55"/>
+                    </filter>
                 </defs>
                 <rect x="-200" y="-200" width="${MAP_SIZE + 400}" height="${MAP_SIZE + 400}" fill="url(#bg-grad)"/>
                 <!-- декоративные звёздочки -->
@@ -1564,51 +1577,64 @@
                     const outY = cy - CENTER;
                     if (nx * outX + ny * outY < 0) { nx = -nx; ny = -ny; }
 
-                    let labelDist = 30;
+                    let labelDist = 44;
                     let lx = cx + nx * labelDist;
                     let ly = cy + ny * labelDist;
                     let anchor = nx > 0.2 ? 'start' : (nx < -0.2 ? 'end' : 'middle');
-                    let dyText = ny > 0.4 ? 18 : (ny < -0.4 ? -6 : 6);
+                    let dyText = ny > 0.4 ? 24 : (ny < -0.4 ? -8 : 8);
 
                     // Розовая линия: «Робототехническая» — длинное имя,
                     // отодвигаем дальше наружу, чтобы не наезжало на «Языковую».
                     if (line.id === 'pink' && station.name === 'Робототехническая') {
-                        labelDist = 64;
+                        labelDist = 86;
                         lx = cx + nx * labelDist;
                         ly = cy + ny * labelDist;
-                        dyText += 8;
+                        dyText += 10;
                     }
                     if (line.id === 'pink' && station.name === 'Языковая') {
-                        labelDist = 22;
+                        labelDist = 34;
                         lx = cx + nx * labelDist;
                         ly = cy + ny * labelDist;
-                        dyText -= 4;
+                        dyText -= 6;
                     }
 
                     // На красной линии «Спектакли» — слева-снизу от станции для читаемости
                     if (line.id === 'red' && station.name === 'Спектакли') {
                         anchor = 'end';
-                        lx = cx - 28;
-                        ly = cy + 22;
+                        lx = cx - 38;
+                        ly = cy + 30;
                         dyText = 0;
                     }
 
                     // «Мегаполис. Лето» рендерим в две строки
                     const isMegapolis = station.name === 'Мегаполис. Лето';
                     const nameMarkup = isMegapolis
-                        ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="22">Лето</tspan>`
+                        ? `<tspan x="${lx}" dy="0">Мегаполис.</tspan><tspan x="${lx}" dy="28">Лето</tspan>`
                         : station.name;
 
+                    // Кликабельная область: охватывает круглую станцию и её подпись.
+                    // В виде вытянутого овала от станции до конца текста, чтобы не
+                    // перекрывать соседние станции вдоль линии.
+                    const midX = (cx + lx) / 2;
+                    const midY = (cy + ly) / 2;
+                    const labelLen = Math.hypot(lx - cx, ly - cy);
+                    const clickAngle = Math.atan2(ly - cy, lx - cx) * 180 / Math.PI;
+                    const clickRX = labelLen / 2 + 54;
+                    const clickRY = 42;
+
                     content += `
-                        <g class="cursor-pointer metro-line-group" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
-                            <circle cx="${cx}" cy="${cy}" r="28" fill="transparent"/>
-                            <circle cx="${cx}" cy="${cy}" r="11" fill="#FFFFFF"
-                                    stroke="${line.color}" stroke-width="5"
+                        <g class="cursor-pointer metro-line-group station-clickable" data-line="${line.id}" onclick="openStationModal(${lineIdx}, ${stationIdx})">
+                            <ellipse cx="${midX}" cy="${midY}" rx="${clickRX}" ry="${clickRY}" fill="transparent" transform="rotate(${clickAngle}, ${midX}, ${midY})"/>
+                            <circle class="station-marker" cx="${cx}" cy="${cy}" r="18" fill="#FFFFFF"
+                                    stroke="${line.color}" stroke-width="8"
+                                    filter="url(#station-glow)"/>
+                            <circle class="station-marker" cx="${cx}" cy="${cy}" r="18" fill="#FFFFFF"
+                                    stroke="${line.color}" stroke-width="8"
                                     filter="url(#station-shadow)"/>
                             <text x="${lx}" y="${ly + dyText}" text-anchor="${anchor}"
-                                  font-family="${FONT}" font-size="24" font-weight="700"
+                                  font-family="${FONT}" font-size="32" font-weight="800"
                                   fill="${TEXT_DARK}" pointer-events="none"
-                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
+                                  paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">${nameMarkup}</text>
                         </g>
                     `;
@@ -1622,36 +1648,46 @@
                 };
                 // Иконка конечной станции совпадает с концом линии (линия входит в круг),
                 // а текст уходит дальше наружу.
-                const iconR = 46;
+                const iconR = 72;
                 const tlx = endX;       // центр иконки = конец линии
                 const ticy = endY;
                 // Подпись конечной всегда выше иконки. Имя сверху, возраст под ним.
                 // Для оранжевой (Школьная) линии — подпись ПОД иконкой.
                 let nameY, ageY;
+                let clickTop, clickBottom, clickCy;
                 if (line.id === 'orange') {
-                    nameY = ticy + iconR + 32;
-                    ageY  = nameY + 24;
+                    nameY = ticy + iconR + 46;
+                    ageY  = nameY + 34;
+                    clickTop    = ticy - iconR - 12;
+                    clickBottom = ageY + 22;
+                    clickCy     = (clickTop + clickBottom) / 2;
                 } else {
-                    nameY = ticy - iconR - 36;
-                    ageY  = nameY + 24;
+                    nameY = ticy - iconR - 50;
+                    ageY  = nameY + 34;
+                    clickTop    = nameY - 28;
+                    clickBottom = ticy + iconR + 12;
+                    clickCy     = (clickTop + clickBottom) / 2;
                 }
+                const clickRx = iconR + 28;
+                const clickRy = (clickBottom - clickTop) / 2 + 10;
 
                 content += `
-                    <g pointer-events="none" class="metro-line-group" data-line="${line.id}">
+                    <g class="cursor-pointer metro-line-group station-clickable" data-line="${line.id}" onclick="goToLinePage('${line.id}')">
+                        <ellipse cx="${tlx}" cy="${clickCy}" rx="${clickRx}" ry="${clickRy}" fill="transparent"/>
                         <circle cx="${tlx}" cy="${ticy}" r="${iconR}" fill="#FFFFFF"
-                                stroke="${line.color}" stroke-width="6"
-                                filter="url(#soft-shadow)"/>
-                        <text x="${tlx}" y="${ticy + 18}" text-anchor="middle"
-                              font-size="46">${termIconMap[line.id] || '⭐'}</text>
+                                stroke="${line.color}" stroke-width="8"
+                                filter="url(#soft-shadow)" pointer-events="none"/>
+                        <text x="${tlx}" y="${ticy + 26}" text-anchor="middle"
+                              font-size="64" pointer-events="none">${termIconMap[line.id] || '⭐'}</text>
                         <text x="${tlx}" y="${nameY}" text-anchor="middle"
-                              font-family="${FONT}" font-size="26" font-weight="900"
-                              fill="${line.color}"
-                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
+                              font-family="${FONT}" font-size="38" font-weight="900"
+                              fill="${line.color}" pointer-events="none"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
                               stroke-linejoin="round">${line.name}</text>
                         <text x="${tlx}" y="${ageY}" text-anchor="middle"
-                              font-family="${FONT}" font-size="18" font-weight="600"
-                              fill="${TEXT_SOFT}"
-                              paint-order="stroke" stroke="#FFFFFF" stroke-width="5"
+                              font-family="${FONT}" font-size="28" font-weight="700"
+                              fill="${TEXT_SOFT}" pointer-events="none"
+                              paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                               stroke-linejoin="round">(${line.age})</text>
                     </g>
                 `;
@@ -1679,23 +1715,23 @@
 
                 <!-- Скрытый круговой путь, по которому едет поезд -->
                 <path id="train-ring-path"
-                      d="M ${CENTER + (RING_RADIUS + 28)},${CENTER}
-                         A ${RING_RADIUS + 28},${RING_RADIUS + 28} 0 1,1 ${CENTER - (RING_RADIUS + 28)},${CENTER}
-                         A ${RING_RADIUS + 28},${RING_RADIUS + 28} 0 1,1 ${CENTER + (RING_RADIUS + 28)},${CENTER} Z"
+                      d="M ${CENTER + (RING_RADIUS + 48)},${CENTER}
+                         A ${RING_RADIUS + 48},${RING_RADIUS + 48} 0 1,1 ${CENTER - (RING_RADIUS + 48)},${CENTER}
+                         A ${RING_RADIUS + 48},${RING_RADIUS + 48} 0 1,1 ${CENTER + (RING_RADIUS + 48)},${CENTER} Z"
                       fill="none" stroke="none"/>
 
                 <!-- Поезд: локомотив + 3 вагончика -->
                 <g id="metro-train" pointer-events="none">
                     ${[0,1,2,3].map(i => `
                         <g class="train-car" data-idx="${i}">
-                            <rect x="-22" y="-12" width="44" height="24" rx="6"
+                            <rect x="-30" y="-16" width="60" height="32" rx="8"
                                   fill="${i===0 ? '#FFE066' : (i===1 ? '#F4B5D6' : (i===2 ? '#B9A6E6' : '#B4E59A'))}"
-                                  stroke="#1F2937" stroke-width="2.5"/>
-                            <rect x="-16" y="-7" width="12" height="9" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="1.5"/>
-                            <rect x="4" y="-7" width="12" height="9" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="1.5"/>
-                            <circle cx="-12" cy="13" r="3.5" fill="#1F2937"/>
-                            <circle cx="12" cy="13" r="3.5" fill="#1F2937"/>
-                            ${i===0 ? '<rect x="8" y="-20" width="6" height="8" fill="#F4B5D6" stroke="#1F2937" stroke-width="1.5"/>' : ''}
+                                  stroke="#1F2937" stroke-width="3"/>
+                            <rect x="-22" y="-10" width="18" height="13" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="2"/>
+                            <rect x="6" y="-10" width="18" height="13" rx="2" fill="#E6F2FF" stroke="#1F2937" stroke-width="2"/>
+                            <circle cx="-16" cy="18" r="5" fill="#1F2937"/>
+                            <circle cx="16" cy="18" r="5" fill="#1F2937"/>
+                            ${i===0 ? '<rect x="14" y="-28" width="8" height="11" fill="#F4B5D6" stroke="#1F2937" stroke-width="2"/>' : ''}
                         </g>
                     `).join('')}
                 </g>
@@ -1775,7 +1811,7 @@
             total: 0,
             t: 0,                  // текущая позиция головы по пути (в длинах)
             speed: 1.8,            // px за кадр (кольцо)
-            carSpacing: 52,        // расстояние между вагонами (px вдоль пути)
+            carSpacing: 74,        // расстояние между вагонами (px вдоль пути)
             rafId: null,
             oneShot: false,
             onArrive: null,
