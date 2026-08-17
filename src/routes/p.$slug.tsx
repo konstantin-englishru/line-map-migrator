@@ -2180,8 +2180,19 @@ const styles = `
 `;
 
 
-/** Страница выбора направления для станции «Индивидуальная» (Малышино). */
-const CHOICES = [
+/** Конфигурации страниц выбора направления (Малышино). */
+type ChoiceConfig = {
+  station: string;
+  badge: string;
+  lead: string;
+  items: { slug: string; emoji: string; color: string; title: string; sub: string; points: string[] }[];
+};
+
+const INDIVIDUAL_CHOICE: ChoiceConfig = {
+  station: "🧸 Малышино • станция «Индивидуальная»",
+  badge: "Индивидуальные занятия",
+  lead: "На станции «Индивидуальная» работают два специалиста. Выберите направление — и мы расскажем подробно, как проходят занятия и какой результат получит ребёнок.",
+  items: [
   {
     slug: "Логопед",
     emoji: "🗣️",
@@ -2198,9 +2209,42 @@ const CHOICES = [
     sub: "Внимание, память и спокойствие через движение и игру",
     points: ["Диагностика и мягкая поддержка", "Внимание, память, саморегуляция", "Индивидуальный маршрут"],
   },
-];
+  ],
+};
 
-function ChoicePage() {
+const PROGRESSIVE_CHOICE: ChoiceConfig = {
+  station: "🧸 Малышино • станция «Прогрессивная»",
+  badge: "Прогрессивные направления",
+  lead: "На станции «Прогрессивная» три программы для дошкольников. Выберите направление — и мы подробно расскажем, как проходят занятия и какой результат получит ребёнок.",
+  items: [
+    {
+      slug: "Подготовка к школе",
+      emoji: "🎒",
+      color: "#F79EC7",
+      title: "Подготовка к школе",
+      sub: "Готовность учиться без стресса: знания, режим, общение",
+      points: ["Чтение, счёт, письмо и речь", "Нейротренировка в каждом занятии", "Адаптация к школьным правилам"],
+    },
+    {
+      slug: "Комплексное развитие интеллекта",
+      emoji: "🧩",
+      color: "#B79BEA",
+      title: "Комплексное развитие интеллекта",
+      sub: "Память, внимание, логика и речь — в одной программе",
+      points: ["Все навыки в одном месте", "Развитие через игру", "Видимый результат за 4 месяца"],
+    },
+    {
+      slug: "Нейрофитнес",
+      emoji: "🤸",
+      color: "#9EE07A",
+      title: "Нейрофитнес",
+      sub: "Прокачка мозга через движение, ритм и координацию",
+      points: ["Внимание и скорость мышления", "Координация и ловкость", "Результат уже через 2 месяца"],
+    },
+  ],
+};
+
+function ChoicePage({ config }: { config: ChoiceConfig }) {
   return (
     <>
       <style>{styles}</style>
@@ -2208,22 +2252,19 @@ function ChoicePage() {
       <main className="cp-page">
         <header className="cp-topbar">
           <Link to="/" className="cp-back">← К карте курсов</Link>
-          <span className="cp-brand">🧸 Малышино • станция «Индивидуальная»</span>
+          <span className="cp-brand">{config.station}</span>
           <a href="tel:+74999385858" className="cp-top-cta">+7 499 938 58 58</a>
         </header>
 
         <section className="cp-hero">
           <div className="ch-head">
-            <span className="cp-badge">Индивидуальные занятия</span>
+            <span className="cp-badge">{config.badge}</span>
             <h1 className="cp-h1">Выберите направление</h1>
-            <p className="cp-lead">
-              На станции «Индивидуальная» работают два специалиста. Выберите направление —
-              и мы расскажем подробно, как проходят занятия и какой результат получит ребёнок.
-            </p>
+            <p className="cp-lead">{config.lead}</p>
           </div>
 
           <div className="ch-grid">
-            {CHOICES.map((c) => (
+            {config.items.map((c) => (
               <Link
                 key={c.slug}
                 to="/p/$slug"
