@@ -2344,6 +2344,14 @@
         const STATION_DEFAULTS = {"term-icon-green":{"x":30.581869316611378,"y":-49.830117388238946},"term-icon-orange":{"x":11.986398961340058,"y":-1.7339976043277439},"term-icon-pink":{"x":36.81363040376196,"y":-65.44642665186747},"st-pink-2":{"x":9.635213418350581,"y":0},"st-pink-0":{"x":38.540853673402324,"y":-4.8176067091752905},"st-pink-5":{"x":14.452936301214873,"y":-14.452820127525872},"st-orange-0":{"x":-10.548004064957498,"y":-113.13563142425785},"st-orange-1":{"x":-18.955598411664056,"y":-114.23735308975981},"st-orange-2":{"x":-24.812295769476286,"y":-94.96681007936965},"st-orange-3":{"x":-36.871907236171026,"y":-70.53241855209052},"st-orange-4":{"x":-42.035622874942064,"y":-56.77219821368101},"st-orange-5":{"x":-26.544201850178645,"y":-23.049200301260896}};
         // Зафиксированные правки геометрии линий
         const LINE_GEOM_DEFAULTS = {};
+        // Глобальный стиль схемы (толщина линий, прямота, жирность станций)
+        const STYLE_DEFAULTS = { lineWidth: 14, straight: 0, stRadius: 18, stStroke: 8 };
+        const STYLE_STORE_KEY = 'metro-style-v1';
+        function loadMapStyle() {
+            return Object.assign({}, STYLE_DEFAULTS, readStore(STYLE_STORE_KEY));
+        }
+        function saveMapStyle(map) { writeStore(STYLE_STORE_KEY, map); }
+        window.loadMapStyle = loadMapStyle;
 
         function readStore(key) {
             if (!METRO_EDIT) return {};
