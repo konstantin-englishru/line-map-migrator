@@ -1415,12 +1415,13 @@
             const svg = document.getElementById('interactive-metro-map');
             const MAP_SIZE = 2000;
             const CENTER = MAP_SIZE / 2;
-            const RING_RADIUS = 210;          // компактное центральное кольцо
-            const CLEAR_R    = 214;           // линии стыкуются с центральным кольцом
+            const MSTYLE_RING = (typeof loadMapStyle === 'function') ? loadMapStyle() : {};
+            const RING_RADIUS = MSTYLE_RING.ringRadius || 300;   // центральное кольцо (настраивается)
+            const CLEAR_R    = RING_RADIUS + 4;  // линии стыкуются с центральным кольцом
             const RING_COLOR = '#3FB8E5';     // голубое кольцо как в референсе
             const TEXT_DARK = '#1F2937';
             const TEXT_SOFT = '#6B7280';
-            const MSTYLE_EARLY = (typeof loadMapStyle === 'function') ? loadMapStyle() : { labelSize: 36, labelFont: 'Montserrat', logoScale: 1.5 };
+            const MSTYLE_EARLY = Object.assign({ labelSize: 36, labelFont: 'Montserrat', logoScale: 1.5, ringRadius: 300 }, MSTYLE_RING);
             const FONT_MAP = {
                 'Accuratist': "'Accuratist','Montserrat',sans-serif",
                 'Montserrat': "'Montserrat','Inter',sans-serif",
@@ -1877,7 +1878,7 @@
             total: 0,
             t: 0,                  // текущая позиция головы по пути (в длинах)
             speed: 1.8,            // px за кадр (кольцо)
-            carSpacing: 105,       // расстояние между вагонами (масштабный поезд у кольца)
+            carSpacing: 135,       // расстояние между вагонами (паровоз не налегает на вагон)
             rafId: null,
             oneShot: false,
             onArrive: null,
@@ -2377,7 +2378,7 @@
         // Зафиксированные правки геометрии линий
         const LINE_GEOM_DEFAULTS = {};
         // Глобальный стиль схемы (толщина линий, прямота, жирность станций)
-        const STYLE_DEFAULTS = { lineWidth: 27, straight: 66, stRadius: 26, stStroke: 12, labelSize: 36, labelFont: 'Montserrat', logoScale: 1.5 };
+        const STYLE_DEFAULTS = { lineWidth: 27, straight: 66, stRadius: 26, stStroke: 12, labelSize: 36, labelFont: 'Montserrat', logoScale: 1.5, ringRadius: 300 };
         const STYLE_STORE_KEY = 'metro-style-v1';
         function loadMapStyle() {
             return Object.assign({}, STYLE_DEFAULTS, readStore(STYLE_STORE_KEY));
@@ -2534,6 +2535,11 @@
                 </select>
                 <label style="display:block;margin-bottom:2px;">Размер центрального логотипа: <span id="me-logo-v"></span></label>
                 <input id="me-logo" type="range" min="0.5" max="1.5" step="0.01" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Размер кольца: <span id="me-ring-v"></span></label>
+                <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+                    <input id="me-ring" type="range" min="150" max="600" step="5" style="flex:1;">
+                    <input id="me-ring-n" type="number" min="150" max="600" step="1" style="width:64px;padding:3px;border:1px solid #CBD5E1;border-radius:6px;">
+                </div>
                 <button id="me-copy" style="width:100%;padding:6px;border-radius:8px;background:#3B82F6;color:#fff;font-weight:600;margin-bottom:6px;">Скопировать JSON</button>
                 <button id="me-reset" style="width:100%;padding:6px;border-radius:8px;background:#F1F5F9;font-weight:600;">Сбросить всё</button>
             `;
@@ -2550,6 +2556,8 @@
             const fs   = panel.querySelector('#me-fs');
             const ff   = panel.querySelector('#me-ff');
             const logo = panel.querySelector('#me-logo');
+            const ring = panel.querySelector('#me-ring');
+            const ringN = panel.querySelector('#me-ring-n');
 
             const syncStyle = () => {
                 const s = loadMapStyle();
@@ -2557,6 +2565,8 @@
                 sr.value = s.stRadius;  ss.value = s.stStroke;
                 fs.value = s.labelSize; ff.value = s.labelFont;
                 logo.value = s.logoScale;
+                ring.value = s.ringRadius; ringN.value = s.ringRadius;
+                panel.querySelector('#me-ring-v').textContent = ring.value;
                 panel.querySelector('#me-lw-v').textContent  = lw.value;
                 panel.querySelector('#me-str-v').textContent = str.value;
                 panel.querySelector('#me-sr-v').textContent  = sr.value;
@@ -2572,7 +2582,8 @@
                     stStroke:  parseFloat(ss.value),
                     labelSize: parseFloat(fs.value),
                     labelFont: ff.value,
-                    logoScale: parseFloat(logo.value)
+                    logoScale: parseFloat(logo.value),
+                    ringRadius: parseFloat(ring.value)
                 });
                 panel.querySelector('#me-lw-v').textContent  = lw.value;
                 panel.querySelector('#me-str-v').textContent = str.value;
@@ -2580,9 +2591,12 @@
                 panel.querySelector('#me-ss-v').textContent  = ss.value;
                 panel.querySelector('#me-fs-v').textContent  = fs.value;
                 panel.querySelector('#me-logo-v').textContent = logo.value;
+                panel.querySelector('#me-ring-v').textContent = ring.value;
+                ringN.value = ring.value;
                 renderMetroMap();
             };
-            [lw, str, sr, ss, fs, logo].forEach(el => el.addEventListener('input', pushStyle));
+            [lw, str, sr, ss, fs, logo, ring].forEach(el => el.addEventListener('input', pushStyle));
+            ringN.addEventListener('input', () => { ring.value = ringN.value; pushStyle(); });
             ff.addEventListener('change', pushStyle);
 
             const sync = () => {
