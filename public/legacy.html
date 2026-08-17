@@ -1000,32 +1000,25 @@
             </div>
         </section>
 
-        <!-- Секция: Игровой хаб -->
-        <section class="w-full px-6 md:px-12 py-16 z-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-            <!-- Канвас для фейерверков -->
+        <!-- Секция: Игровой хаб — ТОЛЬКО ДЛЯ ДЕТЕЙ -->
+        <section id="kids-games" class="w-full px-4 md:px-12 py-16 z-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
             <canvas id="fireworks-canvas" class="fixed inset-0 pointer-events-none z-[100] w-full h-full opacity-0 transition-opacity duration-500"></canvas>
-            
-            <!-- Приветственный экран игры -->
-            <div id="game-intro" class="max-w-3xl w-full relative z-10 bg-white/90 backdrop-blur-md p-10 rounded-[40px] shadow-soft border-4 border-pastelYellow">
-                <div class="w-24 h-24 mx-auto mb-6 bg-pastelYellow rounded-full flex items-center justify-center border-4 border-white shadow-sm animate-bounce">
-                    <svg class="w-12 h-12 text-textMain fill-current" viewBox="0 0 24 24"><path d="M12 15.22l-5.32 3.86 2.03-6.27-5.36-3.88h6.61L12 2.66l2.04 6.27h6.61l-5.36 3.88 2.03 6.27z"/></svg>
+
+            <!-- Приветственный экран / выбор игры -->
+            <div id="game-intro" class="max-w-5xl w-full relative z-10 bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-[40px] shadow-soft border-4 border-pastelYellow">
+                <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-5 bg-pastelYellow rounded-full flex items-center justify-center border-4 border-white shadow-sm animate-bounce">
+                    <svg class="w-11 h-11 text-textMain fill-current" viewBox="0 0 24 24"><path d="M12 15.22l-5.32 3.86 2.03-6.27-5.36-3.88h6.61L12 2.66l2.04 6.27h6.61l-5.36 3.88 2.03 6.27z"/></svg>
                 </div>
-                <h2 class="font-heading text-4xl md:text-5xl font-black mb-4 text-textMain">Готов к школе?</h2>
-                <p class="font-body text-xl mb-10 text-textMain opacity-80">
-                    Пройди нашу увлекательную интерактивную игру, чтобы проверить свои знания по математике, логике и окружающему миру!
+                <span class="inline-block bg-pastelPink px-4 py-1.5 rounded-full font-heading font-bold text-sm mb-4 border-2 border-white shadow-sm">🚫 Взрослым вход воспрещён</span>
+                <h2 class="font-heading text-3xl md:text-5xl font-black mb-4 text-textMain leading-tight">«ТОЛЬКО ДЛЯ ДЕТЕЙ»</h2>
+                <p class="font-body text-lg md:text-xl mb-8 md:mb-10 text-textMain opacity-80 max-w-2xl mx-auto">
+                    Пока взрослые читают умные тексты, мы приготовили кое-что и для тебя, наш юный друг! Давай поиграем!
                 </p>
-                <button onclick="startInteractiveGame()" class="door-btn group bg-gradient-to-r from-pastelYellow to-pastelPink text-textMain font-heading font-black text-xl md:text-2xl py-5 px-10 rounded-full shadow-lg border-4 border-white relative flex items-center justify-center mx-auto min-w-[280px]" data-text="ДАВАЙ ПОИГРАЕМ!">
-                    <span class="invisible">ДАВАЙ ПОИГРАЕМ!</span>
-                    <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <svg class="w-10 h-10 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    </span>
-                </button>
+                <div id="game-menu" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-left"></div>
             </div>
 
             <!-- Игровое поле (Скрыто по умолчанию) -->
-            <div id="game-play-area" class="hidden max-w-3xl w-full relative z-10 bg-white p-8 md:p-12 rounded-[40px] shadow-xl border-4 border-pastelMint min-h-[450px] flex-col">
-                <!-- Контент игры генерируется JS -->
-            </div>
+            <div id="game-play-area" class="hidden max-w-3xl w-full relative z-10 bg-white p-6 md:p-12 rounded-[40px] shadow-xl border-4 border-pastelMint min-h-[450px] flex-col"></div>
         </section>
         
         <!-- ================= КОНЕЦ НОВОЙ СЕКЦИИ ================= -->
@@ -2782,165 +2775,230 @@
             }, 200);
         }
 
-        const GAME_QUESTIONS = [
+        /* ============ ИГРОВОЙ ХАБ «ТОЛЬКО ДЛЯ ДЕТЕЙ» ============ */
+        const KIDS_GAMES = [
             {
-                question: "Сколько пальцев на двух руках?",
-                options: ["5", "10", "15", "20"],
-                answer: "10"
+                id: 'preschool',
+                title: 'Умный дошколёнок',
+                age: '4–6 лет',
+                icon: '🧸',
+                color: '#FFE7AF',
+                desc: 'Счёт, буквы, логика и окружающий мир — весёлые вопросы для самых маленьких.',
+                questions: [
+                    { question: 'Сколько пальцев на двух руках?', options: ['5','10','15','20'], answer: '10' },
+                    { question: 'Какое животное даёт нам молоко?', options: ['Корова','Лиса','Курица','Заяц'], answer: 'Корова' },
+                    { question: 'Что бывает после зимы?', options: ['Лето','Осень','Весна','Новый год'], answer: 'Весна' },
+                    { question: 'Сколько будет 2 + 3?', options: ['4','5','6','7'], answer: '5' },
+                    { question: 'На какую букву начинается слово «Арбуз»?', options: ['Б','В','А','М'], answer: 'А' },
+                    { question: 'Сколько углов у треугольника?', options: ['2','3','4','5'], answer: '3' },
+                    { question: 'Где живут рыбы?', options: ['На дереве','В воде','В норке','В будке'], answer: 'В воде' },
+                    { question: 'Какой день идёт после понедельника?', options: ['Среда','Вторник','Пятница','Суббота'], answer: 'Вторник' },
+                    { question: 'Что лишнее: яблоко, груша, банан, стул?', options: ['Яблоко','Груша','Банан','Стул'], answer: 'Стул' },
+                    { question: 'Сколько ног у паука?', options: ['6','8','4','10'], answer: '8' }
+                ]
             },
             {
-                question: "Какое животное дает нам молоко?",
-                options: ["Корова", "Лиса", "Курица", "Заяц"],
-                answer: "Корова"
+                id: 'eng78',
+                title: 'English Starter',
+                age: '7–8 лет',
+                icon: '🔤',
+                color: '#CDEFE3',
+                desc: 'Первые английские слова, цвета, числа и простые фразы.',
+                questions: [
+                    { question: 'Как по-английски «кошка»?', options: ['Dog','Cat','Cow','Fox'], answer: 'Cat' },
+                    { question: 'Что означает слово «red»?', options: ['Синий','Красный','Зелёный','Жёлтый'], answer: 'Красный' },
+                    { question: 'Выбери число «seven»', options: ['5','6','7','9'], answer: '7' },
+                    { question: 'Как поздороваться утром?', options: ['Good night','Good morning','Goodbye','Good luck'], answer: 'Good morning' },
+                    { question: '«I ___ a pupil.» Какое слово подходит?', options: ['am','is','are','be'], answer: 'am' },
+                    { question: 'Что означает «apple»?', options: ['Груша','Яблоко','Слива','Ананас'], answer: 'Яблоко' },
+                    { question: 'Множественное число слова «box»', options: ['boxs','boxes','boxen','box'], answer: 'boxes' },
+                    { question: 'Как по-английски «мама»?', options: ['Father','Sister','Mother','Brother'], answer: 'Mother' },
+                    { question: 'Что означает «to run»?', options: ['Плавать','Бегать','Прыгать','Спать'], answer: 'Бегать' },
+                    { question: 'Выбери цвет: «green»', options: ['Чёрный','Зелёный','Белый','Розовый'], answer: 'Зелёный' }
+                ]
             },
             {
-                question: "Что бывает после зимы?",
-                options: ["Лето", "Осень", "Весна", "Новый год"],
-                answer: "Весна"
+                id: 'eng912',
+                title: 'English Explorer',
+                age: '9–12 лет',
+                icon: '🌍',
+                color: '#CFE4FF',
+                desc: 'Времена глаголов, предлоги и словарный запас среднего уровня.',
+                questions: [
+                    { question: 'She ___ to school every day.', options: ['go','goes','going','gone'], answer: 'goes' },
+                    { question: 'Прошедшее время глагола «buy»', options: ['buyed','bought','buied','buys'], answer: 'bought' },
+                    { question: 'I am interested ___ music.', options: ['in','on','at','of'], answer: 'in' },
+                    { question: 'Что означает «library»?', options: ['Магазин','Библиотека','Больница','Столовая'], answer: 'Библиотека' },
+                    { question: 'They ___ football now.', options: ['play','plays','are playing','played'], answer: 'are playing' },
+                    { question: 'Сравнительная степень слова «good»', options: ['gooder','better','best','more good'], answer: 'better' },
+                    { question: 'Выбери лишнее слово', options: ['winter','spring','autumn','Monday'], answer: 'Monday' },
+                    { question: 'Как сказать «Я никогда не был в Лондоне»?', options: ['I never was in London','I have never been to London','I am never in London','I never go London'], answer: 'I have never been to London' },
+                    { question: 'Что означает «to borrow»?', options: ['Одолжить (взять)','Продать','Потерять','Купить'], answer: 'Одолжить (взять)' },
+                    { question: 'There ___ many books on the shelf.', options: ['is','are','was','be'], answer: 'are' }
+                ]
             },
             {
-                question: "Сколько будет 2 + 3?",
-                options: ["4", "5", "6", "7"],
-                answer: "5"
+                id: 'eng1315',
+                title: 'English Pro',
+                age: '13–15 лет',
+                icon: '🎧',
+                color: '#E3D3FA',
+                desc: 'Продвинутая грамматика, идиомы и уровень ближе к экзаменам.',
+                questions: [
+                    { question: 'If I ___ more time, I would travel.', options: ['have','had','will have','having'], answer: 'had' },
+                    { question: 'The letter ___ yesterday.', options: ['was sent','sent','is sent','has sent'], answer: 'was sent' },
+                    { question: 'Идиома «It’s a piece of cake» означает…', options: ['Это очень сложно','Это очень просто','Это вкусно','Это дорого'], answer: 'Это очень просто' },
+                    { question: 'He said he ___ finished the task.', options: ['has','had','have','having'], answer: 'had' },
+                    { question: 'Выбери синоним слова «significant»', options: ['tiny','important','boring','strange'], answer: 'important' },
+                    { question: 'I look forward to ___ from you.', options: ['hear','hearing','heard','be heard'], answer: 'hearing' },
+                    { question: 'Which sentence is correct?', options: ['I have seen him yesterday','I saw him yesterday','I seen him yesterday','I was see him yesterday'], answer: 'I saw him yesterday' },
+                    { question: 'Что означает «to give up»?', options: ['Сдаться','Подняться','Отдать долг','Догнать'], answer: 'Сдаться' },
+                    { question: 'She’s used to ___ early.', options: ['get up','getting up','got up','gets up'], answer: 'getting up' },
+                    { question: 'Антоним слова «generous»', options: ['kind','mean','polite','clever'], answer: 'mean' }
+                ]
             },
             {
-                question: "Какого цвета солнце?",
-                options: ["Зеленого", "Синего", "Желтого", "Фиолетового"],
-                answer: "Желтого"
+                id: 'math',
+                title: 'Математический экспресс',
+                age: '8–12 лет',
+                icon: '➗',
+                color: '#FFD6E7',
+                desc: 'Примеры, задачи, дроби и проценты — тренируем скорость счёта.',
+                questions: [
+                    { question: '7 × 8 = ?', options: ['54','56','48','64'], answer: '56' },
+                    { question: 'Сколько минут в 2,5 часа?', options: ['120','150','160','180'], answer: '150' },
+                    { question: 'Найди 25% от 80', options: ['15','20','25','30'], answer: '20' },
+                    { question: 'Периметр квадрата со стороной 9 см', options: ['18 см','27 см','36 см','81 см'], answer: '36 см' },
+                    { question: '144 : 12 = ?', options: ['11','12','13','14'], answer: '12' },
+                    { question: 'Какая дробь больше: 3/4 или 2/3?', options: ['3/4','2/3','Равны','Нельзя сравнить'], answer: '3/4' },
+                    { question: 'Число, следующее за 999', options: ['9910','1000','1001','990'], answer: '1000' },
+                    { question: 'У Маши 5 конфет, у Пети в 3 раза больше. Сколько всего?', options: ['15','18','20','25'], answer: '20' },
+                    { question: 'Площадь прямоугольника 6 × 7 см', options: ['13 см²','42 см²','26 см²','36 см²'], answer: '42 см²' },
+                    { question: 'Сколько граней у куба?', options: ['4','6','8','12'], answer: '6' }
+                ]
             },
             {
-                question: "На какую букву начинается слово 'Арбуз'?",
-                options: ["Б", "В", "А", "М"],
-                answer: "А"
-            },
-            {
-                question: "У кого длинные уши и кто любит морковку?",
-                options: ["Медведь", "Заяц", "Волк", "Ежик"],
-                answer: "Заяц"
-            },
-            {
-                question: "Сколько углов у треугольника?",
-                options: ["2", "3", "4", "5"],
-                answer: "3"
-            },
-            {
-                question: "Где живут рыбы?",
-                options: ["На дереве", "В воде", "В норке", "В будке"],
-                answer: "В воде"
-            },
-            {
-                question: "Какой день идет после понедельника?",
-                options: ["Среда", "Вторник", "Пятница", "Суббота"],
-                answer: "Вторник"
+                id: 'olymp',
+                title: 'Олимпиадная математика',
+                age: '11–15 лет',
+                icon: '🏆',
+                color: '#FFE0C2',
+                desc: 'Нестандартные задачи на логику, комбинаторику и смекалку.',
+                questions: [
+                    { question: 'Сумма всех чисел от 1 до 100 равна…', options: ['4950','5050','5150','10000'], answer: '5050' },
+                    { question: 'Сколько двузначных чисел делятся на 7?', options: ['12','13','14','15'], answer: '13' },
+                    { question: 'Последняя цифра числа 2¹⁰⁰', options: ['2','4','6','8'], answer: '6' },
+                    { question: 'В корзине 5 красных и 3 синих шара. Сколько шаров нужно взять, чтобы точно был синий?', options: ['4','5','6','8'], answer: '6' },
+                    { question: 'Сколькими способами можно рассадить 3 человека на 3 стула?', options: ['3','6','9','27'], answer: '6' },
+                    { question: 'Число делится на 9, если…', options: ['Последняя цифра 9','Сумма цифр делится на 9','Оно чётное','Оно делится на 3 и на 2'], answer: 'Сумма цифр делится на 9' },
+                    { question: 'Часы показывают 3:00. Угол между стрелками?', options: ['45°','60°','90°','120°'], answer: '90°' },
+                    { question: 'Сколько нулей в конце числа 25!?', options: ['4','5','6','7'], answer: '6' },
+                    { question: 'Два поезда идут навстречу со скоростями 60 и 40 км/ч, расстояние 200 км. Через сколько часов встретятся?', options: ['1','2','2,5','3'], answer: '2' },
+                    { question: 'Наименьшее натуральное число, делящееся и на 6, и на 8', options: ['12','16','24','48'], answer: '24' }
+                ]
             }
         ];
 
+        let currentGame = null;
         let currentGameIndex = 0;
         let gameScore = 0;
 
-        function startInteractiveGame() {
+        function renderGameMenu() {
+            const menu = document.getElementById('game-menu');
+            if (!menu) return;
+            menu.innerHTML = KIDS_GAMES.map(g => `
+                <button onclick="startKidsGame('${g.id}')" class="group text-left p-5 rounded-[26px] border-4 border-white shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300" style="background:${g.color};">
+                    <span class="text-4xl block mb-2">${g.icon}</span>
+                    <span class="block font-heading font-black text-lg text-textMain leading-tight">${g.title}</span>
+                    <span class="inline-block mt-1 mb-2 text-xs font-bold bg-white/80 px-3 py-1 rounded-full">${g.age}</span>
+                    <span class="block text-sm opacity-75 leading-snug">${g.desc}</span>
+                    <span class="mt-3 inline-flex items-center gap-2 font-heading font-bold text-sm text-textMain group-hover:gap-3 transition-all">Играть →</span>
+                </button>
+            `).join('');
+        }
+        document.addEventListener('DOMContentLoaded', renderGameMenu);
+
+        function startKidsGame(id) {
+            currentGame = KIDS_GAMES.find(g => g.id === id) || KIDS_GAMES[0];
             document.getElementById('game-intro').classList.add('hidden');
             const gameArea = document.getElementById('game-play-area');
             gameArea.classList.remove('hidden');
             gameArea.classList.add('flex');
-            
             currentGameIndex = 0;
             gameScore = 0;
             renderGameQuestion();
+            gameArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function renderGameQuestion() {
-            if (currentGameIndex >= GAME_QUESTIONS.length) {
-                renderGameOver();
-                return;
-            }
-
-            const q = GAME_QUESTIONS[currentGameIndex];
+            const total = currentGame.questions.length;
+            if (currentGameIndex >= total) { renderGameOver(); return; }
+            const q = currentGame.questions[currentGameIndex];
             const gameArea = document.getElementById('game-play-area');
-            
             gameArea.innerHTML = `
-                <div class="flex justify-between items-center mb-8">
-                    <span class="font-bold text-lg md:text-xl text-gray-400 bg-gray-100 px-4 py-1 rounded-full">Вопрос ${currentGameIndex + 1} из ${GAME_QUESTIONS.length}</span>
-                    <span class="font-bold text-lg md:text-xl px-4 py-1 rounded-full bg-pastelMint text-teal-800 border-2 border-white shadow-sm">Счет: ${gameScore}</span>
+                <div class="flex flex-wrap gap-3 justify-between items-center mb-6">
+                    <span class="font-bold text-sm md:text-base px-4 py-1 rounded-full" style="background:${currentGame.color};">${currentGame.icon} ${currentGame.title} · ${currentGame.age}</span>
+                    <span class="font-bold text-sm md:text-base text-gray-400 bg-gray-100 px-4 py-1 rounded-full">Вопрос ${currentGameIndex + 1} из ${total}</span>
+                    <span class="font-bold text-sm md:text-base px-4 py-1 rounded-full bg-pastelMint text-teal-800 border-2 border-white shadow-sm">Счёт: ${gameScore}</span>
                 </div>
-                
-                <!-- Оверлей для ответа -->
                 <div id="feedback-overlay" class="absolute inset-0 z-20 flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-[36px] hidden transition-opacity"></div>
-                
                 <div class="flex-grow flex flex-col justify-center">
-                    <h2 class="font-heading text-3xl md:text-5xl font-black mb-12 text-center text-textMain leading-tight">${q.question}</h2>
-                    <div class="grid sm:grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto w-full">
-                        ${q.options.map(opt => `
-                            <button onclick="handleGameAnswer('${opt.replace(/'/g, "\\'")}')" class="door-btn group flex items-center justify-center text-xl md:text-2xl font-bold py-6 px-8 rounded-[24px] bg-skyBg hover:bg-pastelYellow transition-colors shadow-sm border-4 border-white text-textMain text-center w-full relative" data-text="${opt}">
-                                <span class="invisible">${opt}</span>
-                                <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-3xl">✔</span>
-                            </button>
+                    <h2 class="font-heading text-2xl md:text-4xl font-black mb-10 text-center text-textMain leading-tight">${q.question}</h2>
+                    <div class="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto w-full">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="handleGameAnswer(${i})" class="text-lg md:text-xl font-bold py-5 px-6 rounded-[24px] bg-skyBg hover:bg-pastelYellow transition-colors shadow-sm border-4 border-white text-textMain text-center w-full">${opt}</button>
                         `).join('')}
                     </div>
                 </div>
+                <button onclick="resetInteractiveGame()" class="mt-8 text-sm font-bold text-gray-400 hover:text-gray-800 transition-colors underline mx-auto">← Выбрать другую игру</button>
             `;
         }
 
-        function handleGameAnswer(answer) {
-            const q = GAME_QUESTIONS[currentGameIndex];
-            const isCorrect = (answer === q.answer);
-            
+        function handleGameAnswer(index) {
+            const q = currentGame.questions[currentGameIndex];
+            const isCorrect = (q.options[index] === q.answer);
             const overlay = document.getElementById('feedback-overlay');
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
-
             if (isCorrect) {
                 gameScore++;
                 overlay.innerHTML = `
-                    <div class="w-32 h-32 bg-pastelMint rounded-full flex items-center justify-center border-8 border-white shadow-lg animate-bounce mb-6">
-                        <svg class="w-16 h-16 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="w-28 h-28 bg-pastelMint rounded-full flex items-center justify-center border-8 border-white shadow-lg animate-bounce mb-6">
+                        <svg class="w-14 h-14 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
                     </div>
-                    <h2 class="font-heading text-4xl font-black text-teal-600 drop-shadow-sm">Правильно!</h2>
+                    <h2 class="font-heading text-3xl md:text-4xl font-black text-teal-600 drop-shadow-sm">Правильно!</h2>
                 `;
                 triggerFireworks();
             } else {
                 overlay.innerHTML = `
-                    <div class="w-32 h-32 bg-pastelPink rounded-full flex items-center justify-center border-8 border-white shadow-lg animate-pulse mb-6">
-                        <svg class="w-16 h-16 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div class="w-28 h-28 bg-pastelPink rounded-full flex items-center justify-center border-8 border-white shadow-lg animate-pulse mb-6">
+                        <svg class="w-14 h-14 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h2 class="font-heading text-4xl font-black text-pink-500 drop-shadow-sm">Почти угадал!</h2>
+                    <h2 class="font-heading text-3xl md:text-4xl font-black text-pink-500 drop-shadow-sm">Почти!</h2>
+                    <p class="mt-3 font-bold text-textMain opacity-80">Правильный ответ: ${q.answer}</p>
                 `;
             }
-
-            setTimeout(() => {
-                currentGameIndex++;
-                renderGameQuestion();
-            }, 2000);
+            setTimeout(() => { currentGameIndex++; renderGameQuestion(); }, isCorrect ? 1400 : 2200);
         }
 
         function renderGameOver() {
+            const total = currentGame.questions.length;
+            const praise = gameScore >= total - 1 ? 'Ты настоящий чемпион!' : gameScore >= total / 2 ? 'Отличный результат!' : 'Хорошее начало — попробуй ещё раз!';
             const gameArea = document.getElementById('game-play-area');
             gameArea.innerHTML = `
                 <div class="text-center flex flex-col items-center justify-center h-full my-auto animate-fadeIn">
-                    <div class="w-32 h-32 bg-pastelYellow rounded-full flex items-center justify-center border-8 border-white shadow-md mb-6">
-                        <svg class="w-16 h-16 text-yellow-600 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <div class="w-28 h-28 bg-pastelYellow rounded-full flex items-center justify-center border-8 border-white shadow-md mb-6">
+                        <svg class="w-14 h-14 text-yellow-600 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </div>
-                    
-                    <h1 class="font-heading text-4xl md:text-5xl font-black mb-4 text-textMain">Игра завершена!</h1>
-                    <p class="font-body text-2xl mb-8 text-textMain">Твой результат: <span class="font-bold text-teal-600 bg-pastelMint px-3 py-1 rounded-xl border-2 border-white drop-shadow-sm">${gameScore}</span> из 10</p>
-                    
-                    <div class="bg-skyBg/50 p-6 rounded-[32px] border-4 border-white max-w-md w-full shadow-sm mb-6">
-                        <h3 class="font-heading font-bold text-xl mb-2 text-textMain">Ты супер молодец!</h3>
-                        <p class="mb-6 opacity-80 text-sm">Мы с радостью ждем тебя на занятиях, чтобы узнать еще больше нового.</p>
-                        
-                        <div class="flex flex-col gap-3">
-                            <input type="text" placeholder="Имя родителя" class="w-full p-4 rounded-2xl border-2 border-white focus:outline-none focus:border-pastelMint shadow-inner font-body">
-                            <input type="tel" placeholder="+7 (___) ___-__-__" class="w-full p-4 rounded-2xl border-2 border-white focus:outline-none focus:border-pastelMint shadow-inner font-body">
-                            <button class="door-btn group flex items-center justify-center bg-pastelPink text-textMain font-heading font-bold px-8 py-4 rounded-2xl border-2 border-white shadow-sm w-full mt-2 hover:bg-pink-200 relative" data-text="Отправить заявку">
-                                <span class="invisible">Отправить заявку</span>
-                                <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xl">✔</span>
-                            </button>
-                        </div>
+                    <h2 class="font-heading text-3xl md:text-4xl font-black mb-3 text-textMain">${praise}</h2>
+                    <p class="font-body text-xl md:text-2xl mb-8 text-textMain">Твой результат: <span class="font-bold text-teal-600 bg-pastelMint px-3 py-1 rounded-xl border-2 border-white">${gameScore}</span> из ${total}</p>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="startKidsGame('${currentGame.id}')" class="bg-pastelMint text-textMain font-heading font-black px-8 py-4 rounded-full border-4 border-white shadow-sm hover:scale-105 transition-transform">Сыграть ещё раз</button>
+                        <button onclick="resetInteractiveGame()" class="bg-pastelLavender text-textMain font-heading font-black px-8 py-4 rounded-full border-4 border-white shadow-sm hover:scale-105 transition-transform">Другая игра</button>
                     </div>
-                    
-                    <button onclick="resetInteractiveGame()" class="text-sm font-bold text-gray-400 hover:text-gray-800 transition-colors underline">Сыграть еще раз</button>
                 </div>
             `;
+            triggerFireworks();
         }
 
         function resetInteractiveGame() {
@@ -2948,6 +3006,8 @@
             const gameArea = document.getElementById('game-play-area');
             gameArea.classList.add('hidden');
             gameArea.classList.remove('flex');
+            gameArea.innerHTML = '';
+            document.getElementById('game-intro').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function triggerFireworks() {
