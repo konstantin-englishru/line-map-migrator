@@ -3289,7 +3289,7 @@
   var cards=Array.prototype.slice.call(grid.children); var shown=6;
   function render(){ cards.forEach(function(c,i){ c.style.display = i<shown ? '' : 'none'; });
     btn.textContent = shown>=cards.length ? 'Свернуть отзывы' : 'Показать ещё отзывы'; }
-  btn.addEventListener('click',function(){ shown = shown>=cards.length ? 6 : Math.min(shown+6,cards.length); render(); if(shown===6) grid.scrollIntoView({behavior:'smooth',block:'start'}); });
+  btn.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); shown = shown>=cards.length ? 6 : Math.min(shown+6,cards.length); render(); if(shown===6) grid.scrollIntoView({behavior:'smooth',block:'start'}); });
   render();
 })();
 </script>
