@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -15,9 +16,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [src, setSrc] = useState("/legacy.html");
+  useEffect(() => {
+    if (window.location.hash) setSrc("/legacy.html" + window.location.hash);
+  }, []);
   return (
     <iframe
-      src="/legacy.html"
+      src={src}
       title="Город Знаний"
       style={{
         position: "fixed",

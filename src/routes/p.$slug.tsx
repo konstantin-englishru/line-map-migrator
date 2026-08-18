@@ -1533,7 +1533,7 @@ function CoursePage() {
       <main className="cp-page">
         {/* ===== Top bar ===== */}
         <header className="cp-topbar">
-          <Link to="/" className="cp-back">← К карте курсов</Link>
+          <a href="/#metro-map-section" className="cp-back">← К карте курсов</a>
           <span className="cp-brand">🧸 {course.station ?? "Город Знаний"}</span>
           {course.nav && (
             <nav className="cp-nav">
@@ -1793,7 +1793,7 @@ function CoursePage() {
         </section>
 
         <footer className="cp-footer">
-          <Link to="/" className="cp-back">← Вернуться на карту курсов</Link>
+          <a href="/#metro-map-section" className="cp-back">← Вернуться на карту курсов</a>
           {course.phone && <span className="cp-footer-tel">{course.phone}</span>}
         </footer>
       </main>
@@ -2265,7 +2265,7 @@ function ChoicePage({ config }: { config: ChoiceConfig }) {
       <style>{choiceStyles}</style>
       <main className="cp-page">
         <header className="cp-topbar">
-          <Link to="/" className="cp-back">← К карте курсов</Link>
+          <a href="/#metro-map-section" className="cp-back">← К карте курсов</a>
           <span className="cp-brand">{config.station}</span>
           <a href="tel:+74999385858" className="cp-top-cta">+7 499 938 58 58</a>
         </header>

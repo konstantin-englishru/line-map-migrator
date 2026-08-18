@@ -1386,8 +1386,11 @@
                     { name: 'Робототехническая', programs: ['Робототехника для малышей'] },
                     { name: 'Творческая', programs: ['Арт-лаборатория'] },
                     { name: 'Логическая', programs: ['Шахматы', 'ТРИЗ'] },
-                    { name: 'Прогрессивная', programs: ['Подготовка к школе', 'Научная школа', 'Комплексное развитие интеллекта', 'Нейрофитнес'] },
-                    { name: 'Индивидуальная', programs: ['Нейропсихолог', 'Логопед'] }
+                    { name: 'Подготовка к школе', programs: ['Подготовка к школе'] },
+                    { name: 'Интеллектуальная', programs: ['Комплексное развитие интеллекта', 'Научная школа'] },
+                    { name: 'Нейрофитнес', programs: ['Нейрофитнес'] },
+                    { name: 'Логопедическая', programs: ['Логопед'] },
+                    { name: 'Нейропсихологическая', programs: ['Нейропсихолог'] }
                 ]
             },
             {
@@ -1524,6 +1527,7 @@
             };
             const FONT = FONT_MAP[MSTYLE_EARLY.labelFont] || FONT_MAP['Accuratist'];
             const LABEL_SIZE = MSTYLE_EARLY.labelSize || 32;
+            const TERM_LABEL_SIZE = MSTYLE_EARLY.termLabelSize || Math.round(LABEL_SIZE * 1.18);
 
             // Восемь линий равномерно по кругу (угол начала линии от центра)
             // 0° = вправо, 90° = вниз. Подобраны так, чтобы лейблы конечных уходили наружу.
@@ -1544,7 +1548,7 @@
             // Плавные кривые: bend — суммарный «увод» ветки в градусах,
             // len — радиус конечной станции. Ни одной ломаной, только Безье.
             const CURVES_BASE = {
-                pink:      { bend: -33, len: 1600 },
+                pink:      { bend: -33, len: 1790 },
                 purple:    { bend: -60, len: 1480 },
                 orange:    { bend: 3,   len: 1440 },
                 yellow:    { bend: 12,  len: 1550 },
@@ -1801,12 +1805,12 @@
                         </g>
                         <g class="draggable-label" data-lkey="term-${line.id}" style="cursor:move;">
                             <text x="${tnx}" y="${nameY}" text-anchor="${termAnchor}"
-                                  font-family="${FONT}" font-size="${LABEL_SIZE * 1.18}" font-weight="900"
+                                  font-family="${FONT}" font-size="${TERM_LABEL_SIZE}" font-weight="900"
                                   fill="${line.color}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
                                    stroke-linejoin="round">${metroName(`term-${line.id}`, line.name)}</text>
                             <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
-                                  font-family="${FONT}" font-size="${LABEL_SIZE * 0.88}" font-weight="700"
+                                  font-family="${FONT}" font-size="${TERM_LABEL_SIZE * 0.75}" font-weight="700"
                                   fill="${TEXT_SOFT}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">(${line.age})</text>
@@ -2336,6 +2340,18 @@
         }
         window.goToMetroMap = goToMetroMap;
 
+        // Переход по якорю (в т.ч. когда страница открыта внутри iframe: /legacy.html#metro-map-section)
+        (function scrollToInitialHash() {
+            const hash = (window.location.hash || '').replace('#', '');
+            if (!hash) return;
+            const tryScroll = (attempt) => {
+                const el = document.getElementById(hash);
+                if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+                if (attempt < 20) setTimeout(() => tryScroll(attempt + 1), 200);
+            };
+            window.addEventListener('load', () => setTimeout(() => tryScroll(0), 250));
+        })();
+
         // --- Секреты нашего Города: страницы с детализацией ---
         const SECRET_PAGES = {
             safe: {
@@ -2737,6 +2753,8 @@
                 <input id="me-ss" type="range" min="2" max="24" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Размер шрифта: <span id="me-fs-v"></span></label>
                 <input id="me-fs" type="range" min="16" max="64" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Размер шрифта конечных: <span id="me-tfs-v"></span></label>
+                <input id="me-tfs" type="range" min="16" max="96" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Шрифт станций</label>
                 <select id="me-ff" style="width:100%;padding:4px;margin-bottom:8px;border:1px solid #CBD5E1;border-radius:8px;">
                     <option value="Accuratist">Accuratist</option>
@@ -2767,6 +2785,7 @@
             const sr   = panel.querySelector('#me-sr');
             const ss   = panel.querySelector('#me-ss');
             const fs   = panel.querySelector('#me-fs');
+            const tfs  = panel.querySelector('#me-tfs');
             const ff   = panel.querySelector('#me-ff');
             const logo = panel.querySelector('#me-logo');
             const ring = panel.querySelector('#me-ring');
@@ -2810,6 +2829,8 @@
                 lw.value = s.lineWidth; str.value = s.straight;
                 sr.value = s.stRadius;  ss.value = s.stStroke;
                 fs.value = s.labelSize; ff.value = s.labelFont;
+                tfs.value = s.termLabelSize || Math.round((s.labelSize || 32) * 1.18);
+                panel.querySelector('#me-tfs-v').textContent = tfs.value;
                 logo.value = s.logoScale;
                 ring.value = s.ringRadius; ringN.value = s.ringRadius;
                 panel.querySelector('#me-ring-v').textContent = ring.value;
@@ -2827,6 +2848,7 @@
                     stRadius:  parseFloat(sr.value),
                     stStroke:  parseFloat(ss.value),
                     labelSize: parseFloat(fs.value),
+                    termLabelSize: parseFloat(tfs.value),
                     labelFont: ff.value,
                     logoScale: parseFloat(logo.value),
                     ringRadius: parseFloat(ring.value)
@@ -2838,10 +2860,11 @@
                 panel.querySelector('#me-fs-v').textContent  = fs.value;
                 panel.querySelector('#me-logo-v').textContent = logo.value;
                 panel.querySelector('#me-ring-v').textContent = ring.value;
+                panel.querySelector('#me-tfs-v').textContent = tfs.value;
                 ringN.value = ring.value;
                 renderMetroMap();
             };
-            [lw, str, sr, ss, fs, logo, ring].forEach(el => el.addEventListener('input', pushStyle));
+            [lw, str, sr, ss, fs, tfs, logo, ring].forEach(el => el.addEventListener('input', pushStyle));
             ringN.addEventListener('input', () => { ring.value = ringN.value; pushStyle(); });
             ff.addEventListener('change', pushStyle);
 
@@ -3293,8 +3316,11 @@
             'pink|Робототехническая': 'Робототехника для дошкольников',
             'pink|Логическая': 'Шахматы'
             ,'pink|Творческая': 'Арт-лаборатория'
-            ,'pink|Индивидуальная': 'Индивидуальные занятия'
-            ,'pink|Прогрессивная': 'Прогрессивные направления'
+            ,'pink|Подготовка к школе': 'Подготовка к школе'
+            ,'pink|Интеллектуальная': 'Комплексное развитие интеллекта'
+            ,'pink|Нейрофитнес': 'Нейрофитнес'
+            ,'pink|Логопедическая': 'Логопед'
+            ,'pink|Нейропсихологическая': 'Нейропсихолог'
         };
         function openStationModal(lineIdx, stationIdx) {
             const line = METRO_LINES[lineIdx];
