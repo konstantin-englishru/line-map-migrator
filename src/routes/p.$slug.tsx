@@ -2133,41 +2133,21 @@ const styles = `
   /* Results list — bento/masonry */
   .cp-h3-center { text-align: center; }
   .cp-results {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-flow: dense;
-    gap: 14px;
-    max-width: 980px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1040px;
     margin: 0 auto;
-    align-items: start;
   }
   .cp-result {
-    display: flex; align-items: center; gap: 12px; background: #fff;
-    border-radius: 20px; padding: 16px 18px; box-shadow: 0 10px 24px rgba(0,0,0,.05);
+    display: flex; align-items: center; gap: 14px; background: #fff;
+    border-radius: 22px; padding: 22px 24px; box-shadow: 0 10px 24px rgba(0,0,0,.05);
     transition: transform .25s ease, box-shadow .25s ease;
-    min-height: 86px;
+    width: calc((100% - 40px) / 3);
+    min-height: 110px;
   }
-  .cp-result:hover { transform: translateY(-4px) rotate(0deg); box-shadow: 0 16px 34px rgba(0,0,0,.08); z-index: 2; }
-  .cp-result--tall { grid-row: span 2; flex-direction: column; align-items: flex-start; justify-content: center; padding: 22px; }
-  .cp-result--tall .cp-result-n { width: 34px; height: 34px; }
-  .cp-result--tall .cp-result-t { font-size: 16px; }
-  .cp-result--wide { grid-column: span 2; }
-  .cp-result--offset-up { transform: translateY(-10px); }
-  .cp-result--offset-down { transform: translateY(10px); }
-  .cp-result--rotate-left { transform: rotate(-1.5deg); }
-  .cp-result--rotate-right { transform: rotate(1.5deg); }
-  .cp-result--offset-up.cp-result--rotate-left,
-  .cp-result--offset-up.cp-result--rotate-right,
-  .cp-result--offset-down.cp-result--rotate-left,
-  .cp-result--offset-down.cp-result--rotate-right { transform: translateY(var(--offset, 0)) rotate(var(--rotate, 0deg)); }
-  .cp-result--offset-up { --offset: -10px; }
-  .cp-result--offset-down { --offset: 10px; }
-  .cp-result--rotate-left { --rotate: -1.5deg; }
-  .cp-result--rotate-right { --rotate: 1.5deg; }
-  .cp-result--offset-up.cp-result--rotate-left { transform: translateY(-10px) rotate(-1.5deg); }
-  .cp-result--offset-up.cp-result--rotate-right { transform: translateY(-10px) rotate(1.5deg); }
-  .cp-result--offset-down.cp-result--rotate-left { transform: translateY(10px) rotate(-1.5deg); }
-  .cp-result--offset-down.cp-result--rotate-right { transform: translateY(10px) rotate(1.5deg); }
+  .cp-result:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(0,0,0,.08); }
   .cp-result-n {
     flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; color: #fff;
     display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px;
