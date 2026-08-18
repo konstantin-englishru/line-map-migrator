@@ -2179,9 +2179,7 @@ const styles = `
     .cp-visual-grid { grid-template-columns: 1fr; }
     .cp-format-grid-3 { grid-template-columns: repeat(2, 1fr); }
     .cp-nav { display: none; }
-    .cp-results { grid-template-columns: repeat(2, 1fr); }
-    .cp-result--tall { grid-row: auto; flex-direction: row; align-items: center; padding: 16px 18px; }
-    .cp-result--wide { grid-column: span 2; }
+    .cp-result { width: calc((100% - 20px) / 2); }
   }
   @media (max-width: 560px) {
     .cp-bento-2 { grid-template-columns: 1fr; }
@@ -2189,11 +2187,8 @@ const styles = `
     .cp-form-grid { grid-template-columns: 1fr; }
     .cp-hero-photo { max-height: 260px; }
     .cp-reviews-scroll { grid-template-columns: 1fr; }
-    .cp-results { grid-template-columns: 1fr; }
-    .cp-result--wide { grid-column: auto; }
-    .cp-result--tall { grid-row: auto; flex-direction: row; align-items: center; padding: 16px 18px; }
-    .cp-result--offset-up, .cp-result--offset-down { transform: none; }
-    .cp-result--rotate-left, .cp-result--rotate-right { transform: none; }
+    .cp-result { width: 100%; }
+    .cp-review:nth-child(odd):last-child { width: 100%; }
   }
 `;
 
