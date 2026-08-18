@@ -1912,6 +1912,14 @@
                 </g>
             `;
 
+            // --- Область просмотра расширяется под очень длинные линии ---
+            (function fitViewBox() {
+                const maxLen = Math.max(...Object.keys(CURVES).map(k => CURVES[k].len || 0));
+                const extra = Math.max(0, maxLen - 1600);
+                svg.setAttribute('viewBox',
+                    `${-340 - extra} ${-280 - extra} ${2680 + extra * 2} ${2800 + extra * 2}`);
+            })();
+
             // --- Запуск анимации поезда ---
             startMetroTrain();
             // --- Пользовательские позиции подписей + перетаскивание ---
