@@ -1793,7 +1793,7 @@ function CoursePage() {
         </section>
 
         <footer className="cp-footer">
-          <Link to="/" className="cp-back">← Вернуться на карту курсов</Link>
+          <a href="/#metro-map-section" className="cp-back">← Вернуться на карту курсов</a>
           {course.phone && <span className="cp-footer-tel">{course.phone}</span>}
         </footer>
       </main>
