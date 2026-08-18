@@ -2340,6 +2340,18 @@
         }
         window.goToMetroMap = goToMetroMap;
 
+        // Переход по якорю (в т.ч. когда страница открыта внутри iframe: /legacy.html#metro-map-section)
+        (function scrollToInitialHash() {
+            const hash = (window.location.hash || '').replace('#', '');
+            if (!hash) return;
+            const tryScroll = (attempt) => {
+                const el = document.getElementById(hash);
+                if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+                if (attempt < 20) setTimeout(() => tryScroll(attempt + 1), 200);
+            };
+            window.addEventListener('load', () => setTimeout(() => tryScroll(0), 250));
+        })();
+
         // --- Секреты нашего Города: страницы с детализацией ---
         const SECRET_PAGES = {
             safe: {
