@@ -2032,7 +2032,7 @@ const styles = `
     box-shadow: 0 14px 30px rgba(0,0,0,.06);
     display: flex; flex-direction: column; gap: 14px;
   }
-  .cp-review:nth-child(odd):last-child { grid-column: 1 / -1; }
+  .cp-review:nth-child(odd):last-child { grid-column: 1 / -1; width: calc(50% - 10px); margin: 0 auto; }
   .cp-review-stars { color: #F59E0B; letter-spacing: 2px; font-size: 14px; }
   .cp-review-text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink); flex: 1; }
   .cp-review-author { display: flex; align-items: center; gap: 12px; }
