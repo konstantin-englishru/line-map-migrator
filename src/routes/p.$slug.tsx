@@ -2096,6 +2096,7 @@ const styles = `
     .cp-two-col { grid-template-columns: 1fr; }
     .cp-bento { grid-template-columns: repeat(2, 1fr); }
     .cp-reviews { grid-template-columns: 1fr; }
+    .cp-review:nth-child(odd):last-child { width: 100%; }
     .cp-stats { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 560px) {
