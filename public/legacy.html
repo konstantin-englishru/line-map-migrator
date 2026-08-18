@@ -1528,6 +1528,7 @@
             const FONT = FONT_MAP[MSTYLE_EARLY.labelFont] || FONT_MAP['Accuratist'];
             const LABEL_SIZE = MSTYLE_EARLY.labelSize || 32;
             const TERM_LABEL_SIZE = MSTYLE_EARLY.termLabelSize || Math.round(LABEL_SIZE * 1.18);
+            const TERM_AGE_SIZE = MSTYLE_EARLY.termAgeSize || Math.round(TERM_LABEL_SIZE * 0.75);
 
             // Восемь линий равномерно по кругу (угол начала линии от центра)
             // 0° = вправо, 90° = вниз. Подобраны так, чтобы лейблы конечных уходили наружу.
@@ -1809,8 +1810,10 @@
                                   fill="${line.color}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
                                    stroke-linejoin="round">${metroName(`term-${line.id}`, line.name)}</text>
+                        </g>
+                        <g class="draggable-label" data-lkey="termage-${line.id}" style="cursor:move;">
                             <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
-                                  font-family="${FONT}" font-size="${TERM_LABEL_SIZE * 0.75}" font-weight="700"
+                                  font-family="${FONT}" font-size="${TERM_AGE_SIZE}" font-weight="700"
                                   fill="${TEXT_SOFT}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">(${line.age})</text>
