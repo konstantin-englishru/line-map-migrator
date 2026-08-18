@@ -1528,6 +1528,7 @@
             const FONT = FONT_MAP[MSTYLE_EARLY.labelFont] || FONT_MAP['Accuratist'];
             const LABEL_SIZE = MSTYLE_EARLY.labelSize || 32;
             const TERM_LABEL_SIZE = MSTYLE_EARLY.termLabelSize || Math.round(LABEL_SIZE * 1.18);
+            const TERM_AGE_SIZE = MSTYLE_EARLY.termAgeSize || Math.round(TERM_LABEL_SIZE * 0.75);
 
             // Восемь линий равномерно по кругу (угол начала линии от центра)
             // 0° = вправо, 90° = вниз. Подобраны так, чтобы лейблы конечных уходили наружу.
@@ -1809,8 +1810,10 @@
                                   fill="${line.color}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="8"
                                    stroke-linejoin="round">${metroName(`term-${line.id}`, line.name)}</text>
+                        </g>
+                        <g class="draggable-label" data-lkey="termage-${line.id}" style="cursor:move;">
                             <text x="${tnx}" y="${ageY}" text-anchor="${termAnchor}"
-                                  font-family="${FONT}" font-size="${TERM_LABEL_SIZE * 0.75}" font-weight="700"
+                                  font-family="${FONT}" font-size="${TERM_AGE_SIZE}" font-weight="700"
                                   fill="${TEXT_SOFT}"
                                   paint-order="stroke" stroke="#FFFFFF" stroke-width="6"
                                   stroke-linejoin="round">(${line.age})</text>
@@ -1908,6 +1911,14 @@
                     ${content}
                 </g>
             `;
+
+            // --- Область просмотра расширяется под очень длинные линии ---
+            (function fitViewBox() {
+                const maxLen = Math.max(...Object.keys(CURVES).map(k => CURVES[k].len || 0));
+                const extra = Math.max(0, maxLen - 1600);
+                svg.setAttribute('viewBox',
+                    `${-340 - extra} ${-280 - extra} ${2680 + extra * 2} ${2800 + extra * 2}`);
+            })();
 
             // --- Запуск анимации поезда ---
             startMetroTrain();
@@ -2610,7 +2621,17 @@
             try { localStorage.setItem(key, JSON.stringify(map)); } catch (e) {}
         }
 
-        function loadLabelOffsets()   { return Object.assign({}, LABEL_DEFAULTS,   readStore(LABEL_STORE_KEY)); }
+        function loadLabelOffsets()   {
+            const o = Object.assign({}, LABEL_DEFAULTS, readStore(LABEL_STORE_KEY));
+            // подпись возраста конечной по умолчанию повторяет смещение её названия
+            Object.keys(o).forEach(k => {
+                if (k.indexOf('term-') === 0) {
+                    const ageKey = 'termage-' + k.slice(5);
+                    if (!o[ageKey]) o[ageKey] = o[k];
+                }
+            });
+            return o;
+        }
         function loadStationOffsets() { return Object.assign({}, STATION_DEFAULTS, readStore(STATION_STORE_KEY)); }
         function loadLineGeom() {
             const out = {};
@@ -2734,7 +2755,7 @@
                 <label style="display:block;margin-bottom:2px;">Изгиб: <span id="me-bend-v"></span>°</label>
                 <input id="me-bend" type="range" min="-60" max="60" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Длина: <span id="me-len-v"></span></label>
-                <input id="me-len" type="range" min="600" max="1600" step="10" style="width:100%;margin-bottom:8px;">
+                <input id="me-len" type="range" min="600" max="4000" step="10" style="width:100%;margin-bottom:8px;">
                 <div style="font-weight:700;margin:8px 0 6px;border-top:1px solid #E2E8F0;padding-top:8px;">Переименовать станцию</div>
                 <select id="me-st" style="width:100%;padding:4px;margin-bottom:6px;border:1px solid #CBD5E1;border-radius:8px;"></select>
                 <input id="me-st-name" type="text" placeholder="Новое название" style="width:100%;padding:5px;margin-bottom:6px;border:1px solid #CBD5E1;border-radius:8px;">
@@ -2754,7 +2775,9 @@
                 <label style="display:block;margin-bottom:2px;">Размер шрифта: <span id="me-fs-v"></span></label>
                 <input id="me-fs" type="range" min="16" max="64" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Размер шрифта конечных: <span id="me-tfs-v"></span></label>
-                <input id="me-tfs" type="range" min="16" max="96" step="1" style="width:100%;margin-bottom:8px;">
+                <input id="me-tfs" type="range" min="16" max="140" step="1" style="width:100%;margin-bottom:8px;">
+                <label style="display:block;margin-bottom:2px;">Размер шрифта возраста конечных: <span id="me-tas-v"></span></label>
+                <input id="me-tas" type="range" min="10" max="120" step="1" style="width:100%;margin-bottom:8px;">
                 <label style="display:block;margin-bottom:2px;">Шрифт станций</label>
                 <select id="me-ff" style="width:100%;padding:4px;margin-bottom:8px;border:1px solid #CBD5E1;border-radius:8px;">
                     <option value="Accuratist">Accuratist</option>
@@ -2786,6 +2809,7 @@
             const ss   = panel.querySelector('#me-ss');
             const fs   = panel.querySelector('#me-fs');
             const tfs  = panel.querySelector('#me-tfs');
+            const tas  = panel.querySelector('#me-tas');
             const ff   = panel.querySelector('#me-ff');
             const logo = panel.querySelector('#me-logo');
             const ring = panel.querySelector('#me-ring');
@@ -2831,6 +2855,8 @@
                 fs.value = s.labelSize; ff.value = s.labelFont;
                 tfs.value = s.termLabelSize || Math.round((s.labelSize || 32) * 1.18);
                 panel.querySelector('#me-tfs-v').textContent = tfs.value;
+                tas.value = s.termAgeSize || Math.round(parseFloat(tfs.value) * 0.75);
+                panel.querySelector('#me-tas-v').textContent = tas.value;
                 logo.value = s.logoScale;
                 ring.value = s.ringRadius; ringN.value = s.ringRadius;
                 panel.querySelector('#me-ring-v').textContent = ring.value;
@@ -2849,6 +2875,7 @@
                     stStroke:  parseFloat(ss.value),
                     labelSize: parseFloat(fs.value),
                     termLabelSize: parseFloat(tfs.value),
+                    termAgeSize: parseFloat(tas.value),
                     labelFont: ff.value,
                     logoScale: parseFloat(logo.value),
                     ringRadius: parseFloat(ring.value)
@@ -2861,10 +2888,11 @@
                 panel.querySelector('#me-logo-v').textContent = logo.value;
                 panel.querySelector('#me-ring-v').textContent = ring.value;
                 panel.querySelector('#me-tfs-v').textContent = tfs.value;
+                panel.querySelector('#me-tas-v').textContent = tas.value;
                 ringN.value = ring.value;
                 renderMetroMap();
             };
-            [lw, str, sr, ss, fs, tfs, logo, ring].forEach(el => el.addEventListener('input', pushStyle));
+            [lw, str, sr, ss, fs, tfs, tas, logo, ring].forEach(el => el.addEventListener('input', pushStyle));
             ringN.addEventListener('input', () => { ring.value = ringN.value; pushStyle(); });
             ff.addEventListener('change', pushStyle);
 
