@@ -15,6 +15,8 @@ import complexHeroImg from "@/assets/complex-dev-hero.jpg";
 import complexLessonImg from "@/assets/complex-dev-lesson.jpg";
 import neurofitHeroImg from "@/assets/neurofit-hero.jpg";
 import neurofitLessonImg from "@/assets/neurofit-lesson.jpg";
+import englishPrimaryHeroImg from "@/assets/english-primary-hero.jpg";
+import englishPrimaryLessonImg from "@/assets/english-primary-lesson.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
@@ -139,6 +141,7 @@ function buildCourse(title: string): CourseData {
   if (/нейропсихолог/i.test(title)) return { ...base, ...NEURO_PRESCHOOL, title };
   if (/шахмат/i.test(title)) return { ...base, ...CHESS_PRESCHOOL, title };
   if (/арт-лаб|арт-мастер|творческ/i.test(title)) return { ...base, ...ART_PRESCHOOL, title };
+  if (/^\s*Английский язык для детей\s*$/i.test(title)) return { ...base, ...ENGLISH_PRIMARY, title };
   if (/англ/i.test(title)) return { ...base, ...ENGLISH_PRESCHOOL, title };
 
   const generic = (emoji: string, h1: string, description: string): CourseData => ({
