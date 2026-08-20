@@ -17,6 +17,14 @@ import neurofitHeroImg from "@/assets/neurofit-hero.jpg";
 import neurofitLessonImg from "@/assets/neurofit-lesson.jpg";
 import englishPrimaryHeroImg from "@/assets/english-primary-hero.jpg";
 import englishPrimaryLessonImg from "@/assets/english-primary-lesson.jpg";
+import germanPrimaryHeroImg from "@/assets/german-primary-hero.jpg";
+import germanPrimaryLessonImg from "@/assets/german-primary-lesson.jpg";
+import chinesePrimaryHeroImg from "@/assets/chinese-primary-hero.jpg";
+import chinesePrimaryLessonImg from "@/assets/chinese-primary-lesson.jpg";
+import spanishPrimaryHeroImg from "@/assets/spanish-primary-hero.jpg";
+import spanishPrimaryLessonImg from "@/assets/spanish-primary-lesson.jpg";
+import sciencePrimaryHeroImg from "@/assets/science-primary-hero.jpg";
+import sciencePrimaryLessonImg from "@/assets/science-primary-lesson.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
