@@ -150,6 +150,10 @@ function buildCourse(title: string): CourseData {
   if (/шахмат/i.test(title)) return { ...base, ...CHESS_PRESCHOOL, title };
   if (/арт-лаб|арт-мастер|творческ/i.test(title)) return { ...base, ...ART_PRESCHOOL, title };
   if (/^\s*Английский язык для детей\s*$/i.test(title)) return { ...base, ...ENGLISH_PRIMARY, title };
+  if (/^\s*Немецкий язык для детей\s*$/i.test(title)) return { ...base, ...GERMAN_PRIMARY, title };
+  if (/^\s*Китайский язык для детей\s*$/i.test(title)) return { ...base, ...CHINESE_PRIMARY, title };
+  if (/^\s*Испанский язык для детей\s*$/i.test(title)) return { ...base, ...SPANISH_PRIMARY, title };
+  if (/^\s*Научная школа\s*$/i.test(title)) return { ...base, ...SCIENCE_PRIMARY, title };
   if (/англ/i.test(title)) return { ...base, ...ENGLISH_PRESCHOOL, title };
 
   const generic = (emoji: string, h1: string, description: string): CourseData => ({
