@@ -89,6 +89,7 @@ type CourseData = {
   formatSub?: string;
   formatCards?: FormatCard[];
   formatCols?: 2;
+  forWhomCentered?: boolean;
   format: { duration: string; schedule: string; mode: string; method: string; teacher: string };
   reviewsTitle?: string;
   reviews: CourseReview[];
@@ -1708,7 +1709,7 @@ function CoursePage() {
           {course.forWhomCards ? (
             <>
               <h3 className="cp-h3 cp-h3-center">Для кого этот курс</h3>
-              <div className="cp-bento cp-bento-2">
+              <div className={`cp-bento cp-bento-2${course.forWhomCentered && course.forWhomCards.length % 2 ? " cp-bento-odd2" : ""}`}>
                 {course.forWhomCards.map((c) => (
                   <div key={c.title} className="cp-bento-card" style={{ background: c.color }}>
                     <div className="cp-bento-icon">{c.icon}</div>
@@ -2240,6 +2241,9 @@ const styles = `
   .cp-result-t { font-weight: 700; font-size: 14px; line-height: 1.35; }
 
   .cp-bento-2 { grid-template-columns: repeat(2, 1fr); }
+  .cp-bento-odd2 { display: flex; flex-wrap: wrap; justify-content: center; }
+  .cp-bento-odd2 > * { flex: 1 1 320px; max-width: calc(50% - 9px); }
+  @media (max-width: 720px) { .cp-bento-odd2 > * { max-width: 100%; } }
   .cp-bento-num { font-weight: 900; font-size: 13px; opacity: .7; }
 
   .cp-format-grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 1180px; }
@@ -4742,6 +4746,7 @@ const VOCABOOSTER_TEEN: Partial<CourseData> = {
   aboutTitle: "Vocabooster — лексика через общение, а не через словарь",
   aboutSub:
     "Мы не говорим «выучите эти 20 слов». Мы обсуждаем тему, и слова приходят сами — через контекст, через диалог, через практику.",
+  forWhomCentered: true,
   forWhomCards: [
     { icon: "📖", color: "#F79EC7", title: "Знает грамматику", desc: "Ребенок знает грамматику, но не хватает слов" },
     { icon: "💬", color: "#B79BEA", title: "Хочет говорить свободнее", desc: "Ребенок хочет говорить на английском свободнее" },
