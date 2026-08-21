@@ -1626,6 +1626,7 @@ function CoursePage() {
           </div>
 
           {/* ===== Статистика ===== */}
+          {course.stats.length > 0 && (
           <div className="cp-stats">
             {course.stats.map((s) => (
               <div key={s.label} className="cp-stat">
@@ -1634,6 +1635,7 @@ function CoursePage() {
               </div>
             ))}
           </div>
+          )}
         </section>
 
         {/* ===== Визуальный блок ===== */}
@@ -1758,7 +1760,7 @@ function CoursePage() {
             <p className="cp-sub">{course.formatSub ?? "Удобно и для ребёнка, и для родителей"}</p>
           </div>
           {course.formatCards ? (
-            <div className="cp-format-grid cp-format-grid-3">
+            <div className={`cp-format-grid cp-format-grid-3${course.formatCards.length % 2 ? " cp-format-grid-odd" : ""}`}>
               {course.formatCards.map((f) => (
                 <div key={f.title} className="cp-fmt cp-fmt-card">
                   <div className="cp-fmt-icon">{f.icon}</div>
@@ -2204,6 +2206,8 @@ const styles = `
   .cp-bento-num { font-weight: 900; font-size: 13px; opacity: .7; }
 
   .cp-format-grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 1180px; }
+  .cp-format-grid-odd { display: flex; flex-wrap: wrap; justify-content: center; }
+  .cp-format-grid-odd > * { flex: 1 1 300px; max-width: calc(33.333% - 12px); }
   .cp-fmt-card { flex-direction: column; }
   .cp-fmt-desc { margin: 6px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
 
@@ -2224,12 +2228,14 @@ const styles = `
   @media (max-width: 980px) {
     .cp-visual-grid { grid-template-columns: 1fr; }
     .cp-format-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .cp-format-grid-odd > * { max-width: calc(50% - 8px); }
     .cp-nav { display: none; }
     .cp-result { width: calc((100% - 20px) / 2); }
   }
   @media (max-width: 560px) {
     .cp-bento-2 { grid-template-columns: 1fr; }
     .cp-format-grid-3 { grid-template-columns: 1fr; }
+    .cp-format-grid-odd > * { max-width: 100%; }
     .cp-form-grid { grid-template-columns: 1fr; }
     .cp-hero-photo { max-height: 260px; }
     .cp-reviews-scroll { grid-template-columns: 1fr; }
