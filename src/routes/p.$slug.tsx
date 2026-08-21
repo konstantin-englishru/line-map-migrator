@@ -25,6 +25,10 @@ import spanishPrimaryHeroImg from "@/assets/spanish-primary-hero.jpg";
 import spanishPrimaryLessonImg from "@/assets/spanish-primary-lesson.jpg";
 import sciencePrimaryHeroImg from "@/assets/science-primary-hero.jpg";
 import sciencePrimaryLessonImg from "@/assets/science-primary-lesson.jpg";
+import mhkPrimaryHeroImg from "@/assets/mhk-primary-hero.jpg";
+import mhkPrimaryLessonImg from "@/assets/mhk-primary-lesson.jpg";
+import artlabPrimaryHeroImg from "@/assets/artlab-primary-hero.jpg";
+import artlabPrimaryLessonImg from "@/assets/artlab-primary-lesson.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
@@ -148,6 +152,8 @@ function buildCourse(title: string): CourseData {
   if (/логопед/i.test(title)) return { ...base, ...SPEECH_PRESCHOOL, title };
   if (/нейропсихолог/i.test(title)) return { ...base, ...NEURO_PRESCHOOL, title };
   if (/шахмат/i.test(title)) return { ...base, ...CHESS_PRESCHOOL, title };
+  if (/^\s*МХК для детей\s*$/i.test(title)) return { ...base, ...MHK_PRIMARY, title };
+  if (/^\s*Арт-лаборатория\s*$/i.test(title)) return { ...base, ...ARTLAB_PRIMARY, title };
   if (/арт-лаб|арт-мастер|творческ/i.test(title)) return { ...base, ...ART_PRESCHOOL, title };
   if (/^\s*Английский язык для детей\s*$/i.test(title)) return { ...base, ...ENGLISH_PRIMARY, title };
   if (/^\s*Немецкий язык для детей\s*$/i.test(title)) return { ...base, ...GERMAN_PRIMARY, title };
