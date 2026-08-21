@@ -35,6 +35,16 @@ import roboticsPrimaryHeroImg from "@/assets/robotics-primary-hero.jpg";
 import roboticsPrimaryLessonImg from "@/assets/robotics-primary-lesson.jpg";
 import programmingPrimaryHeroImg from "@/assets/programming-primary-hero.jpg";
 import programmingPrimaryLessonImg from "@/assets/programming-primary-lesson.jpg";
+import neurofitPrimaryHeroImg from "@/assets/neurofit-primary-hero.jpg";
+import neurofitPrimaryLessonImg from "@/assets/neurofit-primary-lesson.jpg";
+import neuropsyPrimaryHeroImg from "@/assets/neuropsy-primary-hero.jpg";
+import neuropsyPrimaryLessonImg from "@/assets/neuropsy-primary-lesson.jpg";
+import speechPrimaryHeroImg from "@/assets/speech-primary-hero.jpg";
+import speechPrimaryLessonImg from "@/assets/speech-primary-lesson.jpg";
+import russianPrimaryHeroImg from "@/assets/russian-primary-hero.jpg";
+import russianPrimaryLessonImg from "@/assets/russian-primary-lesson.jpg";
+import mathOlympPrimaryHeroImg from "@/assets/matholymp-primary-hero.jpg";
+import mathOlympPrimaryLessonImg from "@/assets/matholymp-primary-lesson.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
@@ -78,6 +88,7 @@ type CourseData = {
   formatTitle?: string;
   formatSub?: string;
   formatCards?: FormatCard[];
+  formatCols?: 2;
   format: { duration: string; schedule: string; mode: string; method: string; teacher: string };
   reviewsTitle?: string;
   reviews: CourseReview[];
@@ -151,6 +162,11 @@ function buildCourse(title: string): CourseData {
     ],
   };
 
+  if (/^\s*Нейрофитнес для начальной школы\s*$/i.test(title)) return { ...base, ...NEUROFIT_PRIMARY, title };
+  if (/^\s*Нейропсихолог для начальной школы\s*$/i.test(title)) return { ...base, ...NEUROPSY_PRIMARY, title };
+  if (/^\s*Логопедическая помощь для начальной школы\s*$/i.test(title)) return { ...base, ...SPEECH_PRIMARY, title };
+  if (/^\s*Русский язык для начальной школы\s*$/i.test(title)) return { ...base, ...RUSSIAN_PRIMARY, title };
+  if (/^\s*Олимпиадная математика для начальной школы\s*$/i.test(title)) return { ...base, ...MATH_OLYMP_PRIMARY, title };
   if (/^\s*Читательский клуб\s*$/i.test(title)) return { ...base, ...READING_PRIMARY, title };
   if (/^\s*Робототехника\s*$/i.test(title)) return { ...base, ...ROBOTICS_PRIMARY, title };
   if (/^\s*Программирование для детей\s*$/i.test(title)) return { ...base, ...PROGRAMMING_PRIMARY, title };
@@ -1770,7 +1786,7 @@ function CoursePage() {
             <p className="cp-sub">{course.formatSub ?? "Удобно и для ребёнка, и для родителей"}</p>
           </div>
           {course.formatCards ? (
-            <div className={`cp-format-grid cp-format-grid-3${course.formatCards.length % 2 ? " cp-format-grid-odd" : ""}`}>
+            <div className={`cp-format-grid ${course.formatCols === 2 ? "cp-format-grid-2c" : "cp-format-grid-3"}${course.formatCards.length % 2 ? (course.formatCols === 2 ? " cp-format-grid-odd2" : " cp-format-grid-odd") : ""}`}>
               {course.formatCards.map((f) => (
                 <div key={f.title} className="cp-fmt cp-fmt-card">
                   <div className="cp-fmt-icon">{f.icon}</div>
@@ -2218,6 +2234,10 @@ const styles = `
   .cp-format-grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 1180px; }
   .cp-format-grid-odd { display: flex; flex-wrap: wrap; justify-content: center; }
   .cp-format-grid-odd > * { flex: 1 1 300px; max-width: calc(33.333% - 12px); }
+  .cp-format-grid-2c { grid-template-columns: repeat(2, 1fr); max-width: 880px; }
+  .cp-format-grid-odd2 { display: flex; flex-wrap: wrap; justify-content: center; }
+  .cp-format-grid-odd2 > * { flex: 1 1 320px; max-width: calc(50% - 8px); }
+  @media (max-width: 720px) { .cp-format-grid-odd2 > * { max-width: 100%; } }
   .cp-fmt-card { flex-direction: column; }
   .cp-fmt-desc { margin: 6px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
 
