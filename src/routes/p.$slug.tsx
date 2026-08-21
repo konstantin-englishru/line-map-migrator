@@ -95,6 +95,7 @@ type CourseData = {
   formatCards?: FormatCard[];
   formatCols?: 2;
   forWhomCentered?: boolean;
+  benefitsCentered?: boolean;
   format: { duration: string; schedule: string; mode: string; method: string; teacher: string };
   reviewsTitle?: string;
   reviews: CourseReview[];
@@ -1774,7 +1775,7 @@ function CoursePage() {
             <h2 className="cp-h2">{course.benefitsTitle ?? "Почему выбирают этот курс"}</h2>
             <p className="cp-sub">{course.benefitsSub ?? "Четыре причины, по которым родители доверяют нам"}</p>
           </div>
-          <div className="cp-bento">
+          <div className={`cp-bento${course.benefitsCentered && course.benefits.length % 2 ? " cp-bento-odd" : ""}`}>
             {course.benefits.map((b, i) => (
               <div key={b.title} className="cp-bento-card" style={{ background: b.color }}>
                 <div className="cp-bento-num">№{i + 1}</div>
@@ -2260,6 +2261,10 @@ const styles = `
   .cp-bento-odd2 { display: flex; flex-wrap: wrap; justify-content: center; }
   .cp-bento-odd2 > * { flex: 1 1 320px; max-width: calc(50% - 9px); }
   @media (max-width: 720px) { .cp-bento-odd2 > * { max-width: 100%; } }
+  .cp-bento-odd { display: flex; flex-wrap: wrap; justify-content: center; }
+  .cp-bento-odd > * { flex: 1 1 240px; max-width: calc(25% - 14px); }
+  @media (max-width: 900px) { .cp-bento-odd > * { max-width: calc(50% - 9px); } }
+  @media (max-width: 560px) { .cp-bento-odd > * { max-width: 100%; } }
   .cp-bento-num { font-weight: 900; font-size: 13px; opacity: .7; }
 
   .cp-format-grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 1180px; }
@@ -5866,23 +5871,17 @@ const PARK_MASTERCLASS: Partial<CourseData> = {
     "Отдых без экранов и гаджетов",
     "Впечатления, которые остаются дольше покупок",
   ],
-  benefitsTitle: "Как проходят мастер-классы",
-  benefitsSub: "Просто, тепло и без обязательств",
+  benefitsTitle: "Какие мастер-классы мы проводим",
+  benefitsSub: "Направления, которые повторяются и обновляются",
+  benefitsCentered: true,
   benefits: [
-    { icon: "🎟", color: "#F79EC7", title: "На один раз", desc: "Не курс, а встреча, где можно попробовать новое" },
-    { icon: "👨‍👩‍👧", title: "Для детей, для взрослых, для всей семьи", color: "#B79BEA", desc: "Формат подбирается под возраст" },
-    { icon: "🍂", color: "#9EE07A", title: "По сезону и настроению", desc: "Приурочены к сезону, празднику или настроению" },
-    { icon: "🎁", color: "#FFCB85", title: "Всё включено", desc: "Материалы предоставляются" },
+    { icon: "🍂", color: "#F79EC7", title: "Сезонные", desc: "Осенние поделки, новогодние игрушки, весенние букеты, летние украшения" },
+    { icon: "🎄", color: "#B79BEA", title: "Праздничные", desc: "К Пасхе, к 8 Марта, к 23 Февраля, к Новому году" },
+    { icon: "🎨", color: "#9EE07A", title: "Творческие", desc: "Рисование, лепка, керамика, коллаж, декупаж, аппликация" },
+    { icon: "🍪", color: "#FFCB85", title: "Кулинарные", desc: "Роспись имбирных пряников, лепка печенья, украшение капкейков" },
+    { icon: "🕯", color: "#9DC7EE", title: "Для души", desc: "Свечи, открытки, мыло, флористика, скрапбукинг" },
   ],
-  programTitle: "Какие мастер-классы мы проводим",
-  programSub: "Направления, которые повторяются и обновляются",
-  modules: [
-    { icon: "1", title: "Сезонные", desc: "Осенние поделки, новогодние игрушки, весенние букеты, летние украшения" },
-    { icon: "2", title: "Праздничные", desc: "К Пасхе, к 8 Марта, к 23 Февраля, к Новому году" },
-    { icon: "3", title: "Творческие", desc: "Рисование, лепка, керамика, коллаж, декупаж, аппликация" },
-    { icon: "4", title: "Кулинарные", desc: "Роспись имбирных пряников, лепка печенья, украшение капкейков" },
-    { icon: "5", title: "Для души", desc: "Свечи, открытки, мыло, флористика, скрапбукинг" },
-  ],
+  modules: [],
   formatTitle: "Как проходят мастер-классы",
   formatSub: "Формат встречи — без учёбы и обязательств",
   formatCols: 2,
