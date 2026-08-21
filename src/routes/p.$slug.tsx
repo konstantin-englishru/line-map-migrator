@@ -1,4 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import parkExcursionImg from "@/assets/park-excursion.jpg";
+import parkMasterclassImg from "@/assets/park-masterclass.jpg";
+import parkHolidayImg from "@/assets/park-holiday.jpg";
+import parkTheatreImg from "@/assets/park-theatre.jpg";
 import heroImg from "@/assets/english-hero.jpg";
 import lessonImg from "@/assets/english-lesson.jpg";
 import roboHeroImg from "@/assets/robotics-hero.jpg";
@@ -76,6 +80,7 @@ type CourseData = {
   aboutTitle?: string;
   aboutSub?: string;
   forWhomCards?: CourseCard[];
+  forWhomTitle?: string;
   forWhom: string[];
   resultsTitle?: string;
   results: string[];
@@ -163,6 +168,10 @@ function buildCourse(title: string): CourseData {
     ],
   };
 
+  if (/^\s*Экскурсии\s*$/i.test(title)) return { ...base, ...PARK_EXCURSIONS, title };
+  if (/^\s*Мастер-классы\s*$/i.test(title)) return { ...base, ...PARK_MASTERCLASS, title };
+  if (/^\s*Тематические праздники\s*$/i.test(title)) return { ...base, ...PARK_HOLIDAYS, title };
+  if (/^\s*Спектакли\s*$/i.test(title)) return { ...base, ...PARK_THEATRE, title };
   if (/^\s*Английский язык для средней школы\s*$/i.test(title)) return { ...base, ...ENGLISH_TEEN, title };
   if (/^\s*Немецкий язык для средней школы\s*$/i.test(title)) return { ...base, ...GERMAN_TEEN, title };
   if (/^\s*Китайский язык для средней школы\s*$/i.test(title)) return { ...base, ...CHINESE_TEEN, title };
@@ -1713,7 +1722,7 @@ function CoursePage() {
           {/* Для кого */}
           {course.forWhomCards ? (
             <>
-              <h3 className="cp-h3 cp-h3-center">Для кого этот курс</h3>
+              <h3 className="cp-h3 cp-h3-center">{course.forWhomTitle ?? "Для кого этот курс"}</h3>
               <div className={`cp-bento cp-bento-2${course.forWhomCentered && course.forWhomCards.length % 2 ? " cp-bento-odd2" : ""}`}>
                 {course.forWhomCards.map((c) => (
                   <div key={c.title} className="cp-bento-card" style={{ background: c.color }}>
@@ -1778,6 +1787,7 @@ function CoursePage() {
         </section>
 
         {/* ===== Program ===== */}
+        {course.modules.length > 0 && (
         <section className="cp-section" id="program">
           <div className="cp-section-head">
             <h2 className="cp-h2">{course.programTitle ?? "Программа обучения"}</h2>
@@ -1795,6 +1805,7 @@ function CoursePage() {
             ))}
           </div>
         </section>
+        )}
 
         {/* ===== Format ===== */}
         <section className="cp-section" id="formats">
