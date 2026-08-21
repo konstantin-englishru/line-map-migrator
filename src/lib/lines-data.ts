@@ -25,7 +25,7 @@ export const METRO_LINES: MetroLine[] = [
       {
         "name": "Творческая",
         "programs": [
-          "Арт-лаборатория"
+          "Арт-мастерская"
         ]
       },
       {
