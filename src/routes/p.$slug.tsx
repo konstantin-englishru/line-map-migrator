@@ -145,6 +145,9 @@ function buildCourse(title: string): CourseData {
     ],
   };
 
+  if (/^\s*Читательский клуб\s*$/i.test(title)) return { ...base, ...READING_PRIMARY, title };
+  if (/^\s*Робототехника\s*$/i.test(title)) return { ...base, ...ROBOTICS_PRIMARY, title };
+  if (/^\s*Программирование для детей\s*$/i.test(title)) return { ...base, ...PROGRAMMING_PRIMARY, title };
   if (/робот|конструир/i.test(title)) return { ...base, ...ROBOTICS_PRESCHOOL, title };
   if (/подготовк/i.test(title)) return { ...base, ...SCHOOL_PREP, title };
   if (/нейрофитнес/i.test(title)) return { ...base, ...NEUROFIT_PRESCHOOL, title };
@@ -153,8 +156,9 @@ function buildCourse(title: string): CourseData {
   if (/нейропсихолог/i.test(title)) return { ...base, ...NEURO_PRESCHOOL, title };
   if (/шахмат/i.test(title)) return { ...base, ...CHESS_PRESCHOOL, title };
   if (/^\s*МХК для детей\s*$/i.test(title)) return { ...base, ...MHK_PRIMARY, title };
-  if (/^\s*Арт-лаборатория\s*$/i.test(title)) return { ...base, ...ARTLAB_PRIMARY, title };
+  if (/^\s*Арт-лаборатория для начальной школы\s*$/i.test(title)) return { ...base, ...ARTLAB_PRIMARY, title };
   if (/арт-лаб|арт-мастер|творческ/i.test(title)) return { ...base, ...ART_PRESCHOOL, title };
+
   if (/^\s*Английский язык для детей\s*$/i.test(title)) return { ...base, ...ENGLISH_PRIMARY, title };
   if (/^\s*Немецкий язык для детей\s*$/i.test(title)) return { ...base, ...GERMAN_PRIMARY, title };
   if (/^\s*Китайский язык для детей\s*$/i.test(title)) return { ...base, ...CHINESE_PRIMARY, title };
