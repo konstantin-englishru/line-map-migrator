@@ -162,7 +162,13 @@ function buildCourse(title: string): CourseData {
     ],
   };
 
+  if (/^\s*Английский язык для средней школы\s*$/i.test(title)) return { ...base, ...ENGLISH_TEEN, title };
+  if (/^\s*Немецкий язык для средней школы\s*$/i.test(title)) return { ...base, ...GERMAN_TEEN, title };
+  if (/^\s*Китайский язык для средней школы\s*$/i.test(title)) return { ...base, ...CHINESE_TEEN, title };
+  if (/^\s*Испанский язык для средней школы\s*$/i.test(title)) return { ...base, ...SPANISH_TEEN, title };
+  if (/^\s*Разговорный клуб\s*$/i.test(title)) return { ...base, ...SPEAKING_CLUB_TEEN, title };
   if (/^\s*Нейрофитнес для начальной школы\s*$/i.test(title)) return { ...base, ...NEUROFIT_PRIMARY, title };
+
   if (/^\s*Нейропсихолог для начальной школы\s*$/i.test(title)) return { ...base, ...NEUROPSY_PRIMARY, title };
   if (/^\s*Логопедическая помощь для начальной школы\s*$/i.test(title)) return { ...base, ...SPEECH_PRIMARY, title };
   if (/^\s*Русский язык для начальной школы\s*$/i.test(title)) return { ...base, ...RUSSIAN_PRIMARY, title };
