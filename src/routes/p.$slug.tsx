@@ -1742,13 +1742,13 @@ function CoursePage() {
           ) : (
             <div className="cp-two-col">
               <div className="cp-soft-card">
-                <h3 className="cp-h3">👨‍👩‍👧 Для кого</h3>
+                <h3 className="cp-h3">{course.forWhomTitle ?? "👨‍👩‍👧 Для кого"}</h3>
                 <ul className="cp-list">
                   {course.forWhom.map((t) => <li key={t}>{t}</li>)}
                 </ul>
               </div>
               <div className="cp-soft-card cp-soft-card-alt">
-                <h3 className="cp-h3">🎯 Результаты</h3>
+                <h3 className="cp-h3">{course.resultsTitle ?? "🎯 Результаты"}</h3>
                 <ul className="cp-list">
                   {course.results.map((t) => <li key={t}>{t}</li>)}
                 </ul>
@@ -1892,7 +1892,7 @@ function CoursePage() {
               {course.finalSub ??
                 "Запишитесь на пробное занятие — познакомимся, проведём диагностику и покажем, как будет учиться ваш ребёнок."}
             </p>
-            <TrialForm cta="Записаться на пробное занятие" />
+            <TrialForm cta={course.finalCta ?? "Записаться на пробное занятие"} />
             <p className="cp-final-phone">
               Или позвоните нам: {course.phone ? <a href={`tel:${course.phone.replace(/[^+\d]/g, "")}`}>{course.phone}</a> : "+7 (___) ___-__-__"}
             </p>
