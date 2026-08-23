@@ -107,6 +107,7 @@ type CourseData = {
   faq: CourseFaq[];
   finalTitle?: string;
   finalSub?: string;
+  finalCta?: string;
   phone?: string;
   nav?: { label: string; href: string }[];
 };
