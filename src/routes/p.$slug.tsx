@@ -1,4 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import englishAdultImg from "@/assets/english-adult.jpg";
+import germanAdultImg from "@/assets/german-adult.jpg";
+import spanishAdultImg from "@/assets/spanish-adult.jpg";
+import chineseAdultImg from "@/assets/chinese-adult.jpg";
 import parkExcursionImg from "@/assets/park-excursion.jpg";
 import parkMasterclassImg from "@/assets/park-masterclass.jpg";
 import parkHolidayImg from "@/assets/park-holiday.jpg";
