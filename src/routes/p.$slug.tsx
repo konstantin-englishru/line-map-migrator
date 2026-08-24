@@ -179,6 +179,11 @@ function buildCourse(title: string): CourseData {
   if (/^\s*Индивидуальная работа летом\s*$/i.test(title)) return { ...base, ...SUMMER_INDIVIDUAL, title };
   if (/^\s*Вспомнить всё\s*$/i.test(title)) return { ...base, ...SUMMER_RECALL, title };
   if (/^\s*Интенсив по чтению\s*$/i.test(title)) return { ...base, ...SUMMER_READING, title };
+  if (/^\s*Русский язык — подготовка к ЕГЭ\s*$/i.test(title)) return { ...base, ...RUSSIAN_EGE, title };
+  if (/^\s*Математика — подготовка к ЕГЭ\s*$/i.test(title)) return { ...base, ...MATH_EGE, title };
+  if (/^\s*Английский язык — подготовка к ЕГЭ\s*$/i.test(title)) return { ...base, ...ENGLISH_EGE, title };
+  if (/^\s*Английский язык для старшей школы\s*$/i.test(title)) return { ...base, ...ENGLISH_SENIOR, title };
+  if (/^\s*Испанский язык для старшей школы\s*$/i.test(title)) return { ...base, ...SPANISH_SENIOR, title };
   if (/^\s*Английский для специальных целей\s*$/i.test(title)) return { ...base, ...PROFESSIONAL_ESP, title };
   if (/^\s*Английский язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...ENGLISH_ADULT, title };
   if (/^\s*Немецкий язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...GERMAN_ADULT, title };
