@@ -2362,6 +2362,17 @@
         }
         window.closeLinePanel = closeLinePanel;
 
+        // Открыть легенду линии по её id (используется пунктами меню «Программы»)
+        function openLineById(id) {
+            const line = (typeof METRO_LINES !== 'undefined')
+                ? METRO_LINES.find(l => l.id === id)
+                : null;
+            if (line) openLinePanel(line);
+            return false;
+        }
+        window.openLineById = openLineById;
+
+
         // --- Навигация внутри главной страницы ---
         function goToCallbackForm() {
             const el = document.getElementById('callback-form');
