@@ -403,12 +403,6 @@ export const METRO_LINES: MetroLine[] = [
         ]
       },
       {
-        "name": "Французская",
-        "programs": [
-          "Французский язык"
-        ]
-      },
-      {
         "name": "Испанская",
         "programs": [
           "Испанский язык"
