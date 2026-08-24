@@ -3423,6 +3423,7 @@
     <!-- Скрытая ссылка/кнопка для режима правки схемы -->
     <style>
       #admin-edit-trigger {
+        display: none;
         position: fixed;
         right: 12px;
         bottom: 12px;
@@ -3430,6 +3431,7 @@
         opacity: 0.18;
         transition: opacity 0.2s ease;
       }
+      body.metro-edit-mode #admin-edit-trigger { display: block; }
       #admin-edit-trigger:hover { opacity: 1; }
       #admin-edit-trigger a {
         display: flex;
