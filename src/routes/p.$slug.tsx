@@ -174,6 +174,10 @@ function buildCourse(title: string): CourseData {
     ],
   };
 
+  if (/^\s*Английский язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...ENGLISH_ADULT, title };
+  if (/^\s*Немецкий язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...GERMAN_ADULT, title };
+  if (/^\s*Испанский язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...SPANISH_ADULT, title };
+  if (/^\s*Китайский язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...CHINESE_ADULT, title };
   if (/^\s*Экскурсии\s*$/i.test(title)) return { ...base, ...PARK_EXCURSIONS, title };
   if (/^\s*Мастер-классы\s*$/i.test(title)) return { ...base, ...PARK_MASTERCLASS, title };
   if (/^\s*Тематические праздники\s*$/i.test(title)) return { ...base, ...PARK_HOLIDAYS, title };
