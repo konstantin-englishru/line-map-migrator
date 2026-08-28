@@ -1685,6 +1685,16 @@ function applyCmsStation(course: CourseData, row: Record<string, unknown> | null
     };
     next.formatCards = undefined;
   }
+  // Блочный редактор админки: content хранит переопределения полей шаблона по slug.
+  const content = row["content"];
+  if (content && typeof content === "object" && !Array.isArray(content)) {
+    for (const [k, v] of Object.entries(content as Record<string, unknown>)) {
+      if (v === null || v === undefined) continue;
+      if (typeof v === "string" && !v.trim()) continue;
+      if (Array.isArray(v) && v.length === 0) continue;
+      (next as unknown as Record<string, unknown>)[k] = v;
+    }
+  }
   return next;
 }
 
