@@ -121,10 +121,11 @@ async function uploadStationImage(slug: string, file: File): Promise<string> {
     .from("cms-images")
     .upload(path, file, { upsert: true, contentType: file.type || undefined });
   if (error) throw new Error(`Загрузка не удалась (${path}): ${error.message}`);
-  const { data } = await supabase.storage
+  const { data, error: signErr } = await supabase.storage
     .from("cms-images")
     .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-  return data?.signedUrl ?? "";
+  if (signErr || !data?.signedUrl) throw new Error(`Ссылка не создана: ${signErr?.message ?? "пусто"}`);
+  return data.signedUrl;
 }
 
 function ImageField({
