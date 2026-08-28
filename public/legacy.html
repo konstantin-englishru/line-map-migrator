@@ -3509,5 +3509,34 @@
   render();
 })();
 </script>
+<script>
+/* CMS: подмешиваем настройки из админки (не меняя разметку по умолчанию) */
+(function(){
+  var URL_="https://ooaratxafchkajuxdjoz.supabase.co/rest/v1/cms_settings?select=key,value";
+  var KEY="sb_publishable_u8toSqgX3EV6MEGx1GhLXw_0kAmYMS8";
+  fetch(URL_,{headers:{apikey:KEY}}).then(function(r){return r.ok?r.json():[]}).then(function(rows){
+    var s={}; (rows||[]).forEach(function(r){ if(r.value) s[r.key]=r.value; });
+    if(!Object.keys(s).length) return;
+    if(s.phone){
+      document.querySelectorAll('*').forEach(function(el){
+        el.childNodes.forEach(function(n){
+          if(n.nodeType===3 && n.nodeValue.indexOf('+7 499 938 58 58')>-1)
+            n.nodeValue=n.nodeValue.split('+7 499 938 58 58').join(s.phone);
+        });
+      });
+    }
+    if(s.phone_href){
+      document.querySelectorAll('a[href^="tel:"]').forEach(function(a){
+        a.setAttribute('href','tel:'+s.phone_href.replace(/[^+\d]/g,''));
+      });
+    }
+    if(s.telegram_url) document.querySelectorAll('a[href*="t.me"]').forEach(function(a){a.href=s.telegram_url;});
+    if(s.max_url) document.querySelectorAll('a[href*="max.ru"]').forEach(function(a){a.href=s.max_url;});
+    if(s.email) document.querySelectorAll('a[href^="mailto:"]').forEach(function(a){a.href='mailto:'+s.email;a.textContent=s.email;});
+    var h1=document.querySelector('#hero h1')||document.querySelectorAll('h1')[1];
+    if(s.hero_title&&h1) h1.textContent=s.hero_title;
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

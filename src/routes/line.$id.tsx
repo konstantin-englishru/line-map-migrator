@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getLine, METRO_LINES, type MetroLine } from "@/lib/lines-data";
+import { useCmsRow } from "@/lib/cms";
 
 export const Route = createFileRoute("/line/$id")({
   head: ({ params }) => {
@@ -30,7 +31,24 @@ export const Route = createFileRoute("/line/$id")({
 });
 
 function LinePage() {
-  const { line } = Route.useLoaderData() as { line: MetroLine };
+  const { line: baseLine } = Route.useLoaderData() as { line: MetroLine };
+  const cms = useCmsRow<Record<string, unknown>>("cms_lines", "id", baseLine.id);
+  const line: MetroLine = (() => {
+    if (!cms) return baseLine;
+    const next: MetroLine = { ...baseLine };
+    if (typeof cms.name === "string" && cms.name) next.name = cms.name;
+    if (Array.isArray(cms.legend) && cms.legend.length) next.legend = cms.legend as string[];
+    if (Array.isArray(cms.stations) && cms.stations.length) {
+      next.stations = (cms.stations as string[]).filter(Boolean).map((raw) => {
+        const [name, programs = ""] = raw.split("|");
+        return {
+          name: name.trim(),
+          programs: programs.split(",").map((p) => p.trim()).filter(Boolean),
+        };
+      });
+    }
+    return next;
+  })();
   const others = METRO_LINES.filter((l) => l.id !== line.id);
   const [lead, ...rest] = line.legend;
   const stationCount = line.stations.length;
