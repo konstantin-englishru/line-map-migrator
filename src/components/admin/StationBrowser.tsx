@@ -278,6 +278,7 @@ export function StationBrowser() {
           </div>
         ))}
 
+        {!Array.isArray(base.formatCards) && (
         <div className="ad-card">
           <b>Параметры обучения</b>
           {FORMAT_FIELDS.map((f) => (
@@ -289,6 +290,7 @@ export function StationBrowser() {
             />
           ))}
         </div>
+        )}
 
         <div className="ad-card">
           <b>Финальный блок</b>
