@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { METRO_LINES } from "@/lib/lines-data";
 import { buildCourse, type CourseData } from "@/routes/p.$slug";
@@ -250,6 +250,13 @@ export function StationBrowser() {
     setDraft({ ...(preset as unknown as Draft), ...saved });
   };
 
+  // Прямая ссылка на редактор конкретной страницы: /admin/stations?slug=english
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("slug");
+    if (q) void openProgram("", "", q);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const val = (k: string): string => {
     const v = draft?.[k];
     return typeof v === "string" ? v : "";
@@ -283,8 +290,8 @@ export function StationBrowser() {
     const { error } = await supabase.from("cms_stations").upsert(
       {
         slug,
-        line_id: lineId,
-        name: stationName,
+        ...(lineId ? { line_id: lineId } : {}),
+        ...(stationName ? { name: stationName } : {}),
         content: payload as never,
         updated_at: new Date().toISOString(),
       } as never,
