@@ -36,7 +36,7 @@ export function AdminNav() {
       <b>Админ-панель</b>
       <Link to="/admin">Главная</Link>
       <Link to="/admin/$section" params={{ section: "lines" }}>Линии</Link>
-      <Link to="/admin/$section" params={{ section: "stations" }}>Станции / программы</Link>
+      <Link to="/admin/$section" params={{ section: "stations" }}>Станции</Link>
       <Link to="/admin/$section" params={{ section: "teachers" }}>Преподаватели</Link>
       <Link to="/admin/$section" params={{ section: "settings" }}>Настройки</Link>
       <button
