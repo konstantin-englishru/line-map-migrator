@@ -1700,6 +1700,14 @@ function applyCmsStation(course: CourseData, row: Record<string, unknown> | null
       (next as unknown as Record<string, unknown>)[k] = v;
     }
 
+    // Фото из админки: заменяем только src, стили и разметка не меняются.
+    const c = content as Record<string, unknown>;
+    const hero = c["heroImage"];
+    if (typeof hero === "string" && hero.trim()) next.heroImage = hero;
+    const vis = c["visualImage"];
+    if (typeof vis === "string" && vis.trim() && next.visual) {
+      next.visual = { ...next.visual, image: vis };
+    }
   }
   return next;
 }
