@@ -103,11 +103,24 @@ function PairEditor({
   );
 }
 
+/** Storage-ключ должен быть ASCII: slug может быть кириллицей, поэтому кодируем безопасно. */
+function slugKey(slug: string): string {
+  const ascii = slug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return `${ascii || "station"}-${h.toString(36)}`;
+}
+
 async function uploadStationImage(slug: string, file: File): Promise<string> {
-  const safe = file.name.replace(/[^\w.\-]+/g, "_");
-  const path = `stations/${encodeURIComponent(slug)}/${Date.now()}-${safe}`;
-  const { error } = await supabase.storage.from("cms-images").upload(path, file, { upsert: true });
-  if (error) throw error;
+  if (!slug) throw new Error("Не выбрана станция (пустой slug)");
+  if (!file) throw new Error("Файл не выбран");
+  const extRaw = (file.name.split(".").pop() ?? "").toLowerCase();
+  const ext = /^[a-z0-9]{1,5}$/.test(extRaw) ? extRaw : "jpg";
+  const path = `stations/${slugKey(slug)}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const { error } = await supabase.storage
+    .from("cms-images")
+    .upload(path, file, { upsert: true, contentType: file.type || undefined });
+  if (error) throw new Error(`Загрузка не удалась (${path}): ${error.message}`);
   const { data } = await supabase.storage
     .from("cms-images")
     .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
