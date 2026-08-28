@@ -1689,11 +1689,17 @@ function applyCmsStation(course: CourseData, row: Record<string, unknown> | null
   const content = row["content"];
   if (content && typeof content === "object" && !Array.isArray(content)) {
     for (const [k, v] of Object.entries(content as Record<string, unknown>)) {
-      if (v === null || v === undefined) continue;
+      if (v === null) {
+        // Явное «убрать блок» из админки (например, карточки заменены списком).
+        (next as unknown as Record<string, unknown>)[k] = undefined;
+        continue;
+      }
+      if (v === undefined) continue;
       if (typeof v === "string" && !v.trim()) continue;
       if (Array.isArray(v) && v.length === 0) continue;
       (next as unknown as Record<string, unknown>)[k] = v;
     }
+
   }
   return next;
 }
