@@ -90,62 +90,23 @@ export function Crud({
   };
 
   if (editing) {
-    const set = (k: string, v: unknown) => setEditing({ ...editing, [k]: v });
     return (
       <>
         <h1>{title}</h1>
         {err && <div className="ad-err">{err}</div>}
-        <div className="ad-card">
-          {fields.map((f) => {
-            const v = editing[f.key];
-            return (
-              <label className="ad-field" key={f.key}>
-                <span>{f.label}{f.hint ? ` — ${f.hint}` : ""}</span>
-                {f.type === "textarea" && (
-                  <textarea className="ad-textarea" value={(v as string) ?? ""} onChange={(e) => set(f.key, e.target.value)} />
-                )}
-                {f.type === "text" && (
-                  <input className="ad-input" value={(v as string) ?? ""} onChange={(e) => set(f.key, e.target.value)} />
-                )}
-                {f.type === "number" && (
-                  <input className="ad-input" type="number" value={(v as number) ?? 0} onChange={(e) => set(f.key, Number(e.target.value))} />
-                )}
-                {f.type === "bool" && (
-                  <input type="checkbox" checked={v !== false} onChange={(e) => set(f.key, e.target.checked)} />
-                )}
-                {f.type === "list" && (
-                  <ListEditor value={Array.isArray(v) ? (v as string[]) : []} onChange={(nv) => set(f.key, nv)} />
-                )}
-                {f.type === "image" && (
-                  <div>
-                    <input className="ad-input" value={(v as string) ?? ""} onChange={(e) => set(f.key, e.target.value)} />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        setBusy(true);
-                        try {
-                          set(f.key, await uploadImage(file));
-                        } catch (ex) {
-                          setErr(String((ex as Error).message ?? ex));
-                        }
-                        setBusy(false);
-                      }}
-                    />
-                    {typeof v === "string" && v && <img src={v} alt="" className="ad-thumb" />}
-                  </div>
-                )}
-              </label>
-            );
-          })}
-          <button className="ad-btn" disabled={busy} onClick={() => void save()}>Сохранить</button>{" "}
-          <button className="ad-btn ad-btn-sec" onClick={() => setEditing(null)}>Отмена</button>
-        </div>
+        <RecordForm
+          fields={fields}
+          value={editing}
+          onChange={setEditing}
+          onSave={() => void save()}
+          onCancel={() => setEditing(null)}
+          busy={busy}
+          onError={setErr}
+        />
       </>
     );
   }
+
 
   return (
     <>
