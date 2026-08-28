@@ -29,7 +29,18 @@ export const Route = createFileRoute("/teacher/$id")({
 });
 
 function TeacherPage() {
-  const { teacher: t } = Route.useLoaderData() as { teacher: Teacher };
+  const { teacher: base } = Route.useLoaderData() as { teacher: Teacher };
+  const cms = useCmsRow<Record<string, unknown>>("cms_teachers", "id", base.id);
+  const t = applyOverride(base, cms, {
+    name: "name",
+    role: "position",
+    photo: "image",
+    quote: "short_description",
+    about: "description",
+    education: "education",
+    experience: "experience",
+    facts: "extra",
+  });
   const others = TEACHERS.filter((x) => x.id !== t.id).slice(0, 6);
 
   return (
