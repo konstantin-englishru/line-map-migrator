@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getLine, METRO_LINES, type MetroLine } from "@/lib/lines-data";
+import { useCmsRow } from "@/lib/cms";
 
 export const Route = createFileRoute("/line/$id")({
   head: ({ params }) => {
