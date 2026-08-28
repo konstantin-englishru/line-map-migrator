@@ -119,7 +119,9 @@ const PALETTE = ["#F79EC7", "#B79BEA", "#9EE07A", "#D6E85E", "#FFCB85", "#9DC7EE
 
 const TRIAL_HREF = "#trial-form";
 
-function buildCourse(title: string): CourseData {
+export type { CourseData };
+
+export function buildCourse(title: string): CourseData {
   const base: CourseData = {
     emoji: "🎓",
     title,
@@ -1682,6 +1684,16 @@ function applyCmsStation(course: CourseData, row: Record<string, unknown> | null
       teacher: teacher ?? course.format.teacher,
     };
     next.formatCards = undefined;
+  }
+  // Блочный редактор админки: content хранит переопределения полей шаблона по slug.
+  const content = row["content"];
+  if (content && typeof content === "object" && !Array.isArray(content)) {
+    for (const [k, v] of Object.entries(content as Record<string, unknown>)) {
+      if (v === null || v === undefined) continue;
+      if (typeof v === "string" && !v.trim()) continue;
+      if (Array.isArray(v) && v.length === 0) continue;
+      (next as unknown as Record<string, unknown>)[k] = v;
+    }
   }
   return next;
 }
