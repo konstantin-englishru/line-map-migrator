@@ -206,6 +206,11 @@ export function StationBrowser() {
   const [finalTitle, setFinalTitle] = useState("");
   const [finalSub, setFinalSub] = useState("");
   const [finalCta, setFinalCta] = useState("");
+  const [heroImage, setHeroImage] = useState("");
+  const [visualImage, setVisualImage] = useState("");
+  const [heroFallback, setHeroFallback] = useState("");
+  const [visualFallback, setVisualFallback] = useState("");
+  const [hasVisual, setHasVisual] = useState(false);
   // Исходные значения формата (чтобы понять, менял ли админ эти поля)
   const [baseFormat, setBaseFormat] = useState({ duration: "", schedule: "", mode: "", method: "", teacher: "" });
   const [hadFormatCards, setHadFormatCards] = useState(false);
@@ -273,6 +278,11 @@ export function StationBrowser() {
     setFinalTitle(s("finalTitle", preset.finalTitle ?? ""));
     setFinalSub(s("finalSub", preset.finalSub ?? ""));
     setFinalCta(s("finalCta", preset.finalCta ?? ""));
+    setHeroFallback(preset.heroImage ?? "");
+    setVisualFallback(preset.visual?.image ?? "");
+    setHasVisual(Boolean(preset.visual));
+    setHeroImage(typeof c["heroImage"] === "string" ? (c["heroImage"] as string) : "");
+    setVisualImage(typeof c["visualImage"] === "string" ? (c["visualImage"] as string) : "");
     setEditing(true);
   };
 
@@ -322,6 +332,8 @@ export function StationBrowser() {
       finalTitle,
       finalSub,
       finalCta,
+      heroImage,
+      visualImage,
     };
     if (formatChanged && hadFormatCards) content["formatCards"] = null;
 
@@ -417,6 +429,28 @@ export function StationBrowser() {
           {field("Заголовок", finalTitle, setFinalTitle, true)}
           {field("Подзаголовок", finalSub, setFinalSub, true)}
           {field("Текст кнопки", finalCta, setFinalCta)}
+        </div>
+
+        <div className="ad-card">
+          <h2>Фотографии</h2>
+          <ImageField
+            label="Главное фото (Hero)"
+            slug={slug}
+            value={heroImage}
+            fallback={heroFallback}
+            onChange={setHeroImage}
+            onError={setErr}
+          />
+          {hasVisual && (
+            <ImageField
+              label="Фото в блоке «О курсе»"
+              slug={slug}
+              value={visualImage}
+              fallback={visualFallback}
+              onChange={setVisualImage}
+              onError={setErr}
+            />
+          )}
         </div>
 
         <div className="ad-card">
