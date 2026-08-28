@@ -119,7 +119,9 @@ const PALETTE = ["#F79EC7", "#B79BEA", "#9EE07A", "#D6E85E", "#FFCB85", "#9DC7EE
 
 const TRIAL_HREF = "#trial-form";
 
-function buildCourse(title: string): CourseData {
+export type { CourseData };
+
+export function buildCourse(title: string): CourseData {
   const base: CourseData = {
     emoji: "🎓",
     title,
