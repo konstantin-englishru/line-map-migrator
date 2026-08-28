@@ -1708,8 +1708,8 @@ function CoursePage() {
   const { slug } = Route.useParams();
   const title = decodeURIComponent(slug);
   const cms = useCmsRow<Record<string, unknown>>("cms_stations", "slug", title);
-  if (/индивидуальн/i.test(title)) return <ChoicePage config={INDIVIDUAL_CHOICE} />;
-  if (/прогрессивн/i.test(title)) return <ChoicePage config={PROGRESSIVE_CHOICE} />;
+  if (/^\s*Индивидуальная\s*$/i.test(title)) return <ChoicePage config={INDIVIDUAL_CHOICE} />;
+  if (/^\s*Прогрессивная\s*$/i.test(title)) return <ChoicePage config={PROGRESSIVE_CHOICE} />;
   const course = applyCmsStation(buildCourse(title), cms);
   const trialHref = TRIAL_HREF;
 
