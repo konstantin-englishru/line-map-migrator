@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as LineIdRouteImport } from './routes/line.$id'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,15 +35,22 @@ const LineIdRoute = LineIdRouteImport.update({
   path: '/line/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/line/$id': typeof LineIdRoute
   '/p/$slug': typeof PSlugRoute
   '/teacher/$id': typeof TeacherIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/line/$id': typeof LineIdRoute
   '/p/$slug': typeof PSlugRoute
   '/teacher/$id': typeof TeacherIdRoute
@@ -50,20 +58,28 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/line/$id': typeof LineIdRoute
   '/p/$slug': typeof PSlugRoute
   '/teacher/$id': typeof TeacherIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/line/$id' | '/p/$slug' | '/teacher/$id'
+  fullPaths: '/' | '/admin/login' | '/line/$id' | '/p/$slug' | '/teacher/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/line/$id' | '/p/$slug' | '/teacher/$id'
-  id: '__root__' | '/' | '/line/$id' | '/p/$slug' | '/teacher/$id'
+  to: '/' | '/admin/login' | '/line/$id' | '/p/$slug' | '/teacher/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/login'
+    | '/line/$id'
+    | '/p/$slug'
+    | '/teacher/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   LineIdRoute: typeof LineIdRoute
   PSlugRoute: typeof PSlugRoute
   TeacherIdRoute: typeof TeacherIdRoute
@@ -99,11 +115,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LineIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminLoginRoute: AdminLoginRoute,
   LineIdRoute: LineIdRoute,
   PSlugRoute: PSlugRoute,
   TeacherIdRoute: TeacherIdRoute,
