@@ -1,5 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { getTeacher, TEACHERS, type Teacher } from "@/lib/teachers-data";
+import { useCmsRow, applyOverride } from "@/lib/cms";
 
 export const Route = createFileRoute("/teacher/$id")({
   head: ({ params }) => {
