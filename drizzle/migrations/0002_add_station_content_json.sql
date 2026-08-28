@@ -1,0 +1,1 @@
+ALTER TABLE public.cms_stations ADD COLUMN IF NOT EXISTS content jsonb;

@@ -80,6 +80,7 @@ export type Database = {
           audience: Json | null
           button_text: string | null
           button_url: string | null
+          content: Json | null
           description: string | null
           extra: Json | null
           format: Json | null
@@ -100,6 +101,7 @@ export type Database = {
           audience?: Json | null
           button_text?: string | null
           button_url?: string | null
+          content?: Json | null
           description?: string | null
           extra?: Json | null
           format?: Json | null
@@ -120,6 +122,7 @@ export type Database = {
           audience?: Json | null
           button_text?: string | null
           button_url?: string | null
+          content?: Json | null
           description?: string | null
           extra?: Json | null
           format?: Json | null
