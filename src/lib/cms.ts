@@ -39,7 +39,7 @@ export function applyOverride<B extends object>(
   map: Partial<Record<keyof B & string, string>>,
 ): B {
   if (!row) return base;
-  const out: Record<string, unknown> = { ...base };
+  const out = { ...base } as Record<string, unknown>;
   for (const [baseKey, rowKey] of Object.entries(map)) {
     const v = row[rowKey as string];
     if (isFilled(v)) out[baseKey] = v;
