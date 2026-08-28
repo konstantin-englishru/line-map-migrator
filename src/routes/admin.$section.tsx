@@ -110,7 +110,7 @@ function AdminSection() {
           />
         </>
       )}
-      {!["lines", "stations", "teachers", "settings"].includes(section) && <p>Раздел не найден.</p>}
+      {!["lines", "stations", "stations-all", "teachers", "settings"].includes(section) && <p>Раздел не найден.</p>}
     </AdminGuard>
   );
 }
