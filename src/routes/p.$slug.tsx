@@ -1643,6 +1643,49 @@ export const Route = createFileRoute("/p/$slug")({
   component: CoursePage,
 });
 
+/** Подмешивает заполненный в админке контент в существующий шаблон курса. */
+function applyCmsStation(course: CourseData, row: Record<string, unknown> | null): CourseData {
+  if (!row) return course;
+  const str = (k: string) => (typeof row[k] === "string" && row[k] ? (row[k] as string) : undefined);
+  const list = (k: string) =>
+    Array.isArray(row[k]) && (row[k] as string[]).length ? ((row[k] as string[]).filter(Boolean)) : undefined;
+  const next: CourseData = { ...course };
+
+  const h1 = str("title");
+  if (h1) next.h1 = h1;
+  const tagline = str("short_description");
+  if (tagline) next.tagline = tagline;
+  const desc = str("description");
+  if (desc) next.description = desc;
+  const image = str("image");
+  if (image) next.heroImage = image;
+  const cta = str("button_text");
+  if (cta) next.primaryCta = cta;
+
+  const audience = list("audience");
+  if (audience) {
+    next.forWhom = audience;
+    next.forWhomCards = undefined;
+  }
+  const advantages = list("advantages");
+  if (advantages) next.results = advantages;
+  const program = list("program");
+  if (program) next.modules = program.map((t, i) => ({ icon: String(i + 1), title: t, desc: "" }));
+  const fmt = list("format");
+  if (fmt) {
+    const [duration, schedule, mode, method, teacher] = fmt;
+    next.format = {
+      duration: duration ?? course.format.duration,
+      schedule: schedule ?? course.format.schedule,
+      mode: mode ?? course.format.mode,
+      method: method ?? course.format.method,
+      teacher: teacher ?? course.format.teacher,
+    };
+    next.formatCards = undefined;
+  }
+  return next;
+}
+
 function CoursePage() {
   const { slug } = Route.useParams();
   const title = decodeURIComponent(slug);
