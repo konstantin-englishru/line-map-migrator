@@ -14,16 +14,211 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cms_lines: {
+        Row: {
+          description: string | null
+          full_description: string | null
+          id: string
+          image: string | null
+          is_active: boolean
+          legend: Json | null
+          name: string | null
+          slug: string | null
+          sort_order: number
+          stations: Json | null
+          updated_at: string
+        }
+        Insert: {
+          description?: string | null
+          full_description?: string | null
+          id: string
+          image?: string | null
+          is_active?: boolean
+          legend?: Json | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number
+          stations?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          description?: string | null
+          full_description?: string | null
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          legend?: Json | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number
+          stations?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cms_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: []
+      }
+      cms_stations: {
+        Row: {
+          advantages: Json | null
+          audience: Json | null
+          button_text: string | null
+          button_url: string | null
+          description: string | null
+          extra: Json | null
+          format: Json | null
+          id: string
+          image: string | null
+          is_active: boolean
+          line_id: string | null
+          name: string | null
+          program: Json | null
+          short_description: string | null
+          slug: string | null
+          sort_order: number
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          advantages?: Json | null
+          audience?: Json | null
+          button_text?: string | null
+          button_url?: string | null
+          description?: string | null
+          extra?: Json | null
+          format?: Json | null
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          line_id?: string | null
+          name?: string | null
+          program?: Json | null
+          short_description?: string | null
+          slug?: string | null
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          advantages?: Json | null
+          audience?: Json | null
+          button_text?: string | null
+          button_url?: string | null
+          description?: string | null
+          extra?: Json | null
+          format?: Json | null
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          line_id?: string | null
+          name?: string | null
+          program?: Json | null
+          short_description?: string | null
+          slug?: string | null
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cms_teachers: {
+        Row: {
+          description: string | null
+          education: string | null
+          experience: string | null
+          extra: Json | null
+          id: string
+          image: string | null
+          is_active: boolean
+          name: string | null
+          position: string | null
+          short_description: string | null
+          slug: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          description?: string | null
+          education?: string | null
+          experience?: string | null
+          extra?: Json | null
+          id: string
+          image?: string | null
+          is_active?: boolean
+          name?: string | null
+          position?: string | null
+          short_description?: string | null
+          slug?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          description?: string | null
+          education?: string | null
+          experience?: string | null
+          extra?: Json | null
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          name?: string | null
+          position?: string | null
+          short_description?: string | null
+          slug?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_admin: { Args: never; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +345,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
