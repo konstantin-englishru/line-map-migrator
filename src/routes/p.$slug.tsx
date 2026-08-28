@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useCmsRow } from "@/lib/cms";
 import englishAdultImg from "@/assets/english-adult.jpg";
 import germanAdultImg from "@/assets/german-adult.jpg";
 import spanishAdultImg from "@/assets/spanish-adult.jpg";
