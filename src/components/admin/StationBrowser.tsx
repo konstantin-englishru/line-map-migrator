@@ -223,6 +223,11 @@ export function StationBrowser() {
     );
 
     const content: Record<string, unknown> = {
+      // Дублируем заголовок/описание в content: у части станций старые записи
+      // уже содержат h1/title/description, которые перекрывают колонки таблицы.
+      h1: title,
+      title,
+      description,
       forWhom: list,
       forWhomCards: null,
       primaryCta,
