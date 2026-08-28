@@ -38,8 +38,8 @@ export function StationBrowser() {
     const content = (data?.content as Record<string, unknown> | null) ?? {};
     const savedForWhom = Array.isArray(content["forWhom"]) ? (content["forWhom"] as string[]) : null;
     setSlug(program);
-    setTitle(data?.title || preset.h1);
-    setDescription(data?.description || preset.description);
+    setTitle(data?.title ?? preset.h1 ?? "");
+    setDescription(data?.description ?? preset.description ?? "");
     setForWhom((savedForWhom ?? preset.forWhom).join("\n"));
     setEditing(true);
   };
