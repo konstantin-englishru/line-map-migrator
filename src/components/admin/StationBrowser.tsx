@@ -4,21 +4,143 @@ import { METRO_LINES } from "@/lib/lines-data";
 import { buildCourse } from "@/routes/p.$slug";
 
 /**
- * Простой редактор текста страниц станций.
- * Три поля: заголовок, описание, «Для кого этот курс».
+ * Простой редактор текстов страниц станций.
  * Данные хранятся в cms_stations по slug и читаются шаблоном p.$slug.tsx.
+ * Пустые поля не сохраняются — страница показывает значение по умолчанию.
  */
+
+type Pair = { title: string; desc: string };
+
+function move<T>(arr: T[], i: number, d: number): T[] {
+  const j = i + d;
+  if (j < 0 || j >= arr.length) return arr;
+  const next = arr.slice();
+  const tmp = next[i]!;
+  next[i] = next[j]!;
+  next[j] = tmp;
+  return next;
+}
+
+function ListEditor({
+  label,
+  items,
+  onChange,
+}: {
+  label: string;
+  items: string[];
+  onChange: (v: string[]) => void;
+}) {
+  return (
+    <div className="ad-field">
+      <span>{label}</span>
+      {items.map((it, i) => (
+        <div key={i} style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+          <input
+            className="ad-input"
+            style={{ flex: 1 }}
+            value={it}
+            onChange={(e) => {
+              const next = items.slice();
+              next[i] = e.target.value;
+              onChange(next);
+            }}
+          />
+          <button className="ad-btn ad-btn-sec" onClick={() => onChange(move(items, i, -1))}>↑</button>
+          <button className="ad-btn ad-btn-sec" onClick={() => onChange(move(items, i, 1))}>↓</button>
+          <button className="ad-btn ad-btn-sec" onClick={() => onChange(items.filter((_, k) => k !== i))}>✕</button>
+        </div>
+      ))}
+      <button className="ad-btn ad-btn-sec" onClick={() => onChange([...items, ""])}>+ Добавить</button>
+    </div>
+  );
+}
+
+function PairEditor({
+  label,
+  items,
+  onChange,
+}: {
+  label: string;
+  items: Pair[];
+  onChange: (v: Pair[]) => void;
+}) {
+  return (
+    <div className="ad-field">
+      <span>{label}</span>
+      {items.map((it, i) => (
+        <div key={i} style={{ border: "1px solid #eee", borderRadius: 8, padding: 8, marginBottom: 8 }}>
+          <input
+            className="ad-input"
+            placeholder="Заголовок"
+            value={it.title}
+            onChange={(e) => {
+              const next = items.slice();
+              next[i] = { ...it, title: e.target.value };
+              onChange(next);
+            }}
+          />
+          <textarea
+            className="ad-textarea"
+            placeholder="Описание"
+            value={it.desc}
+            onChange={(e) => {
+              const next = items.slice();
+              next[i] = { ...it, desc: e.target.value };
+              onChange(next);
+            }}
+          />
+          <div style={{ display: "flex", gap: 6 }}>
+            <button className="ad-btn ad-btn-sec" onClick={() => onChange(move(items, i, -1))}>↑</button>
+            <button className="ad-btn ad-btn-sec" onClick={() => onChange(move(items, i, 1))}>↓</button>
+            <button className="ad-btn ad-btn-sec" onClick={() => onChange(items.filter((_, k) => k !== i))}>✕</button>
+          </div>
+        </div>
+      ))}
+      <button className="ad-btn ad-btn-sec" onClick={() => onChange([...items, { title: "", desc: "" }])}>
+        + Добавить
+      </button>
+    </div>
+  );
+}
 
 export function StationBrowser() {
   const [openLine, setOpenLine] = useState<string | null>(null);
   const [slug, setSlug] = useState<string>("");
   const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [forWhom, setForWhom] = useState("");
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [forWhom, setForWhom] = useState("");
+  const [primaryCta, setPrimaryCta] = useState("");
+  const [phone, setPhone] = useState("");
+  const [aboutTitle, setAboutTitle] = useState("");
+  const [aboutSub, setAboutSub] = useState("");
+  const [resultsTitle, setResultsTitle] = useState("");
+  const [results, setResults] = useState<string[]>([]);
+  const [benefitsTitle, setBenefitsTitle] = useState("");
+  const [benefitsSub, setBenefitsSub] = useState("");
+  const [benefits, setBenefits] = useState<Pair[]>([]);
+  const [programTitle, setProgramTitle] = useState("");
+  const [programSub, setProgramSub] = useState("");
+  const [modules, setModules] = useState<Pair[]>([]);
+  const [formatTitle, setFormatTitle] = useState("");
+  const [formatSub, setFormatSub] = useState("");
+  const [duration, setDuration] = useState("");
+  const [schedule, setSchedule] = useState("");
+  const [mode, setMode] = useState("");
+  const [method, setMethod] = useState("");
+  const [teacher, setTeacher] = useState("");
+  const [finalTitle, setFinalTitle] = useState("");
+  const [finalSub, setFinalSub] = useState("");
+  const [finalCta, setFinalCta] = useState("");
+  // Исходные значения формата (чтобы понять, менял ли админ эти поля)
+  const [baseFormat, setBaseFormat] = useState({ duration: "", schedule: "", mode: "", method: "", teacher: "" });
+  const [hadFormatCards, setHadFormatCards] = useState(false);
+  const [baseBenefits, setBaseBenefits] = useState<Record<string, unknown>[]>([]);
+  const [baseModules, setBaseModules] = useState<Record<string, unknown>[]>([]);
 
   const openProgram = async (program: string) => {
     setErr("");
@@ -35,12 +157,52 @@ export function StationBrowser() {
       return;
     }
     const preset = buildCourse(program);
-    const content = (data?.content as Record<string, unknown> | null) ?? {};
-    const savedForWhom = Array.isArray(content["forWhom"]) ? (content["forWhom"] as string[]) : null;
+    const c = (data?.content as Record<string, unknown> | null) ?? {};
+    const s = (k: string, fb?: string) => (typeof c[k] === "string" ? (c[k] as string) : (fb ?? ""));
+    const arr = (k: string): unknown[] | null => (Array.isArray(c[k]) ? (c[k] as unknown[]) : null);
+
     setSlug(program);
     setTitle(data?.title ?? preset.h1 ?? "");
     setDescription(data?.description ?? preset.description ?? "");
-    setForWhom((savedForWhom ?? preset.forWhom).join("\n"));
+    setForWhom(((arr("forWhom") as string[] | null) ?? preset.forWhom).join("\n"));
+    setPrimaryCta(s("primaryCta", preset.primaryCta));
+    setPhone(s("phone", preset.phone ?? ""));
+    setAboutTitle(s("aboutTitle", preset.aboutTitle ?? ""));
+    setAboutSub(s("aboutSub", preset.aboutSub ?? ""));
+    setResultsTitle(s("resultsTitle", preset.resultsTitle ?? ""));
+    setResults(((arr("results") as string[] | null) ?? preset.results ?? []).slice());
+    setBenefitsTitle(s("benefitsTitle", preset.benefitsTitle ?? ""));
+    setBenefitsSub(s("benefitsSub", preset.benefitsSub ?? ""));
+    const bSrc = ((arr("benefits") as Record<string, unknown>[] | null) ??
+      (preset.benefits as unknown as Record<string, unknown>[]) ?? []);
+    setBaseBenefits(bSrc);
+    setBenefits(bSrc.map((b) => ({ title: String(b["title"] ?? ""), desc: String(b["desc"] ?? "") })));
+    setProgramTitle(s("programTitle", preset.programTitle ?? ""));
+    setProgramSub(s("programSub", preset.programSub ?? ""));
+    const mSrc = ((arr("modules") as Record<string, unknown>[] | null) ??
+      (preset.modules as unknown as Record<string, unknown>[]) ?? []);
+    setBaseModules(mSrc);
+    setModules(mSrc.map((m) => ({ title: String(m["title"] ?? ""), desc: String(m["desc"] ?? "") })));
+    setFormatTitle(s("formatTitle", preset.formatTitle ?? ""));
+    setFormatSub(s("formatSub", preset.formatSub ?? ""));
+    const cf = (c["format"] as Record<string, string> | undefined) ?? undefined;
+    const f = { ...preset.format, ...(cf ?? {}) };
+    setDuration(f.duration ?? "");
+    setSchedule(f.schedule ?? "");
+    setMode(f.mode ?? "");
+    setMethod(f.method ?? "");
+    setTeacher(f.teacher ?? "");
+    setBaseFormat({
+      duration: f.duration ?? "",
+      schedule: f.schedule ?? "",
+      mode: f.mode ?? "",
+      method: f.method ?? "",
+      teacher: f.teacher ?? "",
+    });
+    setHadFormatCards(Boolean(preset.formatCards) && c["formatCards"] !== null);
+    setFinalTitle(s("finalTitle", preset.finalTitle ?? ""));
+    setFinalSub(s("finalSub", preset.finalSub ?? ""));
+    setFinalCta(s("finalCta", preset.finalCta ?? ""));
     setEditing(true);
   };
 
@@ -54,14 +216,47 @@ export function StationBrowser() {
   const save = async () => {
     setBusy(true);
     setErr("");
-    const list = forWhom.split("\n").map((s) => s.trim()).filter(Boolean);
+    const list = forWhom.split("\n").map((x) => x.trim()).filter(Boolean);
+    const fmt = { duration, schedule, mode, method, teacher };
+    const formatChanged = (Object.keys(fmt) as (keyof typeof fmt)[]).some(
+      (k) => fmt[k] !== baseFormat[k],
+    );
+
+    const content: Record<string, unknown> = {
+      forWhom: list,
+      forWhomCards: null,
+      primaryCta,
+      phone,
+      aboutTitle,
+      aboutSub,
+      resultsTitle,
+      results: results.map((r) => r.trim()).filter(Boolean),
+      benefitsTitle,
+      benefitsSub,
+      benefits: benefits
+        .filter((b) => b.title.trim() || b.desc.trim())
+        .map((b, i) => ({ ...(baseBenefits[i] ?? {}), title: b.title, desc: b.desc })),
+      programTitle,
+      programSub,
+      modules: modules
+        .filter((m) => m.title.trim() || m.desc.trim())
+        .map((m, i) => ({ icon: String(i + 1), ...(baseModules[i] ?? {}), title: m.title, desc: m.desc })),
+      formatTitle,
+      formatSub,
+      format: fmt,
+      finalTitle,
+      finalSub,
+      finalCta,
+    };
+    if (formatChanged && hadFormatCards) content["formatCards"] = null;
+
     const { error } = await supabase.from("cms_stations").upsert(
       {
         slug,
         name: slug,
         title,
         description,
-        content: { forWhom: list, forWhomCards: null } as never,
+        content: content as never,
         updated_at: new Date().toISOString(),
       } as never,
       { onConflict: "slug" },
@@ -75,26 +270,80 @@ export function StationBrowser() {
     setMsg(`Сохранено. Страница /p/${slug} обновлена.`);
   };
 
+  const field = (label: string, value: string, set: (v: string) => void, area = false) => (
+    <label className="ad-field" key={label}>
+      <span>{label}</span>
+      {area ? (
+        <textarea className="ad-textarea" value={value} onChange={(e) => set(e.target.value)} />
+      ) : (
+        <input className="ad-input" value={value} onChange={(e) => set(e.target.value)} />
+      )}
+    </label>
+  );
+
   if (editing) {
     return (
       <>
         <h1>{slug}</h1>
         <p className="ad-mini">Страница: /p/{encodeURIComponent(slug)}</p>
         {err && <div className="ad-err">{err}</div>}
+
         <div className="ad-card">
-          <label className="ad-field">
-            <span>Заголовок страницы</span>
-            <input className="ad-input" value={title} onChange={(e) => setTitle(e.target.value)} />
-          </label>
-          <label className="ad-field">
-            <span>Описание страницы</span>
-            <textarea className="ad-textarea" value={description} onChange={(e) => setDescription(e.target.value)} />
-          </label>
+          <h2>Основное</h2>
+          {field("Заголовок страницы", title, setTitle)}
+          {field("Описание страницы", description, setDescription, true)}
           <label className="ad-field">
             <span>Для кого этот курс (по одному пункту в строке)</span>
             <textarea className="ad-textarea" rows={6} value={forWhom} onChange={(e) => setForWhom(e.target.value)} />
           </label>
+          {field("Текст основной кнопки (Hero)", primaryCta, setPrimaryCta)}
+          {field("Телефон", phone, setPhone)}
         </div>
+
+        <div className="ad-card">
+          <h2>О курсе</h2>
+          {field("Заголовок блока", aboutTitle, setAboutTitle, true)}
+          {field("Подзаголовок / текст", aboutSub, setAboutSub, true)}
+        </div>
+
+        <div className="ad-card">
+          <h2>Результаты</h2>
+          {field("Заголовок блока", resultsTitle, setResultsTitle)}
+          <ListEditor label="Пункты результатов" items={results} onChange={setResults} />
+        </div>
+
+        <div className="ad-card">
+          <h2>Преимущества</h2>
+          {field("Заголовок", benefitsTitle, setBenefitsTitle, true)}
+          {field("Подзаголовок", benefitsSub, setBenefitsSub, true)}
+          <PairEditor label="Преимущества" items={benefits} onChange={setBenefits} />
+        </div>
+
+        <div className="ad-card">
+          <h2>Программа обучения</h2>
+          {field("Заголовок", programTitle, setProgramTitle, true)}
+          {field("Подзаголовок", programSub, setProgramSub, true)}
+          <PairEditor label="Модули" items={modules} onChange={setModules} />
+        </div>
+
+        <div className="ad-card">
+          <h2>Формат обучения</h2>
+          {field("Заголовок", formatTitle, setFormatTitle)}
+          {field("Подзаголовок", formatSub, setFormatSub, true)}
+          {field("Длительность", duration, setDuration)}
+          {field("Расписание", schedule, setSchedule)}
+          {field("Формат", mode, setMode)}
+          {field("Методика", method, setMethod)}
+          {field("Преподаватели", teacher, setTeacher)}
+        </div>
+
+        <div className="ad-card">
+          <h2>Финальный блок</h2>
+          {field("Заголовок", finalTitle, setFinalTitle, true)}
+          {field("Подзаголовок", finalSub, setFinalSub, true)}
+          {field("Текст кнопки", finalCta, setFinalCta)}
+        </div>
+
         <div className="ad-card">
           <button className="ad-btn" disabled={busy} onClick={() => void save()}>
             Сохранить
