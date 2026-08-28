@@ -103,6 +103,76 @@ function PairEditor({
   );
 }
 
+async function uploadStationImage(slug: string, file: File): Promise<string> {
+  const safe = file.name.replace(/[^\w.\-]+/g, "_");
+  const path = `stations/${encodeURIComponent(slug)}/${Date.now()}-${safe}`;
+  const { error } = await supabase.storage.from("cms-images").upload(path, file, { upsert: true });
+  if (error) throw error;
+  const { data } = await supabase.storage
+    .from("cms-images")
+    .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+  return data?.signedUrl ?? "";
+}
+
+function ImageField({
+  label,
+  slug,
+  value,
+  fallback,
+  onChange,
+  onError,
+}: {
+  label: string;
+  slug: string;
+  value: string;
+  fallback: string;
+  onChange: (v: string) => void;
+  onError: (m: string) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const shown = value || fallback;
+  return (
+    <div className="ad-field">
+      <span>{label}</span>
+      {shown ? (
+        <img
+          src={shown}
+          alt=""
+          style={{ maxWidth: 320, width: "100%", borderRadius: 10, display: "block", marginBottom: 8 }}
+        />
+      ) : (
+        <div className="ad-mini">Фото нет</div>
+      )}
+      <div className="ad-mini" style={{ marginBottom: 6 }}>
+        {value ? "Загружено через админку" : "Изображение по умолчанию"}
+      </div>
+      <input
+        type="file"
+        accept="image/*"
+        disabled={busy}
+        onChange={async (e) => {
+          const f = e.target.files?.[0];
+          if (!f) return;
+          setBusy(true);
+          try {
+            const url = await uploadStationImage(slug, f);
+            onChange(url);
+          } catch (x) {
+            onError(x instanceof Error ? x.message : String(x));
+          }
+          setBusy(false);
+          e.target.value = "";
+        }}
+      />
+      {value && (
+        <button className="ad-btn ad-btn-sec" style={{ marginTop: 8 }} onClick={() => onChange("")}>
+          Удалить фото (вернуть исходное)
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function StationBrowser() {
   const [openLine, setOpenLine] = useState<string | null>(null);
   const [slug, setSlug] = useState<string>("");
