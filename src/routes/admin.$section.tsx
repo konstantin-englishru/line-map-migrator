@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminGuard } from "@/components/admin/AdminGuard";
 import { Crud, SettingsEditor, type Field } from "@/components/admin/Crud";
+import { StationBrowser } from "@/components/admin/StationBrowser";
+
 
 export const Route = createFileRoute("/admin/$section")({
   ssr: false,
@@ -71,9 +73,11 @@ function AdminSection() {
       {section === "lines" && (
         <Crud table="cms_lines" title="Линии" fields={LINE_FIELDS} idField="id" labelField="name" />
       )}
-      {section === "stations" && (
-        <Crud table="cms_stations" title="Станции / программы" fields={STATION_FIELDS} idField="slug" labelField="name" />
+      {section === "stations" && <StationBrowser />}
+      {section === "stations-all" && (
+        <Crud table="cms_stations" title="Станции / программы (список)" fields={STATION_FIELDS} idField="slug" labelField="name" />
       )}
+
       {section === "teachers" && (
         <Crud table="cms_teachers" title="Преподаватели" fields={TEACHER_FIELDS} idField="id" labelField="name" />
       )}
@@ -106,7 +110,7 @@ function AdminSection() {
           />
         </>
       )}
-      {!["lines", "stations", "teachers", "settings"].includes(section) && <p>Раздел не найден.</p>}
+      {!["lines", "stations", "stations-all", "teachers", "settings"].includes(section) && <p>Раздел не найден.</p>}
     </AdminGuard>
   );
 }
