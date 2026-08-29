@@ -178,6 +178,9 @@ export type Database = {
       }
       cms_teachers: {
         Row: {
+          achievements: Json | null
+          ages: string | null
+          badges: Json | null
           description: string | null
           education: string | null
           experience: string | null
@@ -192,10 +195,14 @@ export type Database = {
           signup_url: string | null
           slug: string | null
           sort_order: number
+          subjects: Json | null
           trial_url: string | null
           updated_at: string
         }
         Insert: {
+          achievements?: Json | null
+          ages?: string | null
+          badges?: Json | null
           description?: string | null
           education?: string | null
           experience?: string | null
@@ -210,10 +217,14 @@ export type Database = {
           signup_url?: string | null
           slug?: string | null
           sort_order?: number
+          subjects?: Json | null
           trial_url?: string | null
           updated_at?: string
         }
         Update: {
+          achievements?: Json | null
+          ages?: string | null
+          badges?: Json | null
           description?: string | null
           education?: string | null
           experience?: string | null
@@ -228,6 +239,7 @@ export type Database = {
           signup_url?: string | null
           slug?: string | null
           sort_order?: number
+          subjects?: Json | null
           trial_url?: string | null
           updated_at?: string
         }
