@@ -3520,8 +3520,9 @@
             io.observe(b);
           });
         }
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-        else init();
+        // ждём полной загрузки: до этого высоты блоков ещё не посчитаны
+        if (document.readyState === 'complete') init();
+        else window.addEventListener('load', init);
       })();
     </script>
 
