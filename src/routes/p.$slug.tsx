@@ -95,6 +95,8 @@ type CourseData = {
   secondaryCta: string;
   heroImage?: string;
   heroImageAlt?: string;
+  /** Подпись в карточке справа в hero (по умолчанию «пробное занятие»); null — скрыть. */
+  heroCardSub?: string | null;
   stats: { value: string; label: string }[];
   visual?: { image: string; alt: string; lead: string; paragraphs: string[] };
   aboutTitle?: string;
@@ -1785,7 +1787,9 @@ function CoursePage() {
                   <div className="cp-hero-card">
                     <div className="cp-hero-emoji">{course.emoji}</div>
                     <div className="cp-hero-card-title">{course.title}</div>
-                    <div className="cp-hero-card-sub">пробное занятие</div>
+                    {course.heroCardSub !== null && (
+                      <div className="cp-hero-card-sub">{course.heroCardSub ?? "пробное занятие"}</div>
+                    )}
                   </div>
                 </>
               )}
