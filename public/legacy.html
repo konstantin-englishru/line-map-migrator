@@ -1635,7 +1635,8 @@
 
             // ---------- ЛИНИИ И СТАНЦИИ ----------
             METRO_LINES.forEach((line, lineIdx) => {
-                const angleDeg = ANGLES[line.id] ?? line.angle;
+                const rotDeg = ((CURVES[line.id] || {}).rot) || 0;
+                const angleDeg = (ANGLES[line.id] ?? line.angle) + rotDeg;
                 const rad = degreesToRadians(angleDeg);
                 const stationsCount = line.stations.length;
 
