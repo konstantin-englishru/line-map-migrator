@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getLine, METRO_LINES, type MetroLine } from "@/lib/lines-data";
 import { useCmsRow } from "@/lib/cms";
+import { useLeadFormUrl } from "@/lib/site-cms";
 
 export const Route = createFileRoute("/line/$id")({
   head: ({ params }) => {
@@ -154,7 +155,7 @@ function LinePage() {
             </p>
             <div className="lp-alfa-form">
               <iframe
-                src="https://gorodznaniy.s20.online/common/1/form/draw?id=7&baseColor=205EDC&borderRadius=8&css=%2F%2Fcdn.alfacrm.pro%2Flead-form%2Fform.css"
+                src={leadFormUrl}
                 title="Записаться на пробное занятие"
                 loading="lazy"
                 style={{
