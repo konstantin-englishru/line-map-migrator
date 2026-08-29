@@ -2997,6 +2997,53 @@
             bend.addEventListener('input', push);
             len.addEventListener('input', push);
             rot.addEventListener('input', push);
+            panel.querySelector('#me-save').addEventListener('click', async () => {
+                const msg = panel.querySelector('#me-save-msg');
+                const dump = {
+                    labels:   loadLabelOffsets(),
+                    stations: loadStationOffsets(),
+                    geom:     loadLineGeom(),
+                    style:    loadMapStyle(),
+                    names:    loadNameOverrides()
+                };
+                let token = '';
+                try {
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const k = localStorage.key(i);
+                        if (k && /^sb-.*-auth-token$/.test(k)) {
+                            const v = JSON.parse(localStorage.getItem(k) || '{}');
+                            token = (v && (v.access_token || (v.currentSession && v.currentSession.access_token))) || '';
+                            if (token) break;
+                        }
+                    }
+                } catch (e) {}
+                if (!token) {
+                    msg.textContent = 'Нужно войти в админку в этой же вкладке браузера.';
+                    msg.style.color = '#DC2626';
+                    return;
+                }
+                msg.textContent = 'Сохраняем…';
+                msg.style.color = '#334155';
+                try {
+                    const url = 'https://ooaratxafchkajuxdjoz.supabase.co/rest/v1/cms_settings?on_conflict=key';
+                    const r = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            apikey: 'sb_publishable_u8toSqgX3EV6MEGx1GhLXw_0kAmYMS8',
+                            Authorization: 'Bearer ' + token,
+                            'Content-Type': 'application/json',
+                            Prefer: 'resolution=merge-duplicates'
+                        },
+                        body: JSON.stringify([{ key: 'map_layout', value: JSON.stringify(dump), updated_at: new Date().toISOString() }])
+                    });
+                    if (!r.ok) throw new Error(await r.text());
+                    msg.textContent = 'Схема сохранена — её видят все посетители сайта.';
+                    msg.style.color = '#16A34A';
+                } catch (e) {
+                    msg.textContent = 'Не удалось сохранить: ' + (e && e.message ? e.message : e);
+                    msg.style.color = '#DC2626';
+                }
+            });
             panel.querySelector('#me-copy').addEventListener('click', () => {
                 const dump = JSON.stringify({
                     labels:   loadLabelOffsets(),
