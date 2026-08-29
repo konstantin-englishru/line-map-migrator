@@ -113,12 +113,17 @@ export function Crud({
   fields,
   idField,
   labelField,
+  filter,
+  intro,
 }: {
-  table: "cms_lines" | "cms_stations" | "cms_teachers" | "cms_reviews";
+  table: "cms_lines" | "cms_stations" | "cms_teachers" | "cms_reviews" | "cms_blocks";
   title: string;
   fields: Field[];
   idField: string;
   labelField: string;
+  /** Ограничение выборки (используется для страниц-«баблов» в общей таблице cms_blocks). */
+  filter?: { column: string; value: string };
+  intro?: string;
 }) {
   const [rows, setRows] = useState<Row[]>([]);
   const [editing, setEditing] = useState<Row | null>(null);
@@ -127,14 +132,16 @@ export function Crud({
   const [busy, setBusy] = useState(false);
 
   const load = async () => {
-    const { data, error } = await supabase.from(table).select("*").order("sort_order").order(labelField);
+    let q = supabase.from(table).select("*");
+    if (filter) q = q.eq(filter.column, filter.value);
+    const { data, error } = await q.order("sort_order").order(labelField);
     if (error) setErr(error.message);
     setRows((data as Row[]) ?? []);
   };
   useEffect(() => {
     void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [table]);
+  }, [table, filter?.value]);
 
   const save = async () => {
     if (!editing) return;
@@ -163,6 +170,18 @@ export function Crud({
     void load();
   };
 
+  /** Переставить запись в списке (меняем sort_order у соседей). */
+  const move = async (index: number, dir: -1 | 1) => {
+    const j = index + dir;
+    if (j < 0 || j >= rows.length) return;
+    const a = rows[index], b = rows[j];
+    setBusy(true);
+    await supabase.from(table).update({ sort_order: j } as never).eq(idField, a[idField] as string);
+    await supabase.from(table).update({ sort_order: index } as never).eq(idField, b[idField] as string);
+    setBusy(false);
+    void load();
+  };
+
   if (editing) {
     return (
       <>
@@ -185,11 +204,12 @@ export function Crud({
   return (
     <>
       <h1>{title}</h1>
+      {intro && <p className="ad-mini">{intro}</p>}
       {msg && <div className="ad-msg">{msg}</div>}
       {err && <div className="ad-err">{err}</div>}
       <div className="ad-card">
         {rows.length === 0 && <p className="ad-mini">Пока нет записей.</p>}
-        {rows.map((r) => (
+        {rows.map((r, i) => (
           <div className="ad-row" key={String(r[idField])}>
             <div>
               <b>{String(r[labelField] ?? r[idField])}</b>{" "}
@@ -197,6 +217,8 @@ export function Crud({
               <div className="ad-mini">{String(r[idField])}</div>
             </div>
             <div>
+              <button className="ad-btn ad-btn-sec" disabled={busy} onClick={() => void move(i, -1)}>↑</button>{" "}
+              <button className="ad-btn ad-btn-sec" disabled={busy} onClick={() => void move(i, 1)}>↓</button>{" "}
               <button className="ad-btn ad-btn-sec" onClick={() => setEditing(r)}>Редактировать</button>{" "}
               <button className="ad-btn ad-btn-del" onClick={() => void remove(r)}>Удалить</button>
             </div>
@@ -208,6 +230,7 @@ export function Crud({
         onClick={() => {
           const blank: Row = { sort_order: rows.length, is_active: true };
           for (const f of fields) if (!(f.key in blank)) blank[f.key] = f.type === "list" ? [] : "";
+          if (filter) blank[filter.column] = filter.value;
           setEditing(blank);
         }}
       >

@@ -9,6 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SvedeniyaRouteImport } from './routes/svedeniya'
+import { Route as MediaRouteImport } from './routes/media'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as TeacherIdRouteImport } from './routes/teacher.$id'
@@ -17,6 +22,31 @@ import { Route as LineIdRouteImport } from './routes/line.$id'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminSectionRouteImport } from './routes/admin.$section'
 
+const SvedeniyaRoute = SvedeniyaRouteImport.update({
+  id: '/svedeniya',
+  path: '/svedeniya',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesRoute = ArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +85,11 @@ const AdminSectionRoute = AdminSectionRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/articles': typeof ArticlesRoute
+  '/contacts': typeof ContactsRoute
+  '/history': typeof HistoryRoute
+  '/media': typeof MediaRoute
+  '/svedeniya': typeof SvedeniyaRoute
   '/admin/$section': typeof AdminSectionRoute
   '/admin/login': typeof AdminLoginRoute
   '/line/$id': typeof LineIdRoute
@@ -64,6 +99,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/articles': typeof ArticlesRoute
+  '/contacts': typeof ContactsRoute
+  '/history': typeof HistoryRoute
+  '/media': typeof MediaRoute
+  '/svedeniya': typeof SvedeniyaRoute
   '/admin/$section': typeof AdminSectionRoute
   '/admin/login': typeof AdminLoginRoute
   '/line/$id': typeof LineIdRoute
@@ -74,6 +114,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/articles': typeof ArticlesRoute
+  '/contacts': typeof ContactsRoute
+  '/history': typeof HistoryRoute
+  '/media': typeof MediaRoute
+  '/svedeniya': typeof SvedeniyaRoute
   '/admin/$section': typeof AdminSectionRoute
   '/admin/login': typeof AdminLoginRoute
   '/line/$id': typeof LineIdRoute
@@ -85,6 +130,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/articles'
+    | '/contacts'
+    | '/history'
+    | '/media'
+    | '/svedeniya'
     | '/admin/$section'
     | '/admin/login'
     | '/line/$id'
@@ -94,6 +144,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/articles'
+    | '/contacts'
+    | '/history'
+    | '/media'
+    | '/svedeniya'
     | '/admin/$section'
     | '/admin/login'
     | '/line/$id'
@@ -103,6 +158,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/articles'
+    | '/contacts'
+    | '/history'
+    | '/media'
+    | '/svedeniya'
     | '/admin/$section'
     | '/admin/login'
     | '/line/$id'
@@ -113,6 +173,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArticlesRoute: typeof ArticlesRoute
+  ContactsRoute: typeof ContactsRoute
+  HistoryRoute: typeof HistoryRoute
+  MediaRoute: typeof MediaRoute
+  SvedeniyaRoute: typeof SvedeniyaRoute
   AdminSectionRoute: typeof AdminSectionRoute
   AdminLoginRoute: typeof AdminLoginRoute
   LineIdRoute: typeof LineIdRoute
@@ -123,6 +188,41 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/svedeniya': {
+      id: '/svedeniya'
+      path: '/svedeniya'
+      fullPath: '/svedeniya'
+      preLoaderRoute: typeof SvedeniyaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles': {
+      id: '/articles'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof ArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -177,6 +277,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArticlesRoute: ArticlesRoute,
+  ContactsRoute: ContactsRoute,
+  HistoryRoute: HistoryRoute,
+  MediaRoute: MediaRoute,
+  SvedeniyaRoute: SvedeniyaRoute,
   AdminSectionRoute: AdminSectionRoute,
   AdminLoginRoute: AdminLoginRoute,
   LineIdRoute: LineIdRoute,

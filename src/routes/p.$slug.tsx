@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useLeadFormUrl } from "@/lib/site-cms";
 import { useCmsRow } from "@/lib/cms";
 import englishAdultImg from "@/assets/english-adult.jpg";
 import germanAdultImg from "@/assets/german-adult.jpg";
@@ -2016,14 +2017,12 @@ function CoursePage() {
   );
 }
 
-const ALFA_FORM_URL =
-  "https://gorodznaniy.s20.online/common/1/form/draw?id=7&baseColor=205EDC&borderRadius=8&css=%2F%2Fcdn.alfacrm.pro%2Flead-form%2Fform.css";
-
 function TrialForm({ cta }: { cta: string }) {
+  const alfaFormUrl = useLeadFormUrl();
   return (
     <div className="cp-form cp-alfa-form">
       <iframe
-        src={ALFA_FORM_URL}
+        src={alfaFormUrl}
         title={cta}
         loading="lazy"
         style={{
