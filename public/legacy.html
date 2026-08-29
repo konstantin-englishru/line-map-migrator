@@ -2064,10 +2064,8 @@
                     if (L < 0) L = 0;
                 }
                 const p1 = path.getPointAtLength(L);
-                const p2 = path.getPointAtLength(Math.min(L + 1, total));
-                const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
-                const flip = (angle > 90 || angle < -90) ? ' scale(1,-1)' : '';
-                car.setAttribute('transform', `translate(${p1.x},${p1.y}) rotate(${angle})${flip}`);
+                // Поезд всегда сохраняет прямую (не перевёрнутую) ориентацию
+                car.setAttribute('transform', `translate(${p1.x},${p1.y})`);
             });
 
             // --- Декоративные блики позади поезда ---
