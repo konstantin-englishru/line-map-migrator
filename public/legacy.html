@@ -584,9 +584,9 @@
                         <svg class="w-4 h-4 xl:w-5 xl:h-5 transition-transform duration-300 group-hover:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                     </button>
                     <div class="absolute top-full left-0 mt-2 w-72 bg-white border-2 border-doorFrame rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100 flex flex-col overflow-hidden">
-                        <a href="#" class="px-5 py-3 hover:bg-skyBg text-sm lg:text-base font-medium transition-colors border-b border-doorFrame">История компании</a>
-                        <a href="#" class="px-5 py-3 hover:bg-skyBg text-sm lg:text-base font-medium transition-colors border-b border-doorFrame">Сведения об образовательной организации</a>
-                        <a href="#" class="px-5 py-3 hover:bg-skyBg text-sm lg:text-base font-medium transition-colors">Фото/видео галерея</a>
+                        <a href="/history" class="px-5 py-3 hover:bg-skyBg text-sm lg:text-base font-medium transition-colors border-b border-doorFrame">История компании</a>
+                        <a href="/svedeniya" class="px-5 py-3 hover:bg-skyBg text-sm lg:text-base font-medium transition-colors border-b border-doorFrame">Сведения об образовательной организации</a>
+                        <a href="/media" class="px-5 py-3 hover:bg-skyBg text-sm lg:text-base font-medium transition-colors">Фото/видео галерея</a>
                     </div>
                 </div>
 
@@ -607,12 +607,12 @@
                 </div>
 
                 <!-- Пункт: Контакты -->
-                <a href="#" class="flex items-center gap-1.5 font-heading font-bold text-sm lg:text-base xl:text-lg hover:text-pastelLavender transition-colors bg-white/50 px-3 py-2 xl:px-4 xl:py-2.5 rounded-xl hover:bg-white shadow-sm whitespace-nowrap" data-menu="contacts">
+                <a href="/contacts" class="flex items-center gap-1.5 font-heading font-bold text-sm lg:text-base xl:text-lg hover:text-pastelLavender transition-colors bg-white/50 px-3 py-2 xl:px-4 xl:py-2.5 rounded-xl hover:bg-white shadow-sm whitespace-nowrap" data-menu="contacts" data-page="/contacts">
                     Контакты
                 </a>
 
                 <!-- Пункт: Полезные статьи -->
-                <a href="#" class="flex items-center gap-1.5 font-heading font-bold text-sm lg:text-base xl:text-lg hover:text-pastelPink transition-colors bg-white/50 px-3 py-2 xl:px-4 xl:py-2.5 rounded-xl hover:bg-white shadow-sm whitespace-nowrap" data-menu="articles">
+                <a href="/articles" class="flex items-center gap-1.5 font-heading font-bold text-sm lg:text-base xl:text-lg hover:text-pastelPink transition-colors bg-white/50 px-3 py-2 xl:px-4 xl:py-2.5 rounded-xl hover:bg-white shadow-sm whitespace-nowrap" data-menu="articles" data-page="/articles">
                     Полезные статьи
                 </a>
 
@@ -708,12 +708,12 @@
                 </div>
 
                 <!-- Пункт: Контакты -->
-                <a href="#" class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelLavender transition-colors" data-menu="contacts">
+                <a href="/contacts" class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelLavender transition-colors" data-menu="contacts" data-page="/contacts">
                     Контакты
                 </a>
 
                 <!-- Пункт: Полезные статьи -->
-                <a href="#" class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelPink transition-colors" data-menu="articles">
+                <a href="/articles" class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-transparent px-6 py-4 flex justify-between items-center font-heading font-bold text-lg hover:bg-pastelPink transition-colors" data-menu="articles" data-page="/articles">
                     Полезные статьи
                 </a>
             </div>
@@ -1303,6 +1303,7 @@
                 <p class="lp-sub">Диагностика – это определение начального уровня сформированности знаний или навыков по выбранному направлению. Это не тестирование, не экзамен. Нам только нужно понять, какова исходная точка. Это поможет определить наиболее точно, в какой группе ребенку будет хорошо, а работа будет продуктивна. Для родителя – это знакомство с центром и его обитателями.</p>
                 <div class="max-w-xl mx-auto bg-white p-4 md:p-6 rounded-[32px] shadow-soft border-4 border-white">
                     <iframe
+                        data-lead-form
                         src="https://gorodznaniy.s20.online/common/1/form/draw?id=7&baseColor=205EDC&borderRadius=8&css=%2F%2Fcdn.alfacrm.pro%2Flead-form%2Fform.css"
                         title="Форма записи"
                         loading="lazy"
@@ -1334,25 +1335,25 @@
                 <div class="bg-white p-6 rounded-[24px] shadow-sm">
                     <h5 class="font-heading font-bold text-xl mb-3 flex items-center justify-center md:justify-start gap-2 text-textMain">
                         <svg class="w-5 h-5 text-pastelMint fill-current" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        Депо (Адрес)
+                        <span data-footer="depo-title">Депо (Адрес)</span>
                     </h5>
-                    <p class="font-medium text-sm text-textMain mb-2">ул. Ясеневая, д. 26</p>
-                    <p class="font-medium text-sm text-textMain">м. Зябликово</p>
+                    <div data-footer="depo-text"><p class="font-medium text-sm text-textMain mb-2">ул. Ясеневая, д. 26</p>
+                    <p class="font-medium text-sm text-textMain">м. Зябликово</p></div>
                 </div>
 
                 <!-- Связь -->
                 <div class="bg-white p-6 rounded-[24px] shadow-sm">
                     <h5 class="font-heading font-bold text-xl mb-3 flex items-center justify-center md:justify-start gap-2 text-textMain">
                         <svg class="w-5 h-5 text-pastelPink fill-current" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-                        Связь
+                        <span data-footer="contact-title">Связь</span>
                     </h5>
                     <p class="font-medium text-sm text-textMain">+7 499 938 58 58</p>
                 </div>
 
                 <!-- Соцсети -->
                 <div class="bg-white p-6 rounded-[24px] shadow-sm flex flex-col items-center justify-center">
-                    <h5 class="font-heading font-bold text-lg mb-4 text-textMain">Наш телеграф:</h5>
-                    <div class="flex gap-4">
+                    <h5 class="font-heading font-bold text-lg mb-4 text-textMain" data-footer="social-title">Наш телеграф:</h5>
+                    <div class="flex gap-4" data-footer="socials">
                         <a href="#" class="w-10 h-10 bg-pastelMint rounded-full flex items-center justify-center hover:scale-110 transition-transform text-textMain font-bold">VK</a>
                         <a href="#" class="w-10 h-10 bg-pastelLavender rounded-full flex items-center justify-center hover:scale-110 transition-transform text-textMain font-bold">TG</a>
                     </div>
@@ -1361,9 +1362,9 @@
             
             <!-- Юридическая информация -->
             <div class="mt-10 flex flex-col md:flex-row gap-4 md:gap-8 justify-center items-center text-center w-full border-t-2 border-gray-300 pt-8 max-w-5xl">
-                <span class="text-sm font-medium opacity-40 cursor-default pointer-events-none">Сведения об образовательной организации</span>
+                <a href="/svedeniya" data-footer-link="0" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelPink transition-colors border-b border-transparent hover:border-pastelPink">Сведения об образовательной организации</a>
                 <span class="hidden md:block opacity-30">•</span>
-                <a href="#" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelPink transition-colors border-b border-transparent hover:border-pastelPink">Политика конфиденциальности</a>
+                <a href="/p/%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D0%B8" data-footer-link="1" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelPink transition-colors border-b border-transparent hover:border-pastelPink">Политика конфиденциальности</a>
                 <span class="hidden md:block opacity-30">•</span>
                 <a href="#" class="text-sm font-medium opacity-60 hover:opacity-100 hover:text-pastelLavender transition-colors border-b border-transparent hover:border-pastelLavender inline-flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
