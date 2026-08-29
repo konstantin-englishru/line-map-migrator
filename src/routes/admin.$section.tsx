@@ -94,6 +94,20 @@ function AdminSection() {
       {section === "teachers" && (
         <Crud table="cms_teachers" title="Преподаватели" fields={TEACHER_FIELDS} idField="id" labelField="name" />
       )}
+      {section === "reviews" && (
+        <Crud table="cms_reviews" title="Отзывы родителей" fields={REVIEW_FIELDS} idField="id" labelField="name" />
+      )}
+      {section === "map" && (
+        <>
+          <h1>Схема линий</h1>
+          <p className="ad-mini">
+            Редактор расположения станций открывается в отдельной вкладке. Обычным посетителям сайта он недоступен.
+          </p>
+          <div className="ad-card">
+            <a className="ad-btn" href="/legacy.html?edit=1" target="_blank" rel="noopener">Открыть редактор схемы</a>
+          </div>
+        </>
+      )}
       {section === "settings" && (
         <>
           <h1>Настройки и главная</h1>
@@ -108,6 +122,32 @@ function AdminSection() {
                   { key: "address", label: "Адрес" },
                   { key: "telegram_url", label: "Ссылка Telegram" },
                   { key: "max_url", label: "Ссылка MAX" },
+                  { key: "consult_url", label: "Ссылка кнопки «Получить консультацию»" },
+                ],
+              },
+              {
+                title: "Шапка сайта",
+                keys: [
+                  { key: "menu_about", label: "Пункт меню «О нас»" },
+                  { key: "menu_programs", label: "Пункт меню «Программы»" },
+                  { key: "menu_contacts", label: "Пункт меню «Контакты»" },
+                  { key: "menu_articles", label: "Пункт меню «Полезные статьи»" },
+                  { key: "show_telegram", label: "Показывать иконку Telegram (1 — да, 0 — нет)" },
+                  { key: "show_max", label: "Показывать иконку MAX (1 — да, 0 — нет)" },
+                ],
+              },
+              {
+                title: "Отзывы",
+                keys: [{ key: "reviews_visible_count", label: "Сколько отзывов показывать сразу (по умолчанию 6)" }],
+              },
+              {
+                title: "Легенда линий: ссылки станций",
+                keys: [
+                  {
+                    key: "station_links",
+                    label: "По строке на станцию, формат: линия | Станция => /p/Название страницы",
+                    type: "textarea",
+                  },
                 ],
               },
               {
@@ -123,7 +163,9 @@ function AdminSection() {
           />
         </>
       )}
-      {!["lines", "stations", "stations-all", "teachers", "settings"].includes(section) && <p>Раздел не найден.</p>}
+      {!["lines", "stations", "stations-all", "teachers", "reviews", "map", "settings"].includes(section) && (
+        <p>Раздел не найден.</p>
+      )}
     </AdminGuard>
   );
 }
