@@ -56,6 +56,42 @@ export type Database = {
         }
         Relationships: []
       }
+      cms_reviews: {
+        Row: {
+          id: string
+          initial: string | null
+          is_active: boolean
+          name: string | null
+          rating: number
+          sort_order: number
+          subtitle: string | null
+          text: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          initial?: string | null
+          is_active?: boolean
+          name?: string | null
+          rating?: number
+          sort_order?: number
+          subtitle?: string | null
+          text?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          initial?: string | null
+          is_active?: boolean
+          name?: string | null
+          rating?: number
+          sort_order?: number
+          subtitle?: string | null
+          text?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cms_settings: {
         Row: {
           key: string
@@ -151,9 +187,12 @@ export type Database = {
           is_active: boolean
           name: string | null
           position: string | null
+          question_url: string | null
           short_description: string | null
+          signup_url: string | null
           slug: string | null
           sort_order: number
+          trial_url: string | null
           updated_at: string
         }
         Insert: {
@@ -166,9 +205,12 @@ export type Database = {
           is_active?: boolean
           name?: string | null
           position?: string | null
+          question_url?: string | null
           short_description?: string | null
+          signup_url?: string | null
           slug?: string | null
           sort_order?: number
+          trial_url?: string | null
           updated_at?: string
         }
         Update: {
@@ -181,9 +223,12 @@ export type Database = {
           is_active?: boolean
           name?: string | null
           position?: string | null
+          question_url?: string | null
           short_description?: string | null
+          signup_url?: string | null
           slug?: string | null
           sort_order?: number
+          trial_url?: string | null
           updated_at?: string
         }
         Relationships: []

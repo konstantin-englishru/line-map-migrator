@@ -42,6 +42,13 @@ function TeacherPage() {
     facts: "extra",
   });
   const others = TEACHERS.filter((x) => x.id !== t.id).slice(0, 6);
+  const cmsUrl = (k: string, fallback: string) => {
+    const v = cms?.[k];
+    return typeof v === "string" && v.trim() ? v : fallback;
+  };
+  const trialUrl = cmsUrl("trial_url", "/#callback-form");
+  const questionUrl = cmsUrl("question_url", "https://t.me/gorod_znanij");
+  const signupUrl = cmsUrl("signup_url", "/#callback-form");
 
   return (
     <>
@@ -66,8 +73,8 @@ function TeacherPage() {
                   {t.subjects.map((s) => <span key={s} className="tp-chip">{s}</span>)}
                 </div>
                 <div className="tp-cta-row">
-                  <a href="/p/Записаться%20на%20пробное%20занятие" className="tp-btn tp-btn-primary">🎁 Записаться на пробное</a>
-                  <a href="/p/Получить%20консультацию" className="tp-btn tp-btn-ghost">📞 Задать вопрос педагогу</a>
+                  <a href={trialUrl} className="tp-btn tp-btn-primary">🎁 Записаться на пробное</a>
+                  <a href={questionUrl} target="_blank" rel="noopener" className="tp-btn tp-btn-ghost">📞 Задать вопрос педагогу</a>
                 </div>
               </div>
             </div>
@@ -146,7 +153,7 @@ function TeacherPage() {
             <h2 className="tp-h2">Познакомьтесь лично</h2>
             <p className="tp-text">Приходите на бесплатное пробное занятие — покажем методику в деле и дадим честную обратную связь по ребёнку.</p>
             <div className="tp-cta-row tp-center-row">
-              <a href="/p/Записаться%20на%20пробное%20занятие" className="tp-btn tp-btn-primary">📝 Записаться</a>
+              <a href={signupUrl} className="tp-btn tp-btn-primary">📝 Записаться</a>
               <a href="tel:+74999385858" className="tp-btn tp-btn-ghost">+7 499 938 58 58</a>
             </div>
           </div>

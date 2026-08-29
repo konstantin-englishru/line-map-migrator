@@ -61,8 +61,21 @@ const TEACHER_FIELDS: Field[] = [
   { key: "education", label: "Образование", type: "textarea" },
   { key: "experience", label: "Опыт", type: "text" },
   { key: "extra", label: "Дополнительно (факты)", type: "list" },
+  { key: "trial_url", label: "Ссылка «Записаться на пробное»", type: "text", hint: "по умолчанию форма на главной" },
+  { key: "question_url", label: "Ссылка «Задать вопрос педагогу»", type: "text", hint: "по умолчанию Telegram" },
+  { key: "signup_url", label: "Ссылка «Записаться» (нижний блок)", type: "text", hint: "по умолчанию форма на главной" },
   { key: "sort_order", label: "Порядок", type: "number" },
   { key: "is_active", label: "Активен", type: "bool" },
+];
+
+const REVIEW_FIELDS: Field[] = [
+  { key: "name", label: "Имя автора", type: "text" },
+  { key: "subtitle", label: "Подпись", type: "text", hint: "например: мама Кирилла, 7 лет" },
+  { key: "initial", label: "Буква в кружке", type: "text", hint: "если пусто — первая буква имени" },
+  { key: "rating", label: "Оценка (1–5)", type: "number" },
+  { key: "text", label: "Текст отзыва", type: "textarea" },
+  { key: "sort_order", label: "Порядок", type: "number" },
+  { key: "is_active", label: "Показывать", type: "bool" },
 ];
 
 function AdminSection() {
@@ -81,6 +94,20 @@ function AdminSection() {
       {section === "teachers" && (
         <Crud table="cms_teachers" title="Преподаватели" fields={TEACHER_FIELDS} idField="id" labelField="name" />
       )}
+      {section === "reviews" && (
+        <Crud table="cms_reviews" title="Отзывы родителей" fields={REVIEW_FIELDS} idField="id" labelField="name" />
+      )}
+      {section === "map" && (
+        <>
+          <h1>Схема линий</h1>
+          <p className="ad-mini">
+            Редактор расположения станций открывается в отдельной вкладке. Обычным посетителям сайта он недоступен.
+          </p>
+          <div className="ad-card">
+            <a className="ad-btn" href="/legacy.html?edit=1" target="_blank" rel="noopener">Открыть редактор схемы</a>
+          </div>
+        </>
+      )}
       {section === "settings" && (
         <>
           <h1>Настройки и главная</h1>
@@ -95,6 +122,32 @@ function AdminSection() {
                   { key: "address", label: "Адрес" },
                   { key: "telegram_url", label: "Ссылка Telegram" },
                   { key: "max_url", label: "Ссылка MAX" },
+                  { key: "consult_url", label: "Ссылка кнопки «Получить консультацию»" },
+                ],
+              },
+              {
+                title: "Шапка сайта",
+                keys: [
+                  { key: "menu_about", label: "Пункт меню «О нас»" },
+                  { key: "menu_programs", label: "Пункт меню «Программы»" },
+                  { key: "menu_contacts", label: "Пункт меню «Контакты»" },
+                  { key: "menu_articles", label: "Пункт меню «Полезные статьи»" },
+                  { key: "show_telegram", label: "Показывать иконку Telegram (1 — да, 0 — нет)" },
+                  { key: "show_max", label: "Показывать иконку MAX (1 — да, 0 — нет)" },
+                ],
+              },
+              {
+                title: "Отзывы",
+                keys: [{ key: "reviews_visible_count", label: "Сколько отзывов показывать сразу (по умолчанию 6)" }],
+              },
+              {
+                title: "Легенда линий: ссылки станций",
+                keys: [
+                  {
+                    key: "station_links",
+                    label: "По строке на станцию, формат: линия | Станция => /p/Название страницы",
+                    type: "textarea",
+                  },
                 ],
               },
               {
@@ -110,7 +163,9 @@ function AdminSection() {
           />
         </>
       )}
-      {!["lines", "stations", "stations-all", "teachers", "settings"].includes(section) && <p>Раздел не найден.</p>}
+      {!["lines", "stations", "stations-all", "teachers", "reviews", "map", "settings"].includes(section) && (
+        <p>Раздел не найден.</p>
+      )}
     </AdminGuard>
   );
 }
