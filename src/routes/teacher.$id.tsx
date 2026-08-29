@@ -153,7 +153,7 @@ function TeacherPage() {
             <h2 className="tp-h2">Познакомьтесь лично</h2>
             <p className="tp-text">Приходите на бесплатное пробное занятие — покажем методику в деле и дадим честную обратную связь по ребёнку.</p>
             <div className="tp-cta-row tp-center-row">
-              <a href="/p/Записаться%20на%20пробное%20занятие" className="tp-btn tp-btn-primary">📝 Записаться</a>
+              <a href={signupUrl} className="tp-btn tp-btn-primary">📝 Записаться</a>
               <a href="tel:+74999385858" className="tp-btn tp-btn-ghost">+7 499 938 58 58</a>
             </div>
           </div>
