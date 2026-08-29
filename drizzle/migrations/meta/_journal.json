@@ -36,6 +36,13 @@
       "when": 1787999694705,
       "tag": "0004_teacher_content_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788001501218,
+      "tag": "0005_create_cms_blocks",
+      "breakpoints": true
     }
   ]
 }

@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      cms_blocks: {
+        Row: {
+          id: string
+          image: string | null
+          is_active: boolean
+          page: string
+          sort_order: number
+          text: string | null
+          title: string | null
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          page?: string
+          sort_order?: number
+          text?: string | null
+          title?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          id?: string
+          image?: string | null
+          is_active?: boolean
+          page?: string
+          sort_order?: number
+          text?: string | null
+          title?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
       cms_lines: {
         Row: {
           description: string | null

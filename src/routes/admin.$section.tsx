@@ -72,6 +72,18 @@ const TEACHER_FIELDS: Field[] = [
   { key: "is_active", label: "Активен", type: "bool" },
 ];
 
+/** Универсальные «баблы» (документы, контакты, статьи, медиа, футер). */
+const BLOCK_FIELDS: Field[] = [
+  { key: "title", label: "Заголовок", type: "text" },
+  { key: "text", label: "Текст", type: "textarea" },
+  { key: "url", label: "Ссылка", type: "text" },
+  { key: "image", label: "Изображение", type: "image" },
+  { key: "sort_order", label: "Порядок", type: "number" },
+  { key: "is_active", label: "Показывать", type: "bool" },
+];
+
+const blockFields = (keys: string[]) => BLOCK_FIELDS.filter((f) => keys.includes(f.key));
+
 const REVIEW_FIELDS: Field[] = [
   { key: "name", label: "Имя автора", type: "text" },
   { key: "subtitle", label: "Подпись", type: "text", hint: "например: мама Кирилла, 7 лет" },
@@ -100,6 +112,83 @@ function AdminSection() {
       )}
       {section === "reviews" && (
         <Crud table="cms_reviews" title="Отзывы родителей" fields={REVIEW_FIELDS} idField="id" labelField="name" />
+      )}
+      {section === "history" && (
+        <Crud
+          table="cms_blocks"
+          title="История компании"
+          intro="Текстовые блоки страницы /history."
+          fields={blockFields(["title", "text", "image", "sort_order", "is_active"])}
+          idField="id"
+          labelField="title"
+          filter={{ column: "page", value: "history" }}
+        />
+      )}
+      {section === "documents" && (
+        <Crud
+          table="cms_blocks"
+          title="Сведения об образовательной организации"
+          intro="Баблы документов на странице /svedeniya: название + ссылка на файл."
+          fields={blockFields(["title", "text", "url", "sort_order", "is_active"])}
+          idField="id"
+          labelField="title"
+          filter={{ column: "page", value: "documents" }}
+        />
+      )}
+      {section === "contacts" && (
+        <Crud
+          table="cms_blocks"
+          title="Контакты (баблы)"
+          intro="Баблы страницы /contacts. Если ни одного бабла нет, показываются контакты из настроек."
+          fields={blockFields(["title", "text", "url", "sort_order", "is_active"])}
+          idField="id"
+          labelField="title"
+          filter={{ column: "page", value: "contacts" }}
+        />
+      )}
+      {section === "articles" && (
+        <Crud
+          table="cms_blocks"
+          title="Полезные статьи"
+          intro="Статьи страницы /articles: заголовок и текст (ссылка и картинка — по желанию)."
+          fields={blockFields(["title", "text", "url", "image", "sort_order", "is_active"])}
+          idField="id"
+          labelField="title"
+          filter={{ column: "page", value: "articles" }}
+        />
+      )}
+      {section === "media" && (
+        <Crud
+          table="cms_blocks"
+          title="Фото/Видео материалы"
+          intro="Страница /media. Для фотографии загрузите изображение, для видео укажите ссылку на плеер (embed)."
+          fields={blockFields(["title", "image", "url", "sort_order", "is_active"])}
+          idField="id"
+          labelField="title"
+          filter={{ column: "page", value: "media" }}
+        />
+      )}
+      {section === "footer-social" && (
+        <Crud
+          table="cms_blocks"
+          title="Подвал: «Наш телеграф»"
+          intro="Соцсети в подвале: название, ссылка и иконка."
+          fields={blockFields(["title", "url", "image", "sort_order", "is_active"])}
+          idField="id"
+          labelField="title"
+          filter={{ column: "page", value: "footer_social" }}
+        />
+      )}
+      {section === "footer-links" && (
+        <Crud
+          table="cms_blocks"
+          title="Подвал: нижние ссылки"
+          intro="Например «Сведения об образовательной организации» и «Политика конфиденциальности»."
+          fields={blockFields(["title", "url", "sort_order", "is_active"])}
+          idField="id"
+          labelField="title"
+          filter={{ column: "page", value: "footer_bottom" }}
+        />
       )}
       {section === "map" && (
         <>
@@ -143,6 +232,26 @@ function AdminSection() {
                 ],
               },
               {
+                title: "Лид-форма",
+                keys: [
+                  {
+                    key: "lead_form_url",
+                    label: "Ссылка на лид-форму (AlfaCRM) — используется на всех страницах",
+                    type: "textarea",
+                  },
+                ],
+              },
+              {
+                title: "Подвал сайта",
+                keys: [
+                  { key: "footer_depo_title", label: "Заголовок блока «Депо»" },
+                  { key: "footer_depo_text", label: "Текст блока «Депо» (адрес)", type: "textarea" },
+                  { key: "footer_contact_title", label: "Заголовок блока «Связь»" },
+                  { key: "footer_social_title", label: "Заголовок блока «Наш телеграф»" },
+                  { key: "vk_url", label: "Ссылка VK" },
+                ],
+              },
+              {
                 title: "Отзывы",
                 keys: [{ key: "reviews_visible_count", label: "Сколько отзывов показывать сразу (по умолчанию 6)" }],
               },
@@ -169,7 +278,22 @@ function AdminSection() {
           />
         </>
       )}
-      {!["lines", "stations", "stations-all", "teachers", "reviews", "map", "settings"].includes(section) && (
+      {![
+        "lines",
+        "stations",
+        "stations-all",
+        "teachers",
+        "reviews",
+        "map",
+        "settings",
+        "history",
+        "documents",
+        "contacts",
+        "articles",
+        "media",
+        "footer-social",
+        "footer-links",
+      ].includes(section) && (
         <p>Раздел не найден.</p>
       )}
     </AdminGuard>
