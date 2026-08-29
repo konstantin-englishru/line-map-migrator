@@ -2133,24 +2133,11 @@
                 dyn.setAttribute('stroke', 'none');
                 linePath.parentNode.appendChild(dyn);
             }
-            // Начинаем движение с точки выхода линии за кольцо, чтобы поезд
-            // не пересекал внутреннюю область кольца
-            let startLen = 0;
-            try {
-                const ring = document.getElementById('train-ring-path');
-                const bb = ring.getBBox();
-                const cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2, rOut = bb.width / 2;
-                for (let L = 0; L <= targetLen; L += 10) {
-                    const pt = linePath.getPointAtLength(L);
-                    if (Math.hypot(pt.x - cx, pt.y - cy) >= rOut) { startLen = L; break; }
-                }
-            } catch (e) { startLen = 0; }
-            if (startLen >= targetLen) startLen = 0;
-            // Аппроксимация: путь = серия отрезков от startLen до targetLen
+            // Аппроксимация: путь = серия отрезков от t=0 до targetLen
             const steps = 60;
             let d = '';
             for (let i = 0; i <= steps; i++) {
-                const L = startLen + ((targetLen - startLen) * i) / steps;
+                const L = (targetLen * i) / steps;
                 const pt = linePath.getPointAtLength(L);
                 d += (i === 0 ? `M ${pt.x} ${pt.y}` : ` L ${pt.x} ${pt.y}`);
             }
