@@ -55,6 +55,19 @@ import russianPrimaryLessonImg from "@/assets/russian-primary-lesson.jpg";
 import mathOlympPrimaryHeroImg from "@/assets/matholymp-primary-hero.jpg";
 import mathOlympPrimaryLessonImg from "@/assets/matholymp-primary-lesson.jpg";
 import careerGuidanceImg from "@/assets/career-guidance-senior.jpg";
+import russianEgeImg from "@/assets/russian-ege.jpg";
+import mathEgeImg from "@/assets/math-ege.jpg";
+import englishEgeImg from "@/assets/english-ege.jpg";
+import englishSeniorImg from "@/assets/english-senior.jpg";
+import spanishSeniorImg from "@/assets/spanish-senior.jpg";
+import chineseSeniorImg from "@/assets/chinese-senior.jpg";
+import chessSeniorImg from "@/assets/chess-senior.jpg";
+import programmingSeniorImg from "@/assets/programming-senior.jpg";
+import englishBusinessImg from "@/assets/english-business.jpg";
+import germanBusinessImg from "@/assets/german-business.jpg";
+import chineseBusinessImg from "@/assets/chinese-business.jpg";
+import spanishBusinessImg from "@/assets/spanish-business.jpg";
+import espBusinessImg from "@/assets/esp-business.jpg";
 
 /**
  * Универсальный шаблон страницы курса «Город Знаний».
@@ -193,6 +206,10 @@ export function buildCourse(title: string): CourseData {
   if (/^\s*Программирование для старшей школы\s*$/i.test(title)) return { ...base, ...PROGRAMMING_SENIOR, title };
   if (/^\s*Профориентация для старшей школы\s*$/i.test(title)) return { ...base, ...CAREER_SENIOR, title };
   if (/^\s*Английский для специальных целей\s*$/i.test(title)) return { ...base, ...PROFESSIONAL_ESP, title };
+  if (/^\s*Английский язык для делового центра\s*$/i.test(title)) return { ...base, ...cloneForBusiness(ENGLISH_ADULT, "Английская", englishBusinessImg), title };
+  if (/^\s*Немецкий язык для делового центра\s*$/i.test(title)) return { ...base, ...cloneForBusiness(GERMAN_ADULT, "Немецкая", germanBusinessImg), title };
+  if (/^\s*Китайский язык для делового центра\s*$/i.test(title)) return { ...base, ...cloneForBusiness(CHINESE_ADULT, "Китайская", chineseBusinessImg), title };
+  if (/^\s*Испанский язык для делового центра\s*$/i.test(title)) return { ...base, ...cloneForBusiness(SPANISH_ADULT, "Испанская", spanishBusinessImg), title };
   if (/^\s*Английский язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...ENGLISH_ADULT, title };
   if (/^\s*Немецкий язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...GERMAN_ADULT, title };
   if (/^\s*Испанский язык для взрослых и студентов\s*$/i.test(title)) return { ...base, ...SPANISH_ADULT, title };
@@ -7125,7 +7142,7 @@ const PROFESSIONAL_ESP: Partial<CourseData> = {
     "Общий английский не всегда помогает на работе. Когда вам нужны не «фразы для путешествий», а профессиональная лексика, терминология, умение вести переговоры, писать письма и понимать отраслевые документы. Здесь недостаточно просто языка — здесь нужен профессиональный инструмент. Для кейтеринга, туризма, юриспруденции, авиации, управления и любых других сфер.",
   primaryCta: "Хочу узнать — запишитесь на консультацию",
   secondaryCta: "Записаться на консультацию",
-  heroImage: englishAdultImg,
+  heroImage: espBusinessImg,
   heroImageAlt:
     "Профессионал и педагог разбирают отраслевой текст. На столе — профессиональная документация, ноутбук, кофе. Атмосфера деловая.",
   nav: [
@@ -7142,7 +7159,7 @@ const PROFESSIONAL_ESP: Partial<CourseData> = {
     { value: "50+ учеников", label: "Прошли ESP-курсы" },
   ],
   visual: {
-    image: englishAdultImg,
+    image: espBusinessImg,
     alt: "Фото: специалист и педагог разбирают отраслевой документ на английском. На столе — ноутбук, документация, чашка кофе. Атмосфера деловая.",
     lead: "Бизнес-английский, медицинский, юридический, авиационный, туристический — язык в каждой сфере звучит по-своему.",
     paragraphs: [
@@ -7269,7 +7286,7 @@ const RUSSIAN_EGE: Partial<CourseData> = {
     "Не «повторим всё», а «разберем, отработаем, закрепим». Алгоритмы, структура, навык — и честный разговор о том, как не выгореть до экзамена. Готовимся так, чтобы на ЕГЭ просто делать свою работу — спокойно, без паники и без сюрпризов.",
   primaryCta: "Хочу узнать — запишитесь на консультацию",
   secondaryCta: "Получить консультацию",
-  heroImage: russianPrimaryHeroImg,
+  heroImage: russianEgeImg,
   heroImageAlt: "Старшеклассник и педагог разбирают структуру задания ЕГЭ по русскому языку",
   nav: NAV_EXAM,
   stats: [
@@ -7279,7 +7296,7 @@ const RUSSIAN_EGE: Partial<CourseData> = {
     { value: "100%", label: "выпускников за год спокойно прошли экзамен" },
   ],
   visual: {
-    image: russianPrimaryLessonImg,
+    image: russianEgeImg,
     alt: "Старшеклассник и педагог разбирают задание из ЕГЭ: распечатанные варианты, схема сочинения, заметки",
     lead: "ЕГЭ по русскому — экзамен, который сдают все. И каждый хочет получить максимум.",
     paragraphs: [
@@ -7368,7 +7385,7 @@ const MATH_EGE: Partial<CourseData> = {
     "ЕГЭ по математике — это не проверка знаний, а проверка навыка. Навыка видеть тип задачи, знать алгоритм, уложиться в тайминг. Мы даем это: систему, структуру, отработку. И результат, который приходит, когда ты понимаешь логику экзамена, а не просто решаешь варианты.",
   primaryCta: "Хочу попробовать — запишитесь на пробное занятие",
   secondaryCta: "Получить консультацию",
-  heroImage: mathOlympPrimaryHeroImg,
+  heroImage: mathEgeImg,
   heroImageAlt: "Старшеклассник и педагог разбирают задачу на доске: таймер, бланк ответов, схема решения",
   nav: NAV_EXAM,
   stats: [
@@ -7378,7 +7395,7 @@ const MATH_EGE: Partial<CourseData> = {
     { value: "20+ выпускников", label: "Ежегодно" },
   ],
   visual: {
-    image: mathOlympPrimaryLessonImg,
+    image: mathEgeImg,
     alt: "Старшеклассник и педагог за столом: открытый вариант ЕГЭ, бланк ответов, черновик",
     lead: "ЕГЭ по математике — это не про «знаю — не знаю». Это про «вижу задачу — понимаю алгоритм — решаю за отведённое время».",
     paragraphs: [
@@ -7470,7 +7487,7 @@ const ENGLISH_EGE: Partial<CourseData> = {
     "ЕГЭ по английскому — сложный, объемный и технический экзамен. Мало знать язык — нужно понимать формат, структуру, критерии. Мы даём систему, алгоритмы и практику, чтобы на экзамене ты просто делал свою работу — без сюрпризов, без паники, без «я не знаю, что от меня хотят».",
   primaryCta: "Хочу попробовать — запишитесь на пробное занятие",
   secondaryCta: "Получить консультацию",
-  heroImage: englishAdultImg,
+  heroImage: englishEgeImg,
   heroImageAlt: "Старшеклассник и педагог разбирают задание из ЕГЭ: КИМ, бланк ответов, записи",
   nav: NAV_EXAM,
   stats: [
@@ -7480,7 +7497,7 @@ const ENGLISH_EGE: Partial<CourseData> = {
     { value: "100+ выпускников", label: "Успешно сдали ЕГЭ и поступили" },
   ],
   visual: {
-    image: englishAdultImg,
+    image: englishEgeImg,
     alt: "Старшеклассник и педагог разбирают задание: распечатанный вариант ЕГЭ, словарь, записи",
     lead: "ЕГЭ по английскому — один из самых сложных экзаменов. Он проверяет всё: чтение, аудирование, грамматику, лексику, письмо, говорение.",
     paragraphs: [
@@ -7572,7 +7589,7 @@ const ENGLISH_SENIOR: Partial<CourseData> = {
     "Это не «подготовка к ЕГЭ». Это язык, который остается с тобой. Для учебы за границей, для работы, для чтения книг и просмотра фильмов без перевода, для общения с миром. В старшей школе уже не нужно «догонять» — нужно углубляться и выходить на уровень, с которым ты чувствуешь себя уверенно. Мы даем реальные навыки, а не галочки.",
   primaryCta: "Хочу попробовать — запишитесь на пробное занятие",
   secondaryCta: "Получить консультацию",
-  heroImage: englishAdultImg,
+  heroImage: englishSeniorImg,
   heroImageAlt: "Старшеклассник и педагог обсуждают статью на английском: книги, распечатки, записи",
   nav: NAV_EXAM,
   stats: [
@@ -7582,7 +7599,7 @@ const ENGLISH_SENIOR: Partial<CourseData> = {
     { value: "90%", label: "продолжают использовать язык в работе, учебе, путешествиях" },
   ],
   visual: {
-    image: englishAdultImg,
+    image: englishSeniorImg,
     alt: "Старшеклассник и педагог обсуждают текст на английском: открытая книга, записи",
     lead: "В старшей школе английский перестает быть «предметом» и становится инструментом.",
     paragraphs: [
@@ -7680,7 +7697,7 @@ const SPANISH_SENIOR: Partial<CourseData> = {
     "Испанский — второй по распространённости язык в мире. И один из самых красивых. В старшей школе его выбирают осознанно: для себя, для путешествий, для будущей профессии. Мы не гонимся за высокими уровнями — мы работаем на реальный результат. Вплоть до B2. Чаще — индивидуально, в своём темпе, под свои цели.",
   primaryCta: "Хочу попробовать — запишитесь на пробное занятие",
   secondaryCta: "Получить консультацию",
-  heroImage: spanishAdultImg,
+  heroImage: spanishSeniorImg,
   heroImageAlt: "Старшеклассник и педагог разбирают диалог на испанском: карта, журналы, записи",
   nav: NAV_EXAM,
   stats: [
@@ -7690,7 +7707,7 @@ const SPANISH_SENIOR: Partial<CourseData> = {
     { value: "20+ учеников", label: "Изучают испанский в центре" },
   ],
   visual: {
-    image: spanishAdultImg,
+    image: spanishSeniorImg,
     alt: "Педагог и ученик обсуждают текст на испанском",
     lead: "Испанский — язык, который хочется учить. Он красивый, музыкальный, и на нём говорят более 500 миллионов человек.",
     paragraphs: [
@@ -7788,7 +7805,7 @@ const CHINESE_SENIOR: Partial<CourseData> = {
     "Это серьезный уровень для тех, кто готовится к стажировке, поступлению в китайский вуз или работе с Китаем. Мы не даем «общий китайский». Мы готовим к конкретным целям: международный экзамен HSK, поступление, переезд. Без иллюзий, но с понятным планом и результатом.",
   primaryCta: "Хочу попробовать — запишитесь на консультацию",
   secondaryCta: "Получить консультацию",
-  heroImage: chineseAdultImg,
+  heroImage: chineseSeniorImg,
   heroImageAlt: "Старшеклассник и педагог разбирают текст на китайском: учебники, карточки с иероглифами, распечатки HSK",
   nav: NAV_EXAM,
   stats: [
@@ -7798,7 +7815,7 @@ const CHINESE_SENIOR: Partial<CourseData> = {
     { value: "40+ выпускников", label: "Учатся, стажируются, работают в Китае" },
   ],
   visual: {
-    image: chineseAdultImg,
+    image: chineseSeniorImg,
     alt: "Педагог и ученик разбирают экзаменационное задание HSK: бланки, прописи, словарь",
     lead: "Китайский язык открывает доступ к образованию, стажировкам и карьере в одной из самых быстрорастущих экономик мира.",
     paragraphs: [
@@ -7896,7 +7913,7 @@ const CHESS_SENIOR: Partial<CourseData> = {
     "Это уровень, где шахматы перестают быть просто игрой. Это спорт: разряды, турниры, победы. Глубокий анализ, дебютная подготовка, психология игры. Для тех, кто готов играть серьезно, работать над собой и видеть результат.",
   primaryCta: "Хочу попробовать — запишитесь на пробное занятие",
   secondaryCta: "Получить консультацию",
-  heroImage: chessHeroImg,
+  heroImage: chessSeniorImg,
   heroImageAlt: "Старшеклассник за шахматной доской: запись партии, часы, сосредоточенный взгляд",
   nav: NAV_EXAM,
   stats: [
@@ -7906,7 +7923,7 @@ const CHESS_SENIOR: Partial<CourseData> = {
     { value: "50+ учеников", label: "Серьезно занимаются шахматами" },
   ],
   visual: {
-    image: chessLessonImg,
+    image: chessSeniorImg,
     alt: "Старшеклассник разбирает партию с тренером: сложная позиция, часы, записи",
     lead: "В старшей школе шахматы — это уже не «научиться играть». Это работа над мастерством.",
     paragraphs: [
@@ -8003,7 +8020,7 @@ const PROGRAMMING_SENIOR: Partial<CourseData> = {
     "Это не «попробовать» и не «для общего развития». Это серьезный уровень: промышленные языки, архитектура проектов, работа с базами данных, алгоритмы и структуры данных. Для тех, кто уже выбрал IT-профессию и готовится к поступлению в топовые вузы или к первой работе в индустрии.",
   primaryCta: "Хочу попробовать — запишитесь на пробное занятие",
   secondaryCta: "Получить консультацию",
-  heroImage: programmingPrimaryHeroImg,
+  heroImage: programmingSeniorImg,
   heroImageAlt: "Старшеклассник за ноутбуком с открытым редактором кода: схемы, записи, план проекта",
   nav: NAV_EXAM,
   stats: [
@@ -8013,7 +8030,7 @@ const PROGRAMMING_SENIOR: Partial<CourseData> = {
     { value: "100% выпускников", label: "Получили профессиональное преимущество" },
   ],
   visual: {
-    image: programmingPrimaryLessonImg,
+    image: programmingSeniorImg,
     alt: "Старшеклассник и педагог-разработчик разбирают код проекта, как на код-ревью",
     lead: "Программирование в старшей школе — это уже не «познакомиться» и не «попробовать». Это профессиональный уровень.",
     paragraphs: [
