@@ -34,6 +34,7 @@ export const Route = createFileRoute("/line/$id")({
 function LinePage() {
   const { line: baseLine } = Route.useLoaderData() as { line: MetroLine };
   const cms = useCmsRow<Record<string, unknown>>("cms_lines", "id", baseLine.id);
+  const leadFormUrl = useLeadFormUrl();
   const line: MetroLine = (() => {
     if (!cms) return baseLine;
     const next: MetroLine = { ...baseLine };
