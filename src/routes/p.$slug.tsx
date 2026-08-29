@@ -5857,6 +5857,7 @@ const ARTLAB_TEEN: Partial<CourseData> = {
 };
 
 const PARK_EXCURSIONS: Partial<CourseData> = {
+  heroCardSub: null,
   emoji: "🚌",
   station: "Парк культуры • станция «Экскурсии»",
   tagline: "Станция Экскурсии",
@@ -5954,6 +5955,7 @@ const PARK_EXCURSIONS: Partial<CourseData> = {
 };
 
 const PARK_MASTERCLASS: Partial<CourseData> = {
+  heroCardSub: null,
   emoji: "🎨",
   station: "Парк культуры • станция «Мастер-классы»",
   tagline: "Станция Мастер-классы",
@@ -6044,6 +6046,7 @@ const PARK_MASTERCLASS: Partial<CourseData> = {
 };
 
 const PARK_HOLIDAYS: Partial<CourseData> = {
+  heroCardSub: null,
   emoji: "🎉",
   station: "Парк культуры • станция «Тематические праздники»",
   tagline: "Станция Тематические праздники",
@@ -6144,6 +6147,7 @@ const PARK_HOLIDAYS: Partial<CourseData> = {
 };
 
 const PARK_THEATRE: Partial<CourseData> = {
+  heroCardSub: null,
   emoji: "🎭",
   station: "Парк культуры • станция «Спектакли»",
   tagline: "Станция Спектакли",
