@@ -3667,6 +3667,14 @@
     var reviews=res[1]||[], lines=res[2]||[], teachers=res[3]||[], blocks=res[4]||[];
     var blocksOf=function(page){ return blocks.filter(function(b){ return b.page===page; }); };
 
+    /* --- Схема линий: раскладка, сохранённая в админке --- */
+    if(s.map_layout){
+      try{
+        window.__cmsMapLayout=JSON.parse(s.map_layout);
+        if(typeof renderMetroMap==='function') renderMetroMap();
+      }catch(e){}
+    }
+
     /* --- Педагоги на главной: единый источник — админка (cms_teachers) --- */
     var tgrid=document.getElementById('teachers-grid');
     if(tgrid && teachers.length){
