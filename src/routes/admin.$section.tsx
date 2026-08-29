@@ -61,8 +61,21 @@ const TEACHER_FIELDS: Field[] = [
   { key: "education", label: "Образование", type: "textarea" },
   { key: "experience", label: "Опыт", type: "text" },
   { key: "extra", label: "Дополнительно (факты)", type: "list" },
+  { key: "trial_url", label: "Ссылка «Записаться на пробное»", type: "text", hint: "по умолчанию форма на главной" },
+  { key: "question_url", label: "Ссылка «Задать вопрос педагогу»", type: "text", hint: "по умолчанию Telegram" },
+  { key: "signup_url", label: "Ссылка «Записаться» (нижний блок)", type: "text", hint: "по умолчанию форма на главной" },
   { key: "sort_order", label: "Порядок", type: "number" },
   { key: "is_active", label: "Активен", type: "bool" },
+];
+
+const REVIEW_FIELDS: Field[] = [
+  { key: "name", label: "Имя автора", type: "text" },
+  { key: "subtitle", label: "Подпись", type: "text", hint: "например: мама Кирилла, 7 лет" },
+  { key: "initial", label: "Буква в кружке", type: "text", hint: "если пусто — первая буква имени" },
+  { key: "rating", label: "Оценка (1–5)", type: "number" },
+  { key: "text", label: "Текст отзыва", type: "textarea" },
+  { key: "sort_order", label: "Порядок", type: "number" },
+  { key: "is_active", label: "Показывать", type: "bool" },
 ];
 
 function AdminSection() {
