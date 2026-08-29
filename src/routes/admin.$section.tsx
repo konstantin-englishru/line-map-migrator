@@ -134,6 +134,8 @@ function AdminSection() {
                   { key: "menu_articles", label: "Пункт меню «Полезные статьи»" },
                   { key: "show_telegram", label: "Показывать иконку Telegram (1 — да, 0 — нет)" },
                   { key: "show_max", label: "Показывать иконку MAX (1 — да, 0 — нет)" },
+                  { key: "telegram_icon", label: "Иконка Telegram (картинка)", type: "image" },
+                  { key: "max_icon", label: "Иконка MAX (картинка)", type: "image" },
                 ],
               },
               {
