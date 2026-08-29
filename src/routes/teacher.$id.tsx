@@ -39,8 +39,12 @@ function TeacherPage() {
     about: "description",
     education: "education",
     experience: "experience",
+    ages: "ages",
+    subjects: "subjects",
+    achievements: "achievements",
     facts: "extra",
   });
+  const badges = Array.isArray(cms?.["badges"]) ? (cms!["badges"] as unknown[]).filter((b) => typeof b === "string" && b.trim()) as string[] : [];
   const others = TEACHERS.filter((x) => x.id !== t.id).slice(0, 6);
   const cmsUrl = (k: string, fallback: string) => {
     const v = cms?.[k];
@@ -81,8 +85,15 @@ function TeacherPage() {
             <div className="tp-stats">
               <div className="tp-stat"><b>{t.experience}</b><span>стаж преподавания</span></div>
               <div className="tp-stat"><b>{t.ages}</b><span>возраст учеников</span></div>
-              <div className="tp-stat"><b>до 6</b><span>детей в группе</span></div>
-              <div className="tp-stat"><b>1-е</b><span>занятие бесплатно</span></div>
+              {badges.map((b) => {
+                const [value, label] = b.includes("|") ? b.split("|") : [b, ""];
+                return (
+                  <div className="tp-stat" key={b}>
+                    <b>{value.trim()}</b>
+                    {label ? <span>{label.trim()}</span> : null}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </header>
