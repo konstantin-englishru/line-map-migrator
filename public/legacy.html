@@ -3630,10 +3630,29 @@
         });
       });
 
-    /* --- Видимость иконок мессенджеров --- */
+    /* --- Видимость и картинки иконок мессенджеров --- */
     ['telegram','max'].forEach(function(k){
       if(s['show_'+k]==='0'||s['show_'+k]==='false')
         document.querySelectorAll('[data-msg="'+k+'"]').forEach(function(el){ el.style.display='none'; });
+      var icon = s[k+'_icon'];
+      if(icon){
+        document.querySelectorAll('[data-msg="'+k+'"]').forEach(function(el){
+          var svg = el.querySelector('svg'), old = el.querySelector('img.cms-msg-icon');
+          var img = old || document.createElement('img');
+          img.className = 'cms-msg-icon';
+          img.src = icon; img.alt = k;
+          if(svg){
+            var w = svg.getAttribute('width') || 24, h = svg.getAttribute('height') || 24;
+            img.style.width = (typeof w === 'string' && w.indexOf('%') > -1) ? '24px' : w + 'px';
+            img.style.height = (typeof h === 'string' && h.indexOf('%') > -1) ? '24px' : h + 'px';
+            img.style.objectFit = 'contain';
+            if(!old) svg.parentNode.replaceChild(img, svg); else svg.remove();
+          } else if(!old){
+            img.style.width = '24px'; img.style.height = '24px'; img.style.objectFit = 'contain';
+            el.insertBefore(img, el.firstChild);
+          }
+        });
+      }
     });
 
     var h1=document.querySelector('#hero h1')||document.querySelectorAll('h1')[1];
