@@ -3538,24 +3538,67 @@
     </script>
 
 <script>
+/* CMS: настройки, шапка, отзывы, легенда линий — подмешиваем поверх разметки по умолчанию */
 (function(){
-  var grid=document.getElementById('reviews-grid'); var btn=document.getElementById('reviews-more');
-  if(!grid||!btn) return;
-  var cards=Array.prototype.slice.call(grid.children); var shown=6;
-  function render(){ cards.forEach(function(c,i){ c.style.display = i<shown ? '' : 'none'; });
-    btn.textContent = shown>=cards.length ? 'Свернуть отзывы' : 'Показать ещё отзывы'; }
-  btn.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); shown = shown>=cards.length ? 6 : Math.min(shown+6,cards.length); render(); if(shown===6) grid.scrollIntoView({behavior:'smooth',block:'start'}); });
-  render();
-})();
-</script>
-<script>
-/* CMS: подмешиваем настройки из админки (не меняя разметку по умолчанию) */
-(function(){
-  var URL_="https://ooaratxafchkajuxdjoz.supabase.co/rest/v1/cms_settings?select=key,value";
+  var API="https://ooaratxafchkajuxdjoz.supabase.co/rest/v1/";
   var KEY="sb_publishable_u8toSqgX3EV6MEGx1GhLXw_0kAmYMS8";
-  fetch(URL_,{headers:{apikey:KEY}}).then(function(r){return r.ok?r.json():[]}).then(function(rows){
-    var s={}; (rows||[]).forEach(function(r){ if(r.value) s[r.key]=r.value; });
+  var esc=function(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+  var get=function(path){ return fetch(API+path,{headers:{apikey:KEY}}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}); };
+
+  /* ---------- Отзывы (кол-во видимых берём из настроек) ---------- */
+  var PALETTE=['bg-pastelYellow','bg-pastelMint','bg-pastelLavender','bg-pastelPink','bg-pastelBlue','bg-pastelPeach'];
+  function reviewCard(r,i){
+    var initial=r.initial||(r.name||'?').trim().charAt(0);
+    var stars='★★★★★'.slice(0,Math.max(1,Math.min(5,r.rating||5)));
+    return '<div class="lp-card review-card"><div class="flex items-center gap-3 mb-3">'+
+      '<div class="w-12 h-12 rounded-full '+PALETTE[i%PALETTE.length]+' flex items-center justify-center font-bold text-xl border-2 border-white">'+esc(initial)+'</div>'+
+      '<div><div class="font-heading font-bold">'+esc(r.name)+'</div><div class="text-sm opacity-70">'+esc(r.subtitle)+'</div></div>'+
+      '</div><div class="text-yellow-500 mb-2">'+stars+'</div><p class="opacity-80">'+esc(r.text)+'</p></div>';
+  }
+  function setupReviews(step){
+    var grid=document.getElementById('reviews-grid'), btn=document.getElementById('reviews-more');
+    if(!grid||!btn) return;
+    var cards=Array.prototype.slice.call(grid.children);
+    var base=Math.max(1, step||6), shown=base;
+    function render(){
+      cards.forEach(function(c,i){ c.style.display=i<shown?'':'none'; });
+      btn.style.display = cards.length>base ? '' : 'none';
+      btn.textContent = shown>=cards.length ? 'Свернуть отзывы' : 'Показать ещё отзывы';
+    }
+    btn.onclick=function(e){ e.preventDefault(); e.stopPropagation();
+      shown = shown>=cards.length ? base : Math.min(shown+base, cards.length);
+      render(); if(shown===base) grid.scrollIntoView({behavior:'smooth',block:'start'}); };
+    render();
+  }
+
+  Promise.all([
+    get('cms_settings?select=key,value'),
+    get('cms_reviews?select=*&is_active=eq.true&order=sort_order.asc'),
+    get('cms_lines?select=id,name,stations,is_active')
+  ]).then(function(res){
+    var s={}; (res[0]||[]).forEach(function(r){ if(r.value) s[r.key]=r.value; });
+    var reviews=res[1]||[], lines=res[2]||[];
+
+    /* --- Отзывы из админки --- */
+    var grid=document.getElementById('reviews-grid');
+    if(grid && reviews.length){ grid.innerHTML=reviews.map(reviewCard).join(''); }
+    setupReviews(parseInt(s.reviews_visible_count,10)||6);
+
+    /* --- Легенда: переопределения страниц станций (формат "Станция | Заголовок страницы") --- */
+    lines.forEach(function(l){
+      if(!l || !Array.isArray(l.stations)) return;
+      l.stations.forEach(function(item){
+        if(typeof item!=='string') return;
+        var parts=item.split('|');
+        if(parts.length<2) return;
+        var st=parts[0].trim(), target=parts.slice(1).join('|').trim();
+        if(st&&target&&window.__cmsStationPages) window.__cmsStationPages[l.id+'|'+st]=target;
+      });
+    });
+
     if(!Object.keys(s).length) return;
+
+    /* --- Контакты --- */
     if(s.phone){
       document.querySelectorAll('*').forEach(function(el){
         el.childNodes.forEach(function(n){
@@ -3569,12 +3612,32 @@
         a.setAttribute('href','tel:'+s.phone_href.replace(/[^+\d]/g,''));
       });
     }
-    if(s.telegram_url) document.querySelectorAll('a[href*="t.me"]').forEach(function(a){a.href=s.telegram_url;});
+    if(s.telegram_url) document.querySelectorAll('a[href*="t.me"]:not([data-consult])').forEach(function(a){a.href=s.telegram_url;});
     if(s.max_url) document.querySelectorAll('a[href*="max.ru"]').forEach(function(a){a.href=s.max_url;});
+    if(s.consult_url) document.querySelectorAll('a[data-consult]').forEach(function(a){a.href=s.consult_url;});
     if(s.email) document.querySelectorAll('a[href^="mailto:"]').forEach(function(a){a.href='mailto:'+s.email;a.textContent=s.email;});
+
+    /* --- Пункты меню в шапке --- */
+    [['menu_about','about'],['menu_programs','programs'],['menu_contacts','contacts'],['menu_articles','articles']]
+      .forEach(function(pair){
+        var val=s[pair[0]]; if(!val) return;
+        document.querySelectorAll('[data-menu="'+pair[1]+'"]').forEach(function(el){
+          for(var i=0;i<el.childNodes.length;i++){
+            var n=el.childNodes[i];
+            if(n.nodeType===3 && n.nodeValue.trim()){ n.nodeValue=n.nodeValue.replace(n.nodeValue.trim(), val); return; }
+          }
+        });
+      });
+
+    /* --- Видимость иконок мессенджеров --- */
+    ['telegram','max'].forEach(function(k){
+      if(s['show_'+k]==='0'||s['show_'+k]==='false')
+        document.querySelectorAll('[data-msg="'+k+'"]').forEach(function(el){ el.style.display='none'; });
+    });
+
     var h1=document.querySelector('#hero h1')||document.querySelectorAll('h1')[1];
     if(s.hero_title&&h1) h1.textContent=s.hero_title;
-  }).catch(function(){});
+  });
 })();
 </script>
 </body>
