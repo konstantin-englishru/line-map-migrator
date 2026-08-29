@@ -66,8 +66,8 @@ function TeacherPage() {
                   {t.subjects.map((s) => <span key={s} className="tp-chip">{s}</span>)}
                 </div>
                 <div className="tp-cta-row">
-                  <a href="/p/Записаться%20на%20пробное%20занятие" className="tp-btn tp-btn-primary">🎁 Записаться на пробное</a>
-                  <a href="/p/Получить%20консультацию" className="tp-btn tp-btn-ghost">📞 Задать вопрос педагогу</a>
+                  <a href={trialUrl} className="tp-btn tp-btn-primary">🎁 Записаться на пробное</a>
+                  <a href={questionUrl} target="_blank" rel="noopener" className="tp-btn tp-btn-ghost">📞 Задать вопрос педагогу</a>
                 </div>
               </div>
             </div>
