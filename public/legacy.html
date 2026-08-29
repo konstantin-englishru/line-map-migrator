@@ -2135,7 +2135,9 @@
             // не пересекал внутреннюю область кольца
             let startLen = 0;
             try {
-                const cx = CENTER, cy = CENTER, rOut = RING_RADIUS + 26;
+                const ring = document.getElementById('train-ring-path');
+                const bb = ring.getBBox();
+                const cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2, rOut = bb.width / 2;
                 for (let L = 0; L <= targetLen; L += 10) {
                     const pt = linePath.getPointAtLength(L);
                     if (Math.hypot(pt.x - cx, pt.y - cy) >= rOut) { startLen = L; break; }
