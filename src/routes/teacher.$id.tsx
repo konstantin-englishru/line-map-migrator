@@ -42,6 +42,13 @@ function TeacherPage() {
     facts: "extra",
   });
   const others = TEACHERS.filter((x) => x.id !== t.id).slice(0, 6);
+  const cmsUrl = (k: string, fallback: string) => {
+    const v = cms?.[k];
+    return typeof v === "string" && v.trim() ? v : fallback;
+  };
+  const trialUrl = cmsUrl("trial_url", "/#callback-form");
+  const questionUrl = cmsUrl("question_url", "https://t.me/gorod_znanij");
+  const signupUrl = cmsUrl("signup_url", "/#callback-form");
 
   return (
     <>
