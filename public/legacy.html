@@ -1190,7 +1190,7 @@
             <div class="lp-wrap">
                 <h2 class="lp-title">Кто ведёт занятия</h2>
                 <p class="lp-sub">Только педагоги с высшим образованием, опытом от 5 лет и регулярной аттестацией.</p>
-                <div class="lp-grid lp-grid-4">
+                <div class="lp-grid lp-grid-4" id="teachers-grid">
                     <div class="lp-card text-center"><img src="/teachers/teacher-01.jpg" alt="Мария Романовна" class="w-24 h-24 mx-auto mb-3 rounded-full object-cover border-4 border-white shadow-sm" loading="lazy" width="96" height="96"><h3 class="font-heading font-bold text-lg">Мария Романовна</h3><p class="text-pink-500 font-medium text-sm mb-1">Педагог начальных классов, методист</p><a href="/teacher/t01" target="_blank" rel="noopener" class="inline-flex items-center gap-1 mt-2 px-4 py-2 rounded-full font-bold text-sm text-white shadow-sm" style="background:linear-gradient(135deg,#EC6C9B,#A06CE0);">👋 Познакомиться</a></div>
                     <div class="lp-card text-center"><img src="/teachers/teacher-02.jpg" alt="Виктория Олеговна" class="w-24 h-24 mx-auto mb-3 rounded-full object-cover border-4 border-white shadow-sm" loading="lazy" width="96" height="96"><h3 class="font-heading font-bold text-lg">Виктория Олеговна</h3><p class="text-purple-500 font-medium text-sm mb-1">Педагог английского языка, методист</p><a href="/teacher/t02" target="_blank" rel="noopener" class="inline-flex items-center gap-1 mt-2 px-4 py-2 rounded-full font-bold text-sm text-white shadow-sm" style="background:linear-gradient(135deg,#EC6C9B,#A06CE0);">👋 Познакомиться</a></div>
                     <div class="lp-card text-center"><img src="/teachers/teacher-03.jpg" alt="Юлия Алексеевна" class="w-24 h-24 mx-auto mb-3 rounded-full object-cover border-4 border-white shadow-sm" loading="lazy" width="96" height="96"><h3 class="font-heading font-bold text-lg">Юлия Алексеевна</h3><p class="text-blue-500 font-medium text-sm mb-1">Педагог английского языка, эксперт ЕГЭ</p><a href="/teacher/t03" target="_blank" rel="noopener" class="inline-flex items-center gap-1 mt-2 px-4 py-2 rounded-full font-bold text-sm text-white shadow-sm" style="background:linear-gradient(135deg,#EC6C9B,#A06CE0);">👋 Познакомиться</a></div>
@@ -3589,10 +3589,57 @@
   Promise.all([
     get('cms_settings?select=key,value'),
     get('cms_reviews?select=*&is_active=eq.true&order=sort_order.asc'),
-    get('cms_lines?select=id,name,stations,is_active')
+    get('cms_lines?select=id,name,stations,is_active'),
+    get('cms_teachers?select=id,name,position,image,sort_order&is_active=eq.true&order=sort_order.asc'),
+    get('cms_blocks?select=*&is_active=eq.true&order=sort_order.asc')
   ]).then(function(res){
     var s={}; (res[0]||[]).forEach(function(r){ if(r.value) s[r.key]=r.value; });
-    var reviews=res[1]||[], lines=res[2]||[];
+    var reviews=res[1]||[], lines=res[2]||[], teachers=res[3]||[], blocks=res[4]||[];
+    var blocksOf=function(page){ return blocks.filter(function(b){ return b.page===page; }); };
+
+    /* --- Педагоги на главной: единый источник — админка (cms_teachers) --- */
+    var tgrid=document.getElementById('teachers-grid');
+    if(tgrid && teachers.length){
+      var TCOL=['text-pink-500','text-purple-500','text-blue-500','text-teal-500','text-yellow-600','text-orange-500','text-green-600'];
+      tgrid.innerHTML=teachers.map(function(t,i){
+        var img=t.image||('/teachers/teacher-'+String(i+1).padStart(2,'0')+'.jpg');
+        return '<div class="lp-card text-center"><img src="'+esc(img)+'" alt="'+esc(t.name)+'" class="w-24 h-24 mx-auto mb-3 rounded-full object-cover border-4 border-white shadow-sm" loading="lazy" width="96" height="96">'+
+          '<h3 class="font-heading font-bold text-lg">'+esc(t.name)+'</h3>'+
+          '<p class="'+TCOL[i%TCOL.length]+' font-medium text-sm mb-1">'+esc(t.position)+'</p>'+
+          '<a href="/teacher/'+esc(t.id)+'" target="_blank" rel="noopener" class="inline-flex items-center gap-1 mt-2 px-4 py-2 rounded-full font-bold text-sm text-white shadow-sm" style="background:linear-gradient(135deg,#EC6C9B,#A06CE0);">\u{1F44B} Познакомиться</a></div>';
+      }).join('');
+    }
+
+    /* --- Единая ссылка лид-формы --- */
+    if(s.lead_form_url){
+      document.querySelectorAll('iframe[data-lead-form]').forEach(function(f){ f.src=s.lead_form_url; });
+    }
+
+    /* --- Подвал: заголовки, адрес, соцсети и нижние ссылки --- */
+    var setTxt=function(sel,val){ var el=document.querySelector(sel); if(el&&val) el.textContent=val; };
+    setTxt('[data-footer="depo-title"]', s.footer_depo_title);
+    setTxt('[data-footer="contact-title"]', s.footer_contact_title);
+    setTxt('[data-footer="social-title"]', s.footer_social_title);
+    if(s.footer_depo_text){
+      var depo=document.querySelector('[data-footer="depo-text"]');
+      if(depo) depo.innerHTML=s.footer_depo_text.split('\n').map(function(l){
+        return '<p class="font-medium text-sm text-textMain mb-2">'+esc(l)+'</p>'; }).join('');
+    }
+    var soc=blocksOf('footer_social');
+    if(soc.length){
+      var wrap=document.querySelector('[data-footer="socials"]');
+      var BG=['bg-pastelMint','bg-pastelLavender','bg-pastelPink','bg-pastelYellow'];
+      if(wrap) wrap.innerHTML=soc.map(function(b,i){
+        var inner=b.image?('<img src="'+esc(b.image)+'" alt="'+esc(b.title)+'" style="width:22px;height:22px;object-fit:contain">'):esc(b.title);
+        return '<a href="'+esc(b.url||'#')+'" target="_blank" rel="noopener" class="w-10 h-10 '+BG[i%BG.length]+' rounded-full flex items-center justify-center hover:scale-110 transition-transform text-textMain font-bold overflow-hidden">'+inner+'</a>';
+      }).join('');
+    }
+    blocksOf('footer_bottom').forEach(function(b,i){
+      var a=document.querySelector('[data-footer-link="'+i+'"]');
+      if(!a) return;
+      if(b.title) a.textContent=b.title;
+      if(b.url) a.href=b.url;
+    });
 
     /* --- Отзывы из админки --- */
     var grid=document.getElementById('reviews-grid');
