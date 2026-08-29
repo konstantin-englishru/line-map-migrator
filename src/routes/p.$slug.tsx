@@ -8225,3 +8225,18 @@ const CAREER_SENIOR: Partial<CourseData> = {
   finalCta: "Записаться на консультацию",
   phone: "+7 499 938 58 58",
 };
+
+
+/** Клон страницы «Студенческая» для линии «Деловой центр»: свои фото и своя станция. */
+function cloneForBusiness(
+  preset: Partial<CourseData>,
+  stationName: string,
+  img: string,
+): Partial<CourseData> {
+  return {
+    ...preset,
+    station: `Деловой центр • станция «${stationName}»`,
+    heroImage: img,
+    visual: preset.visual ? { ...preset.visual, image: img } : preset.visual,
+  };
+}
