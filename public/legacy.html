@@ -2962,20 +2962,24 @@
                 const base = (window.METRO_CURVES_BASE || {})[sel.value] || { bend: 0, len: 1040 };
                 bend.value = g.bend ?? base.bend;
                 len.value  = g.len  ?? base.len;
+                rot.value  = g.rot  ?? 0;
                 panel.querySelector('#me-bend-v').textContent = bend.value;
                 panel.querySelector('#me-len-v').textContent  = len.value;
+                panel.querySelector('#me-rot-v').textContent  = rot.value;
             };
             const push = () => {
                 const map = loadLineGeom();
-                map[sel.value] = { bend: parseFloat(bend.value), len: parseFloat(len.value) };
+                map[sel.value] = { bend: parseFloat(bend.value), len: parseFloat(len.value), rot: parseFloat(rot.value) };
                 saveLineGeom(map);
                 panel.querySelector('#me-bend-v').textContent = bend.value;
                 panel.querySelector('#me-len-v').textContent  = len.value;
+                panel.querySelector('#me-rot-v').textContent  = rot.value;
                 renderMetroMap();
             };
             sel.addEventListener('change', () => { sync(); fillStations(); });
             bend.addEventListener('input', push);
             len.addEventListener('input', push);
+            rot.addEventListener('input', push);
             panel.querySelector('#me-copy').addEventListener('click', () => {
                 const dump = JSON.stringify({
                     labels:   loadLabelOffsets(),
