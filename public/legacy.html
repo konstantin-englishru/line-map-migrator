@@ -2669,10 +2669,25 @@
         function saveMapStyle(map) { writeStore(STYLE_STORE_KEY, map); }
         window.loadMapStyle = loadMapStyle;
 
+        // Раскладка схемы, сохранённая в админке (общая для всех посетителей)
+        const CLOUD_SECTIONS = {
+            'gz-metro-label-offsets-v1': 'labels',
+            'gz-metro-station-offsets-v1': 'stations',
+            'gz-metro-line-geom-v1': 'geom',
+            'gz-metro-names-v1': 'names',
+            'metro-style-v1': 'style'
+        };
+        function cloudStore(key) {
+            const layout = window.__cmsMapLayout;
+            const section = CLOUD_SECTIONS[key];
+            if (!layout || !section) return {};
+            return layout[section] || {};
+        }
         function readStore(key) {
-            if (!METRO_EDIT) return {};
-            try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; }
-            catch (e) { return {}; }
+            const cloud = cloudStore(key);
+            if (!METRO_EDIT) return Object.assign({}, cloud);
+            try { return Object.assign({}, cloud, JSON.parse(localStorage.getItem(key) || '{}') || {}); }
+            catch (e) { return Object.assign({}, cloud); }
         }
         function writeStore(key, map) {
             if (!METRO_EDIT) return;
