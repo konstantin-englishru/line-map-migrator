@@ -114,7 +114,7 @@ export function Crud({
   idField,
   labelField,
 }: {
-  table: "cms_lines" | "cms_stations" | "cms_teachers";
+  table: "cms_lines" | "cms_stations" | "cms_teachers" | "cms_reviews";
   title: string;
   fields: Field[];
   idField: string;
