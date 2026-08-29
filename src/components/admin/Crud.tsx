@@ -259,6 +259,30 @@ export function SettingsEditor({ groups }: { groups: { title: string; keys: { ke
                   value={values[k.key] ?? ""}
                   onChange={(e) => setValues({ ...values, [k.key]: e.target.value })}
                 />
+              ) : k.type === "image" ? (
+                <div>
+                  <input
+                    className="ad-input"
+                    value={values[k.key] ?? ""}
+                    onChange={(e) => setValues({ ...values, [k.key]: e.target.value })}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        setValues((prev) => ({ ...prev, [k.key]: "" }));
+                        const url = await uploadImage(file);
+                        setValues((prev) => ({ ...prev, [k.key]: url }));
+                      } catch (ex) {
+                        setErr(String((ex as Error).message ?? ex));
+                      }
+                    }}
+                  />
+                  {values[k.key] && <img src={values[k.key]} alt="" className="ad-thumb" />}
+                </div>
               ) : (
                 <input
                   className="ad-input"
