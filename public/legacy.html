@@ -3482,46 +3482,61 @@
         }
     </script>
 
-    <!-- Скрытая ссылка/кнопка для режима правки схемы -->
-    <style>
-      #admin-edit-trigger {
-        display: none;
-        position: fixed;
-        right: 12px;
-        bottom: 12px;
-        z-index: 9999;
-        opacity: 0.18;
-        transition: opacity 0.2s ease;
-      }
-      body.metro-edit-mode #admin-edit-trigger { display: block; }
-      #admin-edit-trigger:hover { opacity: 1; }
-      #admin-edit-trigger a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: rgba(15, 23, 42, 0.85);
-        color: #fff;
-        text-decoration: none;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        font-size: 16px;
-      }
-    </style>
-    <div id="admin-edit-trigger" title="Редактор схемы (edit=1)">
-      <a href="?edit=1" target="_blank" rel="noopener" aria-label="Открыть редактор схемы">✎</a>
-    </div>
+    <!-- Публичный интерфейс редактирования схемы удалён.
+         Режим правки доступен только из админ-панели (/admin → Схема линий). -->
 
-    <script>
-      // Горячая клавиша для редактора: Ctrl/Cmd + Shift + E
-      document.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.code === 'KeyE') {
-          e.preventDefault();
-          window.open(window.location.pathname + '?edit=1', '_blank', 'noopener');
+    <!-- Плавное появление блоков при прокрутке -->
+    <style>
+      @media (prefers-reduced-motion: no-preference) {
+        .reveal-on-scroll {
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity .6s ease, transform .6s ease;
+          will-change: opacity, transform;
         }
+        .reveal-on-scroll.is-visible { opacity: 1; transform: none; }
+      }
+      html { scroll-behavior: smooth; }
+    </style>
+    <script>
+      (function () {
+        if (!('IntersectionObserver' in window)) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        function init() {
+          var blocks = document.querySelectorAll('.lp-section, #metro-map-section, .train-window');
+          if (!blocks.length) return;
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+              if (en.isIntersecting) {
+                en.target.classList.add('is-visible');
+                io.unobserve(en.target);
+              }
+            });
+          }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+          blocks.forEach(function (b, i) {
+            // первый экран показываем сразу — чтобы ничего не «мигало»
+            if (b.getBoundingClientRect().top < window.innerHeight * 0.9) return;
+            b.classList.add('reveal-on-scroll');
+            io.observe(b);
+          });
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+      })();
+    </script>
+
+    <!-- Плавная прокрутка к лид-форме AlfaCRM -->
+    <script>
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href="#callback-form"]');
+        if (!a) return;
+        var target = document.getElementById('callback-form');
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     </script>
+
 <script>
 (function(){
   var grid=document.getElementById('reviews-grid'); var btn=document.getElementById('reviews-more');
