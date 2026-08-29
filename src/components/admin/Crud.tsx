@@ -141,8 +141,12 @@ export function Crud({
     setBusy(true);
     setErr("");
     setMsg("");
-    const payload = { ...editing, updated_at: new Date().toISOString() };
-    const { error } = await supabase.from(table).upsert(payload as never, { onConflict: idField });
+    const payload: Row = { ...editing, updated_at: new Date().toISOString() };
+    // Новая запись с автогенерируемым id (uuid) — не отправляем пустой идентификатор
+    if (payload[idField] === "" || payload[idField] === undefined || payload[idField] === null) delete payload[idField];
+    const { error } = payload[idField] === undefined
+      ? await supabase.from(table).insert(payload as never)
+      : await supabase.from(table).upsert(payload as never, { onConflict: idField });
     setBusy(false);
     if (error) {
       setErr(error.message);
