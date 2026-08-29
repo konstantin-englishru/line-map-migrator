@@ -1,131 +1,169 @@
-import type { ReactNode } from "react";
-import { useCmsBlocks } from "@/lib/site-cms";
-import { useCmsSettings } from "@/lib/cms";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
- * Единый шаблон информационных страниц: общая шапка → контент → общий подвал.
- * Все тексты подвала и контакты берутся из админки (cms_settings / cms_blocks),
- * поэтому подвал одинаков на всех страницах, где используется этот шаблон.
+ * Единый шаблон информационных страниц.
+ * Header и Footer НЕ дублируются: они подгружаются напрямую из /legacy.html
+ * (та же самая разметка, стили и поведение, что на главной странице).
+ * Контент страниц остаётся прежним (sp-* стили ниже).
  */
 
-const NAV = [
-  { href: "/history", label: "История компании" },
-  { href: "/svedeniya", label: "Сведения об образовательной организации" },
-  { href: "/media", label: "Фото/видео галерея" },
-  { href: "/contacts", label: "Контакты" },
-  { href: "/articles", label: "Полезные статьи" },
-];
-
-export function SiteHeader() {
-  const s = useCmsSettings();
-  const phone = s.phone || "+7 499 938 58 58";
-  const phoneHref = "tel:" + (s.phone_href || phone).replace(/[^+\d]/g, "");
-  return (
-    <header className="sp-header">
-      <a className="sp-brand" href="/">
-        <img src="/GorodZnaniyLOGO.png" alt="Город Знаний" />
-        <span>Город Знаний</span>
-      </a>
-      <nav className="sp-nav">
-        {NAV.map((n) => (
-          <a key={n.href} href={n.href}>
-            {n.label}
-          </a>
-        ))}
-      </nav>
-      <a className="sp-phone" href={phoneHref}>
-        {phone}
-      </a>
-    </header>
-  );
+declare global {
+  interface Window {
+    tailwind?: unknown;
+    openLineById?: (id: string) => boolean;
+  }
 }
 
-export function SiteFooter() {
-  const s = useCmsSettings();
-  const socials = useCmsBlocks("footer_social");
-  const bottom = useCmsBlocks("footer_bottom");
-  const phone = s.phone || "+7 499 938 58 58";
-  return (
-    <footer className="sp-footer">
-      <div className="sp-footer-grid">
-        <div className="sp-fcard">
-          <h5>{s.footer_depo_title || "Депо (Адрес)"}</h5>
-          {(s.footer_depo_text || "ул. Ясеневая, д. 26\nм. Зябликово").split("\n").map((l, i) => (
-            <p key={i}>{l}</p>
-          ))}
-        </div>
-        <div className="sp-fcard">
-          <h5>{s.footer_contact_title || "Связь"}</h5>
-          <p>
-            <a href={"tel:" + (s.phone_href || phone).replace(/[^+\d]/g, "")}>{phone}</a>
-          </p>
-          {s.email && (
-            <p>
-              <a href={"mailto:" + s.email}>{s.email}</a>
-            </p>
-          )}
-        </div>
-        <div className="sp-fcard sp-fsocial">
-          <h5>{s.footer_social_title || "Наш телеграф:"}</h5>
-          <div className="sp-socials">
-            {(socials.length
-              ? socials
-              : [
-                  { id: "vk", title: "VK", url: s.vk_url || "#", image: null },
-                  { id: "tg", title: "TG", url: s.telegram_url || "#", image: null },
-                ]
-            ).map((b) => (
-              <a key={b.id} href={b.url || "#"} target="_blank" rel="noopener">
-                {b.image ? <img src={b.image} alt={b.title ?? ""} /> : b.title}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="sp-footer-bottom">
-        {(bottom.length
-          ? bottom
-          : [
-              { id: "d1", title: "Сведения об образовательной организации", url: "/svedeniya" },
-              { id: "d2", title: "Политика конфиденциальности", url: "/p/Политика%20конфиденциальности" },
-            ]
-        ).map((b) => (
-          <a key={b.id} href={b.url || "#"}>
-            {b.title}
-          </a>
-        ))}
-        <a href="/legacy.html#accessibility" className="sp-a11y">
-          Версия для слабовидящих
-        </a>
-      </div>
-      <p className="sp-copy">© 2026 Город Знаний. Следующая станция — Успех!</p>
-    </footer>
-  );
+const TW_CONFIG = {
+  theme: {
+    extend: {
+      colors: {
+        carBg: "#FFFBEF",
+        skyBg: "#EFE6FB",
+        pastelYellow: "#D6E85E",
+        pastelMint: "#9EE07A",
+        pastelPink: "#F79EC7",
+        pastelLavender: "#B79BEA",
+        textMain: "#3A3A3A",
+        doorFrame: "#B7D6F0",
+      },
+      fontFamily: {
+        heading: ["Fredoka", "sans-serif"],
+        body: ["Quicksand", "sans-serif"],
+      },
+      boxShadow: {
+        soft: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
+        "inner-window": "inset 0 4px 6px -1px rgba(0, 0, 0, 0.1), inset 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+        cushion: "0 -4px 10px rgba(0,0,0,0.03), inset 0 4px 0 rgba(255,255,255,0.5)",
+      },
+      animation: {
+        float: "float 6s ease-in-out infinite",
+        "float-delayed": "float 6s ease-in-out 3s infinite",
+        "pulse-soft": "pulseSoft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      keyframes: {
+        float: { "0%, 100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-10px)" } },
+        pulseSoft: { "0%, 100%": { opacity: 1, transform: "scale(1)" }, "50%": { opacity: 0.95, transform: "scale(0.98)" } },
+      },
+    },
+  },
+};
+
+let chromePromise: Promise<{ header: string; mobileMenu: string; bumper: string; footer: string; styles: string }> | null = null;
+
+function ensureTailwind() {
+  if (document.getElementById("tw-play-cdn")) return;
+  window.tailwind = { config: TW_CONFIG };
+  const s = document.createElement("script");
+  s.id = "tw-play-cdn";
+  s.src = "https://cdn.tailwindcss.com";
+  document.head.appendChild(s);
+}
+
+function ensureFonts() {
+  if (document.getElementById("legacy-fonts")) return;
+  const l = document.createElement("link");
+  l.id = "legacy-fonts";
+  l.rel = "stylesheet";
+  l.href =
+    "https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap";
+  document.head.appendChild(l);
+}
+
+function loadLegacyChrome() {
+  if (!chromePromise) {
+    ensureTailwind();
+    ensureFonts();
+    chromePromise = fetch("/legacy.html")
+      .then((r) => r.text())
+      .then((html) => {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const header = doc.querySelector("header.site-header");
+        const mobileMenu = doc.getElementById("mobile-menu");
+        const footer = doc.querySelector("footer");
+        const bumper = footer?.previousElementSibling;
+        const styles = Array.from(doc.querySelectorAll("style"))
+          .map((el) => el.textContent || "")
+          .join("\n");
+        return {
+          header: header?.outerHTML || "",
+          mobileMenu: mobileMenu?.outerHTML || "",
+          bumper: bumper?.outerHTML || "",
+          footer: footer?.outerHTML || "",
+          styles,
+        };
+      });
+  }
+  return chromePromise;
+}
+
+function useLegacyChrome() {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    // Фолбэк для ссылок «Программы»: на главной открывается панель линии,
+    // отсюда — переход на главную с авто-открытием той же панели.
+    window.openLineById = (id: string) => {
+      window.location.href = "/#line-" + id;
+      return false;
+    };
+    loadLegacyChrome().then((c) => {
+      if (cancelled || !headerRef.current || !footerRef.current) return;
+      headerRef.current.innerHTML = c.header + c.mobileMenu;
+      footerRef.current.innerHTML = c.bumper + c.footer;
+      if (!document.getElementById("legacy-styles")) {
+        const st = document.createElement("style");
+        st.id = "legacy-styles";
+        st.textContent = c.styles;
+        document.head.appendChild(st);
+      }
+      // Якорные ссылки главной (#callback-form и т.п.) ведут на главную
+      const onClick = (e: MouseEvent) => {
+        const a = (e.target as HTMLElement).closest?.("a[href^='#']") as HTMLAnchorElement | null;
+        if (!a) return;
+        const id = a.getAttribute("href")!.slice(1);
+        if (id && !document.getElementById(id)) {
+          e.preventDefault();
+          window.location.href = "/#" + id;
+        }
+      };
+      document.addEventListener("click", onClick);
+      setReady(true);
+      return () => document.removeEventListener("click", onClick);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { headerRef, footerRef, ready };
 }
 
 export function SitePage({ title, children }: { title: string; children: ReactNode }) {
+  const { headerRef, footerRef, ready } = useLegacyChrome();
   return (
     <div className="sp-root">
       <style>{SITE_CSS}</style>
-      <SiteHeader />
-      <main className="sp-main">
-        <h1 className="sp-title">{title}</h1>
-        {children}
-      </main>
-      <SiteFooter />
+      <div className="sp-car">
+        <div ref={headerRef} className="sp-chrome" aria-hidden={!ready} />
+        <main className="sp-main">
+          <h1 className="sp-title">{title}</h1>
+          {children}
+        </main>
+        <div ref={footerRef} className="sp-chrome" aria-hidden={!ready} />
+      </div>
     </div>
   );
 }
 
 const SITE_CSS = `
-.sp-root{min-height:100vh;display:flex;flex-direction:column;background:#F3F8FF;color:#1F2937;font-family:'Montserrat',system-ui,sans-serif;}
-.sp-header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 24px;background:#fff;box-shadow:0 2px 12px rgba(30,58,95,.08);position:sticky;top:0;z-index:20;}
-.sp-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:#1E3A5F;text-decoration:none;}
-.sp-brand img{width:44px;height:44px;object-fit:contain;}
-.sp-nav{display:flex;gap:8px;flex-wrap:wrap;flex:1;}
-.sp-nav a{font-size:13px;font-weight:700;color:#1F2937;text-decoration:none;background:#F3F8FF;padding:8px 12px;border-radius:12px;}
-.sp-nav a:hover{background:#DFC7FF;}
-.sp-phone{font-weight:800;color:#1E3A5F;text-decoration:none;background:#FFC2DA;padding:9px 14px;border-radius:12px;white-space:nowrap;}
+.sp-root{min-height:100vh;background:#DCE9FF;color:#1F2937;font-family:'Accuratist','Montserrat',system-ui,sans-serif;padding:0 8px;}
+.sp-car{width:100%;max-width:1400px;margin:0 auto;background:#FFFBEF;border:8px solid #fff;border-radius:40px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 25px -5px rgba(0,0,0,.05);}
+@media(min-width:768px){.sp-car{border-radius:60px;}}
+.sp-chrome:empty{min-height:0;}
 .sp-main{flex:1;width:100%;max-width:1040px;margin:0 auto;padding:32px 20px 56px;}
 .sp-title{font-size:clamp(28px,4vw,42px);font-weight:900;color:#1E3A5F;margin-bottom:24px;}
 .sp-bubbles{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
@@ -139,17 +177,4 @@ const SITE_CSS = `
 .sp-media img,.sp-media iframe,.sp-media video{width:100%;display:block;border:0;aspect-ratio:16/10;object-fit:cover;background:#000;}
 .sp-media figcaption{padding:10px 14px;font-weight:700;font-size:14px;}
 .sp-empty{opacity:.6;}
-.sp-footer{background:linear-gradient(180deg,#1E3A5F 0%,#0F2540 100%);color:#E8F1FF;padding:40px 24px 24px;}
-.sp-footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;max-width:1040px;margin:0 auto;}
-.sp-fcard{background:#fff;color:#1F2937;border-radius:24px;padding:22px;}
-.sp-fcard h5{font-weight:800;font-size:18px;margin-bottom:10px;color:#1E3A5F;}
-.sp-fcard p{font-size:14px;font-weight:500;}
-.sp-fcard a{color:inherit;text-decoration:none;}
-.sp-socials{display:flex;gap:12px;flex-wrap:wrap;}
-.sp-socials a{width:44px;height:44px;border-radius:999px;background:#DFC7FF;display:flex;align-items:center;justify-content:center;font-weight:800;color:#1F2937;text-decoration:none;overflow:hidden;}
-.sp-socials img{width:26px;height:26px;object-fit:contain;}
-.sp-footer-bottom{max-width:1040px;margin:32px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);display:flex;gap:20px;flex-wrap:wrap;justify-content:center;}
-.sp-footer-bottom a{color:#E8F1FF;opacity:.75;font-size:14px;font-weight:500;text-decoration:none;}
-.sp-footer-bottom a:hover{opacity:1;}
-.sp-copy{text-align:center;margin-top:24px;font-size:13px;opacity:.5;}
 `;
