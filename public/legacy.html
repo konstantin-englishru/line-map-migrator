@@ -3584,16 +3584,16 @@
     if(grid && reviews.length){ grid.innerHTML=reviews.map(reviewCard).join(''); }
     setupReviews(parseInt(s.reviews_visible_count,10)||6);
 
-    /* --- Легенда: переопределения страниц станций (формат "Станция | Заголовок страницы") --- */
-    lines.forEach(function(l){
-      if(!l || !Array.isArray(l.stations)) return;
-      l.stations.forEach(function(item){
-        if(typeof item!=='string') return;
-        var parts=item.split('|');
-        if(parts.length<2) return;
-        var st=parts[0].trim(), target=parts.slice(1).join('|').trim();
-        if(st&&target&&window.__cmsStationPages) window.__cmsStationPages[l.id+'|'+st]=target;
-      });
+    /* --- Легенда: переопределения страниц станций.
+           Настройка station_links, по строке на станцию:  lineId | Станция => /p/Страница  --- */
+    (s.station_links||'').split('\n').forEach(function(row){
+      var m=row.split('=>');
+      if(m.length<2) return;
+      var left=m[0].split('|');
+      if(left.length<2) return;
+      var key=left[0].trim()+'|'+left.slice(1).join('|').trim();
+      var target=m.slice(1).join('=>').trim();
+      if(target&&window.__cmsStationPages) window.__cmsStationPages[key]=target;
     });
 
     if(!Object.keys(s).length) return;
