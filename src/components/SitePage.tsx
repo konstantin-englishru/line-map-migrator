@@ -53,10 +53,17 @@ let chromePromise: Promise<{ header: string; mobileMenu: string; bumper: string;
 
 function ensureTailwind() {
   if (document.getElementById("tw-play-cdn")) return;
-  window.tailwind = { config: TW_CONFIG };
+  // Play CDN перезаписывает window.tailwind при загрузке, поэтому конфиг
+  // назначаем сразу после выполнения скрипта (onload), как на главной.
   const s = document.createElement("script");
   s.id = "tw-play-cdn";
   s.src = "https://cdn.tailwindcss.com";
+  s.onload = () => {
+    (window.tailwind as { config?: unknown }).config = TW_CONFIG;
+    // Форсируем пересборку стилей для уже вставленной разметки
+    document.body.classList.add("tw-ready");
+    setTimeout(() => document.body.classList.remove("tw-ready"), 50);
+  };
   document.head.appendChild(s);
 }
 
