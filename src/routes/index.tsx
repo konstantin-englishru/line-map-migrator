@@ -16,9 +16,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  // Хэш (в т.ч. #line-<id> для автооткрытия панели линии) прокидываем в src iframe.
+  // После SSR-гидратации атрибут src не перезаписывается, а смена только фрагмента
+  // не перезагружает iframe — поэтому добавляем query-параметр для полной загрузки.
   const [src, setSrc] = useState("/legacy.html");
   useEffect(() => {
-    if (window.location.hash) setSrc("/legacy.html" + window.location.hash);
+    const hash = window.location.hash;
+    if (hash) setSrc("/legacy.html?h=" + encodeURIComponent(hash.slice(1)) + hash);
   }, []);
   return (
     <iframe

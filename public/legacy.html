@@ -2398,9 +2398,11 @@
             // Якорь вида #line-<id>: открыть панель линии (используется меню «Программы» на внутренних страницах)
             if (hash.indexOf('line-') === 0) {
                 const lineId = hash.slice(5);
-                window.addEventListener('load', () => setTimeout(() => {
-                    if (typeof openLineById === 'function') openLineById(lineId);
-                }, 400));
+                const tryOpen = (attempt) => {
+                    if (typeof openLineById === 'function') { openLineById(lineId); return; }
+                    if (attempt < 25) setTimeout(() => tryOpen(attempt + 1), 200);
+                };
+                setTimeout(() => tryOpen(0), 500);
                 return;
             }
             const tryScroll = (attempt) => {
