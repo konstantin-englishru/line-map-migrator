@@ -16,10 +16,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [src, setSrc] = useState("/legacy.html");
-  useEffect(() => {
-    if (window.location.hash) setSrc("/legacy.html" + window.location.hash);
-  }, []);
+  // Хэш (в т.ч. #line-<id> для автооткрытия панели линии) прокидываем в src iframe
+  // сразу при первом рендере, чтобы legacy-скрипты увидели его при первой загрузке.
+  const [src] = useState(
+    () =>
+      "/legacy.html" +
+      (typeof window !== "undefined" ? window.location.hash || "" : ""),
+  );
   return (
     <iframe
       src={src}
