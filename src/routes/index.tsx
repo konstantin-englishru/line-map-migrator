@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,13 +16,14 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  // Хэш (в т.ч. #line-<id> для автооткрытия панели линии) прокидываем в src iframe
-  // сразу при первом рендере, чтобы legacy-скрипты увидели его при первой загрузке.
-  const [src] = useState(
-    () =>
-      "/legacy.html" +
-      (typeof window !== "undefined" ? window.location.hash || "" : ""),
-  );
+  // Хэш (в т.ч. #line-<id> для автооткрытия панели линии) прокидываем в src iframe.
+  // После SSR-гидратации атрибут src не перезаписывается, а смена только фрагмента
+  // не перезагружает iframe — поэтому добавляем query-параметр для полной загрузки.
+  const [src, setSrc] = useState("/legacy.html");
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) setSrc("/legacy.html?h=" + encodeURIComponent(hash.slice(1)) + hash);
+  }, []);
   return (
     <iframe
       src={src}
