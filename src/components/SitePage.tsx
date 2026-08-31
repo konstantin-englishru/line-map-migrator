@@ -127,8 +127,18 @@ function useLegacyChrome() {
         st.textContent = c.styles;
         document.head.appendChild(st);
       }
+      // Клик по логотипу «Город Знаний» ведёт на главную (/), не затрагивая ссылку адреса
+      const logo = headerRef.current.querySelector("header.site-header .cursor-pointer.group") as HTMLElement | null;
+      const onLogoClick = (e: Event) => {
+        const a = (e.target as HTMLElement).closest?.("a") as HTMLAnchorElement | null;
+        if (a) return; // адрес на Яндекс.Карты работает как раньше
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = "/";
+      };
+      logo?.addEventListener("click", onLogoClick);
       // Якорные ссылки главной (#callback-form и т.п.) ведут на главную
-      const onClick = (e: MouseEvent) => {
+      const onClick = (e: Event) => {
         const a = (e.target as HTMLElement).closest?.("a[href^='#']") as HTMLAnchorElement | null;
         if (!a) return;
         const id = a.getAttribute("href")!.slice(1);
@@ -139,7 +149,10 @@ function useLegacyChrome() {
       };
       document.addEventListener("click", onClick);
       setReady(true);
-      return () => document.removeEventListener("click", onClick);
+      return () => {
+        document.removeEventListener("click", onClick);
+        logo?.removeEventListener("click", onLogoClick);
+      };
     });
     return () => {
       cancelled = true;
