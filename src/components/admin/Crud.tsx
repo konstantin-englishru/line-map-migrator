@@ -96,7 +96,7 @@ export function RecordForm({
                     }
                   }}
                 />
-                {typeof v === "string" && v && <img src={v} alt="" className="ad-thumb" />}
+                {typeof v === "string" && v && <Thumb value={v} />}
               </div>
             )}
           </label>
@@ -306,7 +306,7 @@ export function SettingsEditor({ groups }: { groups: { title: string; keys: { ke
                       }
                     }}
                   />
-                  {values[k.key] && <img src={values[k.key]} alt="" className="ad-thumb" />}
+                  {values[k.key] && <Thumb value={values[k.key]} />}
                 </div>
               ) : (
                 <input
