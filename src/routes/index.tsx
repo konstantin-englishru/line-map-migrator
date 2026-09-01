@@ -4,13 +4,31 @@ import { useEffect, useState } from "react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Город Знаний — Детский развивающий центр" },
+      { title: "Город Знаний — детский развивающий центр" },
       {
         name: "description",
         content:
-          "Детский развивающий центр «Город Знаний» — программы для малышей, школьников, старшеклассников и взрослых.",
+          "Развивающие занятия для детей от 4 до 17 лет. Английский язык, подготовка к школе, робототехника и другие направления.",
       },
+      { property: "og:title", content: "Город Знаний — детский развивающий центр" },
+      {
+        property: "og:description",
+        content:
+          "Развивающие занятия для детей от 4 до 17 лет. Английский язык, подготовка к школе, робототехника и другие направления.",
+      },
+      { property: "og:image", content: "https://xn--80afdmggzbeav.xn--p1ai/og-image.jpg" },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://xn--80afdmggzbeav.xn--p1ai/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Город Знаний — детский развивающий центр" },
+      {
+        name: "twitter:description",
+        content:
+          "Развивающие занятия для детей от 4 до 17 лет. Английский язык, подготовка к школе, робототехника и другие направления.",
+      },
+      { name: "twitter:image", content: "https://xn--80afdmggzbeav.xn--p1ai/og-image.jpg" },
     ],
+    links: [{ rel: "canonical", href: "https://xn--80afdmggzbeav.xn--p1ai/" }],
   }),
   component: Index,
 });
