@@ -124,10 +124,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     "Развивающие занятия для детей от 4 до 17 лет. Английский язык, подготовка к школе, робототехника и другие направления.",
 },
 
-{
-  name: "twitter:image",
-  content: "https://xn--80afdmggzbeav.xn--p1ai/og-image.jpg",
-},
+      {
+        name: "twitter:image",
+        content: "https://xn--80afdmggzbeav.xn--p1ai/og-image.jpg",
+      },
+    ],
     links: [
       {
         rel: "stylesheet",
