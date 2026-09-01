@@ -142,7 +142,7 @@ function ImageField({
   onError: (m: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
-  const shown = value || fallback;
+  const shown = useStorageUrl(value || fallback);
   return (
     <div className="ad-field">
       <span>{label}</span>

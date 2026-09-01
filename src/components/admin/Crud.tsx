@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useStorageUrl } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
 
 export type FieldType = "text" | "textarea" | "number" | "bool" | "list" | "image";
