@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveStorageUrls } from "@/lib/storage";
+
 
 /**
  * Лёгкий слой CMS: публичные страницы продолжают рендерить свои статические данные,
@@ -23,7 +25,9 @@ export function useCmsRow<T = Record<string, unknown>>(
     let alive = true;
     void (async () => {
       const { data } = await supabase.from(table).select("*").eq(column, value).maybeSingle();
-      if (alive) setRow((data as T) ?? null);
+      const resolved = data ? await resolveStorageUrls(data) : null;
+      if (alive) setRow((resolved as T) ?? null);
+
     })();
     return () => {
       alive = false;

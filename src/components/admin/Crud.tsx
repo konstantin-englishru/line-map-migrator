@@ -9,9 +9,10 @@ async function uploadImage(file: File): Promise<string> {
   const path = `${Date.now()}-${file.name.replace(/[^\w.\-]+/g, "_")}`;
   const { error } = await supabase.storage.from("cms-images").upload(path, file, { upsert: true });
   if (error) throw error;
-  const { data } = await supabase.storage.from("cms-images").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-  return data?.signedUrl ?? "";
+  // В базе храним относительный путь, ссылка создаётся при показе
+  return `cms-images/${path}`;
 }
+
 
 function ListEditor({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
   const set = (i: number, v: string) => onChange(value.map((x, j) => (j === i ? v : x)));
