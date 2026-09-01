@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useStorageUrl } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
 
 export type FieldType = "text" | "textarea" | "number" | "bool" | "list" | "image";
@@ -9,9 +10,10 @@ async function uploadImage(file: File): Promise<string> {
   const path = `${Date.now()}-${file.name.replace(/[^\w.\-]+/g, "_")}`;
   const { error } = await supabase.storage.from("cms-images").upload(path, file, { upsert: true });
   if (error) throw error;
-  const { data } = await supabase.storage.from("cms-images").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-  return data?.signedUrl ?? "";
+  // В базе храним относительный путь, ссылка создаётся при показе
+  return `cms-images/${path}`;
 }
+
 
 function ListEditor({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
   const set = (i: number, v: string) => onChange(value.map((x, j) => (j === i ? v : x)));
@@ -94,7 +96,7 @@ export function RecordForm({
                     }
                   }}
                 />
-                {typeof v === "string" && v && <img src={v} alt="" className="ad-thumb" />}
+                {typeof v === "string" && v && <Thumb value={v} />}
               </div>
             )}
           </label>
@@ -304,7 +306,7 @@ export function SettingsEditor({ groups }: { groups: { title: string; keys: { ke
                       }
                     }}
                   />
-                  {values[k.key] && <img src={values[k.key]} alt="" className="ad-thumb" />}
+                  {values[k.key] && <Thumb value={values[k.key]} />}
                 </div>
               ) : (
                 <input

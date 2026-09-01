@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCmsSettings } from "@/lib/cms";
+import { resolveStorageUrls } from "@/lib/storage";
+
 
 /** Универсальный «бабл» контента (документы, контакты, статьи, фото, видео, футер). */
 export type CmsBlock = {
@@ -26,7 +28,9 @@ export function useCmsBlocks(page: string): CmsBlock[] {
         .eq("page", page)
         .eq("is_active", true)
         .order("sort_order");
-      if (alive) setRows((data as CmsBlock[]) ?? []);
+      const resolved = data ? await resolveStorageUrls(data) : [];
+      if (alive) setRows((resolved as CmsBlock[]) ?? []);
+
     })();
     return () => {
       alive = false;
