@@ -72,19 +72,62 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Line Diagram Mover transfers entire websites, including line diagrams, to new locations." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Line Diagram Mover transfers entire websites, including line diagrams, to new locations." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Line Diagram Mover transfers entire websites, including line diagrams, to new locations." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/04aa7432-7321-4a06-89ad-6164b700788e/id-preview-8a4cc0b2--3e4d23ce-9179-4916-864e-ea8943da57eb.lovable.app-1779370567000.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/04aa7432-7321-4a06-89ad-6164b700788e/id-preview-8a4cc0b2--3e4d23ce-9179-4916-864e-ea8943da57eb.lovable.app-1779370567000.png" },
-    ],
+   { title: "Город Знаний — детский развивающий центр" },
+
+{
+  name: "description",
+  content:
+    "Развивающие занятия для детей от 4 до 17 лет. Английский язык, подготовка к школе, робототехника и другие направления.",
+},
+
+{ name: "author", content: "Город Знаний" },
+
+{ property: "og:title", content: "Город Знаний — детский развивающий центр" },
+
+{
+  property: "og:description",
+  content:
+    "Развивающие занятия для детей от 4 до 17 лет. Английский язык, подготовка к школе, робототехника и другие направления.",
+},
+
+{ property: "og:type", content: "website" },
+
+{
+  property: "og:url",
+  content: "https://xn--80afdmggzbeav.xn--p1ai/",
+},
+
+{
+  property: "og:image",
+  content: "https://xn--80afdmggzbeav.xn--p1ai/og-image.jpg",
+},
+
+{ property: "og:image:width", content: "1200" },
+
+{ property: "og:image:height", content: "630" },
+
+{
+  property: "og:image:alt",
+  content: "Город Знаний — детский развивающий центр",
+},
+
+{ name: "twitter:card", content: "summary_large_image" },
+
+{
+  name: "twitter:title",
+  content: "Город Знаний — детский развивающий центр",
+},
+
+{
+  name: "twitter:description",
+  content:
+    "Развивающие занятия для детей от 4 до 17 лет. Английский язык, подготовка к школе, робототехника и другие направления.",
+},
+
+{
+  name: "twitter:image",
+  content: "https://xn--80afdmggzbeav.xn--p1ai/og-image.jpg",
+},
     links: [
       {
         rel: "stylesheet",
