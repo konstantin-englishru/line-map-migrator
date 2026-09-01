@@ -516,8 +516,7 @@ export const METRO_LINES: MetroLine[] = [
       {
         "name": "Спектакли",
         "programs": [
-          "Детские спектакли",
-          "Семейный театр"
+          "Спектакли"
         ]
       },
       {
