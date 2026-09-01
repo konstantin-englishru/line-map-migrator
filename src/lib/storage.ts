@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
@@ -54,4 +55,24 @@ export async function resolveStorageUrls<T>(data: T): Promise<T> {
     if (s.signedUrl) map.set(list[i], s.signedUrl);
   });
   return replace(data, map);
+}
+
+/** Хук: возвращает готовую ссылку для показа относительного пути storage. */
+export function useStorageUrl(value: string | null | undefined): string {
+  const [url, setUrl] = useState<string>(value ?? "");
+  useEffect(() => {
+    let alive = true;
+    if (!value) {
+      setUrl("");
+      return;
+    }
+    void (async () => {
+      const resolved = await resolveStorageUrls(value);
+      if (alive) setUrl(resolved);
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [value]);
+  return url;
 }
