@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useStorageUrl } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
 
+function Thumb({ value }: { value: string }) {
+  const url = useStorageUrl(value);
+  return url ? <img src={url} alt="" className="ad-thumb" /> : null;
+}
+
 export type FieldType = "text" | "textarea" | "number" | "bool" | "list" | "image";
 export type Field = { key: string; label: string; type: FieldType; hint?: string };
 export type Row = Record<string, unknown>;

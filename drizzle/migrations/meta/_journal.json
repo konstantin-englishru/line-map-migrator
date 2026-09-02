@@ -43,6 +43,13 @@
       "when": 1788001501218,
       "tag": "0005_create_cms_blocks",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1788382612014,
+      "tag": "0006_storage_urls_to_relative",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useStorageUrl } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
 import { METRO_LINES } from "@/lib/lines-data";
 import { buildCourse } from "@/routes/p.$slug";
