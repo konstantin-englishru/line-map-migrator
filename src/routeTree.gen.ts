@@ -21,6 +21,7 @@ import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as LineIdRouteImport } from './routes/line.$id'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminSectionRouteImport } from './routes/admin.$section'
+import { Route as ApiPublicStorageExportRouteImport } from './routes/api/public/storage-export'
 
 const SvedeniyaRoute = SvedeniyaRouteImport.update({
   id: '/svedeniya',
@@ -82,6 +83,11 @@ const AdminSectionRoute = AdminSectionRouteImport.update({
   path: '/admin/$section',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicStorageExportRoute = ApiPublicStorageExportRouteImport.update({
+  id: '/api/public/storage-export',
+  path: '/api/public/storage-export',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/p/$slug': typeof PSlugRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/storage-export': typeof ApiPublicStorageExportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/p/$slug': typeof PSlugRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/storage-export': typeof ApiPublicStorageExportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/p/$slug': typeof PSlugRoute
   '/teacher/$id': typeof TeacherIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/storage-export': typeof ApiPublicStorageExportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/p/$slug'
     | '/teacher/$id'
     | '/admin/'
+    | '/api/public/storage-export'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/p/$slug'
     | '/teacher/$id'
     | '/admin'
+    | '/api/public/storage-export'
   id:
     | '__root__'
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/p/$slug'
     | '/teacher/$id'
     | '/admin/'
+    | '/api/public/storage-export'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,6 +196,7 @@ export interface RootRouteChildren {
   PSlugRoute: typeof PSlugRoute
   TeacherIdRoute: typeof TeacherIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  ApiPublicStorageExportRoute: typeof ApiPublicStorageExportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSectionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/storage-export': {
+      id: '/api/public/storage-export'
+      path: '/api/public/storage-export'
+      fullPath: '/api/public/storage-export'
+      preLoaderRoute: typeof ApiPublicStorageExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -288,6 +308,7 @@ const rootRouteChildren: RootRouteChildren = {
   PSlugRoute: PSlugRoute,
   TeacherIdRoute: TeacherIdRoute,
   AdminIndexRoute: AdminIndexRoute,
+  ApiPublicStorageExportRoute: ApiPublicStorageExportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
