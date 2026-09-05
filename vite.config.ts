@@ -16,10 +16,15 @@ export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     server: { entry: "server" },
-    spa: {
-      enabled: true,
-      // Оболочка кладётся в index.html — именно её отдаёт Nginx на любом маршруте.
-      prerender: { outputPath: "/index.html" },
-    },
+    // SPA-оболочка нужна только для статической сборки под свой сервер.
+    // В обычной (Lovable) сборке она конфликтует с пререндером «/».
+    ...(staticBuild
+      ? {
+          spa: {
+            enabled: true,
+            prerender: { outputPath: "/index.html" },
+          },
+        }
+      : {}),
   },
 });
